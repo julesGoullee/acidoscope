@@ -20,7 +20,7 @@
     name: 'ShaderRender',
     mounted: function() {
 
-      const container = document.getElementById( 'shader-container' );
+      const container = document.getElementById( 'shader-container');
       this.createShaderEngine({ container });
 
     },
