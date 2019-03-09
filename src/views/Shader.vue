@@ -1,7 +1,14 @@
 <template>
-  <div class="shader-view" id="svr">
+  <div
+    id="svr"
+    class="shader-view"
+  >
     <ShaderRender v-if="selectedVisualization" />
-    <div v-if="!isFullscreen" class="fsbtn" v-on:click="fullscreen">
+    <div
+      v-if="!isFullscreen"
+      class="fsbtn"
+      @click="fullscreen"
+    >
       FS
     </div>
   </div>
@@ -57,7 +64,7 @@
         await this.loadVisualisations();
       }
 
-      document.addEventListener("fullscreenchange", () => {
+      document.addEventListener('fullscreenchange', () => {
         console.log(!!document.fullscreenElement);
         this.isFullscreen = !!document.fullscreenElement;
       });
