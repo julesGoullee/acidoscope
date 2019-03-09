@@ -2,9 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import shader1 from '@/shaders/shader1'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-export default new Vuex.Store({
+export const store = {
   state: {
     selectedVisualization: null,
     visualizations: []
@@ -22,7 +22,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    loadVisualisations:  async ({ state, commit }) => {
+    loadVisualisations: ({ state, commit }) => {
 
       if(state.visualizations.length === 0){
 
@@ -39,7 +39,9 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    selectedVisualization: state => () => state.selectedVisualization,
+    selectedVisualization: state => state.selectedVisualization,
     visualizations: state => state.visualizations,
   }
-})
+};
+
+export default new Vuex.Store(store);
