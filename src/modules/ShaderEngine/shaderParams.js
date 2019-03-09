@@ -76,11 +76,24 @@ class ShaderParams {
     this.forUniforms(param => {
 
       switch(param.special) {
+
         case 'time': {
           const startTime = this.shaderEngine.startTime;
           const elapsedMilliseconds = Date.now() - startTime;
-          this.uniforms.time.value = elapsedMilliseconds / 1000.;
+          this.uniforms[param.name].value = elapsedMilliseconds / 1000.;
+          //this.uniforms.time.value = 0;
+          break;
         }
+
+        case 'resolution': {
+          const container = this.shaderEngine.container;
+          const width = container.offsetWidth;
+          const height = container.offsetHeight;
+          this.uniforms[param.name].value.x = width;
+          this.uniforms[param.name].value.y = height;
+          break;
+        }
+
       }
     });
 

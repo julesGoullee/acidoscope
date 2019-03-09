@@ -1,14 +1,20 @@
 <template>
   <div
     id="shader-container"
-    class="home"
   />
 </template>
+
+<style scoped>
+  #shader-container {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+  }
+</style>
 
 <script>
   import ShaderEngine from '@/modules/ShaderEngine'
   import shader1 from '@/shaders/shader1'
-
 
   export default {
     name: 'ShaderRender',

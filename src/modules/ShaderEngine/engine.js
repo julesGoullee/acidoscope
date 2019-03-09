@@ -26,7 +26,7 @@ class ShaderEngine {
 
     const { vertexShader, fragmentShader } = this.shader;
 
-    this.three.camera = new THREE.Camera();
+    this.three.camera = new THREE.PerspectiveCamera();
     this.three.camera.position.z = 1;
 
     this.three.scene = new THREE.Scene();
@@ -45,9 +45,11 @@ class ShaderEngine {
     this.renderer = new THREE.WebGLRenderer();
     this.container.appendChild( this.renderer.domElement );
 
-    this.uniforms.resolution.value.x = window.innerWidth * 2;
-    this.uniforms.resolution.value.y = window.innerHeight * 2;
-    this.renderer.setSize( window.innerWidth, window.innerHeight );
+    const width = this.container.offsetWidth;
+    const height = this.container.offsetHeight;
+    this.uniforms.resolution.value.x = width;
+    this.uniforms.resolution.value.y = height;
+    this.renderer.setSize( width, height );
 
   }
 
@@ -66,9 +68,22 @@ class ShaderEngine {
     this.render();
   }
 
+  updateCanvas() {
+    const canvas = this.renderer.domElement;
+    const width = this.container.clientWidth;
+    const height = this.container.clientHeight;
+    
+    if (canvas.width !== width || canvas.height !== height) {
+      this.renderer.setSize(width, height, true);
+      //this.three.camera.aspect = width / height;
+      //this.three.camera.updateProjectionMatrix();
+    }
+  }
+
   render() {
 
     this.shaderParams.updateUniforms();
+    this.updateCanvas();
     this.renderer.render( this.three.scene, this.three.camera );
 
   }
