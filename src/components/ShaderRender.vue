@@ -21,7 +21,7 @@
     data: () => ({
       shaderEngine: null,
     }),
-    mounted: async function() {
+    mounted: function() {
 
       const container = document.getElementById( 'shader-container' );
 
@@ -30,7 +30,7 @@
       this.shaderEngine.start();
 
     },
-    beforeDestroy: async function() {
+    beforeDestroy: function() {
 
       this.shaderEngine.stop();
 
