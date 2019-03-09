@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import assert from 'assert'
 
 import ShaderEngine from '@/modules/ShaderEngine'
 import shader1 from '@/shaders/shader1'
@@ -34,6 +35,7 @@ export const store = {
     },
     stopShaderEngine: (state) => {
 
+      assert(state.shaderEngine, 'engine_not_exist');
       state.shaderEngine.stop();
 
     },
