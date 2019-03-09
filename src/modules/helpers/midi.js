@@ -1,6 +1,23 @@
 import WebMidi from 'webmidi';
 
+const controllerId = [
+  'resonance',
+  'soundreleasetime',
+  'soundattacktime',
+  'brightness',
+  'soundcontrol6',
+  'soundcontrol7',
+  'soundcontrol8',
+  'soundcontrol9',
+];
+
 const Midi = {
+  controllerIdMap: controllerId.reduce( (acc, item, i) => {
+
+    acc[item] = i + 1;
+    return acc;
+
+  }, {}),
   isSupported: () => Boolean(navigator.requestMIDIAccess),
   requestAccess: async () => {
 
@@ -27,55 +44,14 @@ const Midi = {
 
     WebMidi.inputs.forEach( (input) => {
 
-      input.addListener('controlchange', 'all', (e) => {
+      input.addListener('controlchange', 'all', (event) => {
 
-        const event = {
-          channel: e.channel,
-          controller: e.controller,
-          type: e.type,
-          value: e.value,
-          input: {
-            id: e.target.id,
-            name: e.target.name
-          }
-        };
+        if(Midi.controllerIdMap[event.controller.name]){
 
-        handler(event);
+          handler(Midi.controllerIdMap[event.controller.name], event.value);
 
-      });
+        }
 
-      const events = [
-        'noteoff',
-        'noteon',
-        'keyaftertouch',
-        'controlchange',
-        'channelmode',
-        'programchange',
-        'channelaftertouch',
-        'pitchbend',
-
-        'sysex',
-        'timecode',
-        'songposition',
-        'songselect',
-        'tuningrequest',
-        'clock',
-        'start',
-        'continue',
-        'stop',
-        'activesensing',
-        'reset',
-        'midimessage',
-        'unknownsystemmessage',
-      ];
-
-      events.forEach(event => {
-
-        input.addListener(event, 'all', (e) => {
-
-          console.log(event, e);
-
-        });
       });
 
     });

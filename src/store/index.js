@@ -42,14 +42,22 @@ export const store = {
 
       // state.midiValues[entry] = value;
 
-      const gap = 0.01;
+      const param = state.shaderEngine.shader.params.find(param => param.name === entry);
+
+      if(!param){
+
+        return;
+
+      }
+
+
       if(value === 'up'){
 
-        state.shaderEngine.uniforms[entry].value += gap;
+        state.shaderEngine.uniforms[entry].value += param.gap;
 
       } else {
 
-        state.shaderEngine.uniforms[entry].value -= gap;
+        state.shaderEngine.uniforms[entry].value -= param.gap;
 
       }
 

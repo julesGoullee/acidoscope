@@ -57,15 +57,15 @@
 
       }
 
-      Midi.onEvent( (event) => {
+      Midi.onEvent( (id, value) => {
 
-        if(event.value === 1){
+        if(value < 126){
 
-          this.setMidiValue({ entry: 'caca1', value: 'down' });
+          this.setMidiValue({ entry: `control${id}`, value: 'down' });
 
-        } else if(event.value === 127){
+        } else if(value >= 126){
 
-          this.setMidiValue({ entry: 'caca1', value: 'up' });
+          this.setMidiValue({ entry: `control${id}`, value: 'up' });
 
         }
 
