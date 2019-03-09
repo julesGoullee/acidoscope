@@ -2,27 +2,24 @@
   <div>
     Coucou midi
     <div v-if="event !== null">
-
       <ul>
-
-        <li>channel: {{event.channel}}</li>
-        <li>type: {{event.type}}</li>
-        <li>value: {{event.value}}</li>
-        <li>controller:</li>
-        <ul>
-          <li>id: {{event.controller.id}}</li>
-          <li>name: {{event.controller.name}}</li>
-        </ul>
-        <li>input:</li>
-        <ul>
-          <li>id: {{event.input.id}}</li>
-          <li>name: {{event.input.name}}</li>
-        </ul>
-
+        <li>channel: {{ event.channel }} </li>
+        <li>type: {{ event.type }} </li>
+        <li>value: {{ event.value }} </li>
+        <li>
+          <ul>
+            <li>controller:</li>
+            <li>id: {{ event.controller.id }} </li>
+            <li>name: {{ event.controller.name }} </li>
+          </ul>
+          <ul>
+            <li>input:</li>
+            <li>id: {{ event.input.id }}</li>
+            <li>name: { {event.input.name }}</li>
+          </ul>
+        </li>
       </ul>
     </div>
-
-
   </div>
 </template>
 

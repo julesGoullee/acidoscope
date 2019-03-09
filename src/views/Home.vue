@@ -4,7 +4,7 @@
       alt="Vue logo"
       src="../assets/logo.png"
     >
-    <!--<MidiLoader />-->
+    <MidiLoader />
   </div>
 </template>
 
@@ -15,7 +15,7 @@ import MidiLoader from '@/components/MidiLoader.vue'
 export default {
   name: 'Home',
   components: {
-    // MidiLoader
+    MidiLoader
   }
 }
 </script>
