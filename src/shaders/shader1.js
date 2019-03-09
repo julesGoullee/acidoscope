@@ -1,5 +1,5 @@
 export default {
-    vertexShader: `
+  vertexShader: `
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -10,7 +10,7 @@ void main()	{
     gl_Position = vec4( position, 1.0 );
 }
     `,
-    fragmentShader: `
+  fragmentShader: `
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -116,4 +116,24 @@ void main(void)
 	gl_FragColor = vec4(gl_FragColor.xyz,1.0);
 }
 `,
+  params: [
+    {
+      name: 'time',
+      type: 'f',
+      defaultValue: 0.,
+      special: 'time',
+    },
+    {
+      name: 'resolution',
+      type: 'v2',
+      defaultValue: [0.,0.],
+      special: 'resolution',
+    },
+    {
+      name: 'mouse',
+      type: 'v2',
+      defaultValue: [0.,0.],
+      special: 'mouse',
+    },
+  ],
 }
