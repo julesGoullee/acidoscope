@@ -11,7 +11,6 @@ export const store = {
     selectedVisualization: null,
     visualizations: [],
     shaderEngine: null,
-    midiValues: {},
     midiHardwareConnected: false,
   },
   mutations: {
@@ -39,8 +38,6 @@ export const store = {
 
     },
     setMidiValue: (state, { entry, value }) => {
-
-      // state.midiValues[entry] = value;
 
       const param = state.shaderEngine.shader.params.find(param => param.name === entry);
 
@@ -107,7 +104,6 @@ export const store = {
     selectedVisualization: state => state.selectedVisualization,
     visualizations: state => state.visualizations,
     shaderEngine: state => state.shaderEngine,
-    midiValues: state => state.midiValues,
     midiHardwareConnected: state => state.midiHardwareConnected,
   }
 };
