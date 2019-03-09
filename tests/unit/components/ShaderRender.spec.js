@@ -6,7 +6,7 @@ import { waitNextTick } from '@/../tests/unit/test.utils';
 import ShaderRender from '@/components/ShaderRender.vue';
 import ShaderEngine from '@/modules/ShaderEngine'
 
-describe('Components: ShaderRender', function () {
+describe('Components: ShaderRender', function (){
 
   beforeEach(() => {
 

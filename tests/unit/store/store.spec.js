@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash';
 import { store } from '@/store';
 import shader1 from '@/shaders/shader1'
 
-describe('Store', function () {
+describe('Store', function (){
 
   beforeEach( () => {
 
