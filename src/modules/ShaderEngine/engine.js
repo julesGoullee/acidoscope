@@ -82,8 +82,8 @@ class ShaderEngine {
 
   render() {
 
-    this.shaderParams.updateUniforms();
     this.updateCanvas();
+    this.shaderParams.updateUniforms();
     this.renderer.render( this.three.scene, this.three.camera );
 
   }
