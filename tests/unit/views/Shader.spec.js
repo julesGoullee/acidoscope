@@ -1,9 +1,10 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
+import { waitNextTick } from '@/../tests/unit/test.utils';
+
 import Shader from '@/views/Shader.vue';
 import ShaderRender from '@/components/ShaderRender.vue';
-import { waitNextTick } from '@/../tests/unit/test.utils';
 
 describe('Views: Shader.vue', function () {
 
@@ -45,7 +46,7 @@ describe('Views: Shader.vue', function () {
 
   describe('Mount', () => {
 
-    it('Should loadVisualisations on mount',  async () => {
+    it('Should loadVisualisations on mount',() => {
 
       const wrapper = shallowMount(Shader, this.shallowConfig);
 
@@ -53,7 +54,6 @@ describe('Views: Shader.vue', function () {
       expect(this.stubs.actions.loadVisualisations.calledOnce).to.be.true;
 
       expect(wrapper.contains(ShaderRender) ).to.be.false;
-
 
     });
 
