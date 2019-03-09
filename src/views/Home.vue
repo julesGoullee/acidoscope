@@ -9,13 +9,14 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import MidiLoader from '@/components/MidiLoader.vue'
 
-export default {
-  name: 'Home',
-  components: {
-    MidiLoader
+  import MidiLoader from '@/components/MidiLoader.vue'
+
+  export default {
+    name: 'Home',
+    components: {
+      MidiLoader
+    }
   }
-}
+
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="shader-view" id="svr">
-    <ShaderRender />
+    <ShaderRender v-if="selectedVisualization" />
     <div v-if="!isFullscreen" class="fsbtn" v-on:click="fullscreen">
       FS
     </div>
@@ -35,16 +35,36 @@
 <script>
 
   import ShaderRender from '@/components/ShaderRender.vue'
+  import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'Shader',
     components: {
-      ShaderRender
+      ShaderRender,
     },
     data: () => ({
       isFullscreen: false,
     }),
+    computed: {
+      ...mapGetters([
+        'selectedVisualization',
+        'visualizations'
+      ]),
+    },
+    mounted: async function () {
+
+      if(this.visualizations.length === 0){
+        await this.loadVisualisations();
+      }
+
+      document.addEventListener("fullscreenchange", () => {
+        console.log(!!document.fullscreenElement);
+        this.isFullscreen = !!document.fullscreenElement;
+      });
+
+    },
     methods: {
+      ...mapActions(['loadVisualisations']),
       fullscreen: function () {
 
         this.isFullscreen = true;
@@ -55,15 +75,6 @@
         }
 
       },
-    },
-    mounted: async function() {
-
-      document.addEventListener("fullscreenchange", () => {
-        console.log(!!document.fullscreenElement);
-        this.isFullscreen = !!document.fullscreenElement;
-      });
-      
-    },
+    }
   }
-
 </script>
