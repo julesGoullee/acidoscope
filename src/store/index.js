@@ -50,7 +50,6 @@ export const store = {
 
       }
 
-
       if(value === 'up'){
 
         state.shaderEngine.uniforms[entry].value += param.gap;
