@@ -25,6 +25,7 @@
 
 <script>
 
+  import { mapGetters, mapActions } from 'vuex';
   import Midi from '../modules/helpers/midi'
 
   export default {
@@ -34,6 +35,11 @@
       return {
         event: null
       };
+    },
+    computed: {
+      ...mapGetters([
+        'midiHardwareConnected',
+      ]),
     },
     mounted: async function () {
 
@@ -53,12 +59,22 @@
 
       Midi.onEvent( (event) => {
 
-        this.event = event;
+        if(event.value === 1){
+
+          this.setMidiValue({ entry: 'caca1', value: 'down' });
+
+        } else if(event.value === 127){
+
+          this.setMidiValue({ entry: 'caca1', value: 'up' });
+
+        }
 
       });
 
+    },
+    methods: {
+      ...mapActions(['setMidiValue']),
     }
-
   }
 
 </script>

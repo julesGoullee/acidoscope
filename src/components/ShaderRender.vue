@@ -13,27 +13,27 @@
 </style>
 
 <script>
-  import ShaderEngine from '@/modules/ShaderEngine'
-  import shader1 from '@/shaders/shader1'
+
+  import { mapActions } from 'vuex';
 
   export default {
     name: 'ShaderRender',
-    data: () => ({
-      shaderEngine: null,
-    }),
     mounted: function() {
 
       const container = document.getElementById( 'shader-container' );
-
-      this.shaderEngine = new ShaderEngine(shader1, container);
-      this.shaderEngine.init();
-      this.shaderEngine.start();
+      this.createShaderEngine({ container });
 
     },
     beforeDestroy: function() {
 
-      this.shaderEngine.stop();
+      this.stopShaderEngine();
 
+    },
+    methods: {
+      ...mapActions([
+        'createShaderEngine',
+        'stopShaderEngine',
+      ]),
     }
   }
 </script>
