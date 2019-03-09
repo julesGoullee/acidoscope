@@ -6,7 +6,7 @@
     <ShaderRender v-if="selectedVisualization" />
     <div
       v-if="!isFullscreen"
-      class="fsbtn"
+      id="fsbtn"
       @click="fullscreen"
     >
       FS
@@ -21,7 +21,7 @@
     z-index: 0;
     position: relative;
   }
-  .fsbtn{
+  #fsbtn{
     position: absolute;
     bottom: 0;
     right: 0;

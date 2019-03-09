@@ -81,7 +81,7 @@ describe('Views: Shader.vue', function () {
 
       expect(spyFullScreen.calledOnce).to.be.true;
       expect(spyFullScreen.args[0][0]).to.be.eq('fullscreenchange');
-      expect(wrapper.contains('.fsbtn') ).to.be.true;
+      expect(wrapper.contains('#fsbtn') ).to.be.true;
 
     });
 
