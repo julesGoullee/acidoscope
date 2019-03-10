@@ -19,9 +19,6 @@ describe('Test', () => {
     cy.get('#nav > a:nth-child(2)').click();
     cy.get('#shader-container').should('be.visible');
 
-    cy.get('#nav > a:nth-child(3)').click();
-    cy.get('#about').should('be.visible');
-
     cy.get('#nav > a:nth-child(1)').click();
     cy.get('#home').should('be.visible');
 

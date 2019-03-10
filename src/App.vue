@@ -6,9 +6,6 @@
       </router-link> |
       <router-link to="/shader">
         Shader
-      </router-link> |
-      <router-link to="/about">
-        About
       </router-link>
     </div>
     <router-view />
