@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import assert from 'assert'
 
+import Midi from '@/modules/helpers/midi';
 import ShaderEngine from '@/modules/ShaderEngine'
 import shader1 from '@/shaders/shader1'
 
@@ -39,9 +40,9 @@ export const store = {
       state.shaderEngine.stop();
 
     },
-    setMidiValue: (state, { entry, value }) => {
+    setMidiValue: (state, { controlId, value }) => {
 
-      const param = state.shaderEngine.shader.params.find(param => param.name === entry);
+      const param = state.shaderEngine.shader.params.find(param => param.name === controlId);
 
       if(!param){
 
@@ -51,15 +52,20 @@ export const store = {
 
       if(value === 'up'){
 
-        state.shaderEngine.uniforms[entry].value += param.gap;
+        state.shaderEngine.uniforms[controlId].value += param.gap;
 
       } else {
 
-        state.shaderEngine.uniforms[entry].value -= param.gap;
+        state.shaderEngine.uniforms[controlId].value -= param.gap;
 
       }
 
-    }
+    },
+    setMidiHardwareStatus: (state, { midiHardwareConnected }) => {
+
+      state.midiHardwareConnected = midiHardwareConnected;
+
+    },
   },
   actions: {
 
@@ -92,11 +98,32 @@ export const store = {
       }
 
     },
-    setMidiValue: ({ state, commit }, { entry, value }) => {
+    setMidiValue: ({ state, commit }, { controlId, value }) => {
 
       if(state.shaderEngine){
 
-        commit('setMidiValue', { entry, value} );
+        commit('setMidiValue', { controlId, value} );
+
+      }
+
+    },
+    setMidiHardwareStatus: ({ state, commit, dispatch }, { midiHardwareConnected }) => {
+
+      if(state.midiHardwareConnected === midiHardwareConnected){
+
+        return false;
+
+      }
+
+      commit('setMidiHardwareStatus', { midiHardwareConnected });
+
+      if(midiHardwareConnected){
+
+        Midi.onEvent( (controlId, value) => {
+
+          dispatch('setMidiValue', { controlId, value });
+
+        });
 
       }
 

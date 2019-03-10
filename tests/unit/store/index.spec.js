@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import { cloneDeep } from 'lodash';
 
 import { store } from '@/store';
+import Midi from '@/modules/helpers/midi';
 import ShaderEngine from '@/modules/ShaderEngine'
 import shader1 from '@/shaders/shader1'
 
@@ -92,6 +93,13 @@ describe('Store', function (){
     it('Should set midi value', () => {
 
       // TODO
+
+    });
+
+    it('Should set hardware status', () => {
+
+      store.mutations.setMidiHardwareStatus(this.store.state, { midiHardwareConnected: true });
+      expect(this.store.state.midiHardwareConnected).to.be.eq(true);
 
     });
 
@@ -194,12 +202,12 @@ describe('Store', function (){
 
       this.store.state.shaderEngine = 'shaderEngine';
 
-      store.actions.setMidiValue(this.actionArgs, { entry: 'entry', value: 'value' });
+      store.actions.setMidiValue(this.actionArgs, { controlId: 'controlId', value: 'value' });
       expect(this.actionArgs.commit.calledOnce).to.be.true;
       expect(this.actionArgs.commit.calledWith(
         'setMidiValue',
-        { entry: 'entry',  value: 'value' }
-        ) ).to.be.true;
+        { controlId: 'controlId',  value: 'value' }
+      ) ).to.be.true;
 
     });
 
@@ -207,6 +215,66 @@ describe('Store', function (){
 
       store.actions.stopShaderEngine(this.actionArgs);
       expect(this.actionArgs.commit.callCount).to.be.eq(0);
+
+    });
+
+    describe('setMidiHardwareStatus', () => {
+
+      beforeEach( () => {
+
+        this.stubMidiOnEvent = this.sandbox.stub(Midi, 'onEvent');
+
+      });
+
+      it('Should set midi hardware status from connected to disconnected', () => {
+
+        this.store.state.midiHardwareConnected = true;
+
+        store.actions.setMidiHardwareStatus(this.actionArgs, { midiHardwareConnected: false });
+        expect(this.actionArgs.commit.calledOnce).to.be.true;
+        expect(this.actionArgs.commit.calledWith(
+          'setMidiHardwareStatus',
+          { midiHardwareConnected: false }
+        ) ).to.be.true;
+        expect(this.stubMidiOnEvent.callCount).to.be.eq(0);
+
+      });
+
+      it('Should set midi hardware same status disconnected', () => {
+
+        store.actions.setMidiHardwareStatus(this.actionArgs, { midiHardwareConnected: false });
+        expect(this.actionArgs.commit.callCount).to.be.eq(0);
+        expect(this.stubMidiOnEvent.callCount).to.be.eq(0);
+
+      });
+
+      it('Should set midi hardware same status connected', () => {
+
+        this.store.state.midiHardwareConnected = true;
+
+        store.actions.setMidiHardwareStatus(this.actionArgs, { midiHardwareConnected: true });
+        expect(this.actionArgs.commit.callCount).to.be.eq(0);
+        expect(this.stubMidiOnEvent.callCount).to.be.eq(0);
+
+      });
+
+      it('Should set midi hardware status from disconnected to connected', () => {
+
+        this.store.state.midiHardwareConnected = false;
+
+        store.actions.setMidiHardwareStatus(this.actionArgs, { midiHardwareConnected: true });
+        expect(this.actionArgs.commit.calledOnce).to.be.true;
+        expect(this.actionArgs.commit.calledWith(
+          'setMidiHardwareStatus',
+          { midiHardwareConnected: true }
+        ) ).to.be.true;
+        expect(this.stubMidiOnEvent.calledOnce).to.be.true;
+        expect(this.actionArgs.dispatch.callCount).to.be.eq(0);
+        this.stubMidiOnEvent.args[0][0]('controlId', 'value');
+        expect(this.actionArgs.dispatch.calledOnce).to.be.true;
+        expect(this.actionArgs.dispatch.calledWith('setMidiValue', { controlId: 'controlId', value: 'value' }) ).to.be.true;
+
+      });
 
     });
 
