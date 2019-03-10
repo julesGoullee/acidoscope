@@ -35,7 +35,7 @@
       ...mapActions([
         'createShaderEngine',
         'stopShaderEngine',
-        'listenMidi',
+        'listenMidiActions',
         'unlistenMidiActions',
       ]),
     }

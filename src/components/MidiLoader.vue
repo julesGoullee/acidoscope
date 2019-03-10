@@ -16,7 +16,6 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
-  import Midi from '@/modules/midi';
 
   export default {
     name: 'MidiLoader',
