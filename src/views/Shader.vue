@@ -65,7 +65,6 @@
       }
 
       document.addEventListener('fullscreenchange', () => {
-        console.log(!!document.fullscreenElement);
         this.isFullscreen = !!document.fullscreenElement;
       });
 

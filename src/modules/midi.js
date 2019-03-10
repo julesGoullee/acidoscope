@@ -11,8 +11,9 @@ const controllerId = [
   'soundcontrol9',
 ];
 
+const log = console.log.bind(null, '[MIDI]:');
+
 const Midi = {
-  isListening: false,
   isSupported: () => WebMidi.supported,
   isConnected: () => WebMidi.inputs && WebMidi.inputs.length > 0,
   controllerIdMap: controllerId.reduce( (acc, item, i) => {
@@ -43,17 +44,21 @@ const Midi = {
   },
   listenStatus: (setMidiHardwareStatus) => {
 
-    if(Midi.isConnected() ){
+    WebMidi.addListener('connected', () => {
+      log('Device connected');
+      setMidiHardwareStatus({ connected: true })
+    });
+    WebMidi.addListener('disconnected', () => {
+      log('Device disconnected');
+      setMidiHardwareStatus({ connected: false })
+    });
 
-      setMidiHardwareStatus({ midiHardwareConnected: true });
+    return function() {
 
-    }
+      WebMidi.removeListener('connected');
+      WebMidi.removeListener('disconnected');
 
-    WebMidi.addListener('connected', () => setMidiHardwareStatus({ midiHardwareConnected: true }) );
-
-    WebMidi.addListener('disconnected', () => setMidiHardwareStatus({ midiHardwareConnected: false }) );
-
-    Midi.isListening = true;
+    };
 
   },
   onEvent: (handler) => {
@@ -62,18 +67,41 @@ const Midi = {
 
       input.addListener('controlchange', 'all', (event) => {
 
-        if(Midi.controllerIdMap[event.controller.name]){
+        const name = event.controller.name;
+        const number = event.controller.number;
+        const value = event.value;
+        log('controlchange', number, name, value);
 
-          const value = event.value < 126 ? 'down' : 'up';
-          const id = Midi.controllerIdMap[event.controller.name];
-          handler(`control${id}`, value);
+        const mappedName = Midi.controllerIdMap[event.controller.name];
+        if(mappedName !== undefined){
+
+          const parsedValue = event.value < 126 ? 'down' : 'up';
+          handler(`control${mappedName}`, parsedValue);
 
         }
 
       });
 
+      function noteListener(event) {
+        const { channel, note, rawVelocity, velocity, type } = event;
+        log(type, channel, note.name, rawVelocity, velocity);
+      }
+      input.addListener('noteon', 'all', noteListener);
+      input.addListener('noteoff', 'all', noteListener);
+
     });
 
+    return function() {
+
+      WebMidi.inputs.forEach( (input) => {
+
+        input.removeListener('controlchange');
+        input.removeListener('noteon');
+        input.removeListener('noteoff');
+
+      });
+
+    };
   }
 };
 
