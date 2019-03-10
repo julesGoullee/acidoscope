@@ -62,6 +62,7 @@ const MidiLinkModule = {
 
       await Midi.init();
 
+      commit('setMidiHardwareConnected', Midi.isConnected());
       Midi.listenStatus(hardwareStatus => {
         commit('setMidiHardwareConnected', hardwareStatus.connected);
       });
