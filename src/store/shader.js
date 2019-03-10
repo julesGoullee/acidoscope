@@ -24,21 +24,6 @@ const ShaderParamsModule = {
         [paramName]: shader.getUniformValue(paramName),
       };
 
-      console.log(state.paramsValue);
-    },
-    setParamValueByIndex(state, { paramIndex, paramValue }) {
-
-      const param = state.paramsList[paramIndex];
-      if(!param) return;
-
-      const shader = state.shaderEngine.shaderParams;
-      shader.setUniformValue(param.name, paramValue);
-
-      state.paramsValue = {
-        ...state.paramsValue,
-        [param.name]: shader.getUniformValue(param.name),
-      };
-
     },
 
     createShaderEngine: (state, { shader, container }) => {
@@ -99,6 +84,32 @@ const ShaderParamsModule = {
         commit('stopShaderEngine');
 
       }
+
+    },
+
+    changeParamValue({state, commit}, {paramName, action}) {
+
+      const initialParam = state.shaderEngine.shaderParams.initialParams[paramName];
+      if(!initialParam) throw new Error('Unknown shader parameter to change');
+
+      const oldValue = state.shaderEngine.shaderParams.getUniformValue(paramName);
+      let newValue = oldValue;
+
+      switch(action) {
+        case 'up': {
+          newValue = oldValue + initialParam.step;
+          break;
+        }
+        case 'down': {
+          newValue = oldValue + initialParam.step;
+          break;
+        }
+        default: {
+          throw new Error('Unknown shader change param action')
+        }
+      }
+
+      commit('setParamValue', { paramName, paramValue: newValue });
 
     },
 
