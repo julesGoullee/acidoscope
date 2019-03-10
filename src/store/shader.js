@@ -24,6 +24,21 @@ const ShaderParamsModule = {
         [paramName]: shader.getUniformValue(paramName),
       };
 
+      console.log(state.paramsValue);
+    },
+    setParamValueByIndex(state, { paramIndex, paramValue }) {
+
+      const param = state.paramsList[paramIndex];
+      if(!param) return;
+
+      const shader = state.shaderEngine.shaderParams;
+      shader.setUniformValue(param.name, paramValue);
+
+      state.paramsValue = {
+        ...state.paramsValue,
+        [param.name]: shader.getUniformValue(param.name),
+      };
+
     },
 
     createShaderEngine: (state, { shader, container }) => {

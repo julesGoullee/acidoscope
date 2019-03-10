@@ -9,8 +9,33 @@ const MidiLinkModule = {
       {
         midiActionType: 'controlchange',
         controlNumber: 71,
-        shaderParamName: 'control1',
-      }
+        shaderParamIndex: 0,
+      },
+      {
+        midiActionType: 'controlchange',
+        controlNumber: 72,
+        shaderParamIndex: 1,
+      },
+      {
+        midiActionType: 'controlchange',
+        controlNumber: 73,
+        shaderParamIndex: 2,
+      },
+      {
+        midiActionType: 'controlchange',
+        controlNumber: 74,
+        shaderParamIndex: 3,
+      },
+      {
+        midiActionType: 'controlchange',
+        controlNumber: 75,
+        shaderParamIndex: 4,
+      },
+      {
+        midiActionType: 'controlchange',
+        controlNumber: 76,
+        shaderParamIndex: 5,
+      },
     ],
   },
 
@@ -69,11 +94,19 @@ const MidiLinkModule = {
       const shaderEngine = rootGetters.shaderEngine;
       const shaderParams = shaderEngine.shaderParams;
       const initialParams = shaderParams.initialParams;
-      const initialParam = initialParams[bindedParam.shaderParamName];
 
-      if(!initialParam) throw new Error('Midi action binded to unknown shader param');
+      let paramName = bindedParam.shaderParamName;
+      if(!paramName && bindedParam.shaderParamIndex !== undefined) {
+        const param = rootGetters.paramsList[bindedParam.shaderParamIndex];
+        if(!param) return;
+        paramName = param.name;
+      } else if(!bindedParam.shaderParamName) {
+        throw new Error('Nothing to bind midi action to');
+      }
 
-      const paramName = initialParam.name;
+      const initialParam = initialParams[paramName];
+      if(!initialParam) throw new Error('Midi action binded to unknown shader param name');
+
       let newValue = 0;
 
       if(midiAction.type === 'controlchange') {
@@ -86,8 +119,10 @@ const MidiLinkModule = {
           newValue = shaderParams.getUniformValue(paramName) - initialParam.step;
 
         }
+
       }
-      commit('setParamValue', {paramName, paramValue: newValue})
+
+      commit('setParamValue', { paramName, paramValue: newValue })
 
     },
 

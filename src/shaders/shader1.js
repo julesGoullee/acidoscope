@@ -6,6 +6,7 @@ precision mediump float;
 
 uniform float time;
 uniform float control1;
+uniform float control2;
 uniform vec2 mouse;
 uniform vec2 resolution;
 #define time (time*0.5)
@@ -44,7 +45,7 @@ vec2 mobius(vec2 domain, vec2 zero_pos, vec2 asymptote_pos){
 
 float gear(vec2 domain, float phase, vec2 pos){
 	float angle = atan(domain.y - pos.y, domain.x - pos.x);
-	float d = control1 + sin((angle + phase) * sin(time / 999.0)*10.21)*0.1;
+	float d = control1 + sin((angle + phase) * sin(time / 999.0)*10.21)*control2;
 	return smoothcircle(domain, pos, vec2(1), d, 128.);
 }
 
@@ -129,6 +130,14 @@ void main(void)
       type: 'f',
       special: 'controllable',
       defaultValue: 0.2,
+      range: [0.01, 0.7],
+      step: 0.01,
+    },
+    {
+      name: 'control2',
+      type: 'f',
+      special: 'controllable',
+      defaultValue: 0.1,
       range: [0.01, 0.7],
       step: 0.01,
     },
