@@ -92,4 +92,10 @@ class ShaderEngine {
 
 }
 
+function reduceArrayToObject(obj) {
+  return obj.reduce((acc, it) => ({...acc, [it]: it}), {});
+}
+ShaderEngine.TYPES = reduceArrayToObject(['f', 'v2', 'v3']);
+ShaderEngine.SPECIALS = reduceArrayToObject(['time', 'mouse', 'resolution', 'controllable']);
+
 export default ShaderEngine;

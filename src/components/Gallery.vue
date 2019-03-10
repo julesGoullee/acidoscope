@@ -1,6 +1,6 @@
 <template>
   <v-layout
-    id="gallery-container"
+    class="gallery-container"
     justify-center
   >
     <v-flex
