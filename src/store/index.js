@@ -102,7 +102,7 @@ export const store = {
 
       if(state.shaderEngine){
 
-        commit('setMidiValue', { controlId, value} );
+        commit('setMidiValue', { controlId, value });
 
       }
 
