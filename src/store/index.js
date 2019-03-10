@@ -8,14 +8,7 @@ import MidiLink from './midiLink';
 // Modules
 import router from '@/router';
 import ShaderEngine from '@/modules/ShaderEngine';
-import shader1 from '@/shaders/shader1';
-import shader2 from '@/shaders/shader2';
-
-const shaders = [
-  shader1,
-  shader2,
-];
-
+import shaders from '@/shaders';
 
 Vue.use(Vuex);
 
@@ -61,7 +54,7 @@ export const store = {
 
         if(state.visualizations.length === 0){
 
-          commit('setVisualisations', { visualizations: [ shader1, shader2 ]} );
+          commit('setVisualisations', { visualizations: shaders } );
 
         }
 
