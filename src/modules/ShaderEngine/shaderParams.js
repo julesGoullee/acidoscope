@@ -41,16 +41,16 @@ class ShaderParams {
     }
   }
 
-  forUniforms(fn) {
+  forInitialParams(fn) {
 
-    const params = this.shaderEngine.shader.initialParams;
-    const props = Object.keys(params);
+    const initialParams = this.shaderEngine.shader.initialParams;
+    const paramNames = Object.keys(initialParams);
 
-    for(let prop in props) {
+    for(let index in paramNames) {
 
-      const param = params[prop];
+      const initialParam = initialParams[index];
 
-      fn(param);
+      fn(initialParam);
 
     }
 
@@ -60,7 +60,7 @@ class ShaderParams {
 
     this.uniforms = {};
 
-    this.forUniforms(param => {
+    this.forInitialParams(param => {
 
       const value = ShaderParams.getUniformDefaultValue(param.type, param.defaultValue);
 
@@ -77,7 +77,7 @@ class ShaderParams {
 
   updateSpecialUniforms() {
 
-    this.forUniforms(param => {
+    this.forInitialParams(param => {
 
       switch(param.special) {
 

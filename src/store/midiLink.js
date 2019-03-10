@@ -1,6 +1,6 @@
 import Midi from '@/modules/midi';
 
-const MidiLink = {
+const MidiLinkModule = {
 
   state: {
     midiHardwareConnected: false,
@@ -68,7 +68,7 @@ const MidiLink = {
 
     },
 
-    listenMidi({ state, commit } ) {
+    listenMidiActions({ state, commit } ) {
 
       if(state.midiListener) return;
 
@@ -79,7 +79,7 @@ const MidiLink = {
 
     },
 
-    unlistenMidi({ state, commit } ) {
+    unlistenMidiActions({ state, commit } ) {
 
       if(!state.midiListening) return;
       state.midiListener();
@@ -95,4 +95,4 @@ const MidiLink = {
 
 };
 
-export default MidiLink;
+export default MidiLinkModule;
