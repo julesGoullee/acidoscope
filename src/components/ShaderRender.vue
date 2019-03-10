@@ -1,3 +1,4 @@
+<script src="../../tests/unit/store/index.spec.js"></script>
 <template>
   <div
     id="shader-container"
@@ -18,21 +19,25 @@
 
   export default {
     name: 'ShaderRender',
-    mounted: function() {
+    mounted: async function() {
 
       const container = document.getElementById( 'shader-container');
       this.createShaderEngine({ container });
+      await this.listenMidi();
 
     },
     beforeDestroy: function() {
 
       this.stopShaderEngine();
+      this.unlistenMidi();
 
     },
     methods: {
       ...mapActions([
         'createShaderEngine',
         'stopShaderEngine',
+        'listenMidi',
+        'unlistenMidi',
       ]),
     }
   }

@@ -10,6 +10,8 @@ const MidiLink = {
   state: {
     midiInitialized: false,
     midiHardwareConnected: false,
+    midiListening: false,
+    unlisteners: [],
   },
 
   mutations: {
@@ -36,48 +38,85 @@ const MidiLink = {
       }
 
     },
-    setMidiHardwareStatus: (state, connected) => {
-
+    setMidiHardwareConnected: (state, connected) => {
       state.midiHardwareConnected = connected;
-
     },
     setMidiInitialized(state, initialized) {
       state.midiInitialized = initialized;
     },
+    setMidiListening(state, listening) {
+      state.midiListening = listening;
+    },
+
+    addUnlistener(state, unlistener) {
+      state.unlisteners.push(unlistener);
+    },
+
   },
   actions: {
 
-    async initMidi({ state, commit, dispatch } ) {
+    async initMidi({ state, commit } ) {
 
       if(state.midiInitialized) return;
       assert(Midi.isSupported(), 'web_midi_not_supported');
 
       await Midi.requestAccess();
 
-      dispatch('setMidiHardwareStatus', Midi.isConnected());
-
+      commit('setMidiHardwareConnected', Midi.isConnected());
       Midi.listenStatus(hardwareStatus => {
-        dispatch('setMidiHardwareStatus', hardwareStatus.connected);
+        commit('setMidiHardwareConnected', hardwareStatus.connected);
       });
+
       commit('setMidiInitialized', true);
+
     },
 
-    setMidiHardwareStatus: ({ state, commit }, connected) => {
+    listenMidi({ state, commit, dispatch } ) {
 
-      if(state.midiHardwareConnected === connected) return;
-      commit('setMidiHardwareStatus', connected);
+      if(state.midiListening) return;
 
-      if(connected){
+      function startListening() {
 
-        Midi.onEvent( (controlId, value) => {
-
+        const unlistenEvents = Midi.onEvent( (controlId, value) => {
           commit('handleMidiValue', { controlId, value });
-
         });
+        commit('addUnlistener', unlistenEvents);
+        commit('setMidiListening', true);
+
+        const unlistenStatus = Midi.listenStatus(hardwareStatus => {
+          if(!hardwareStatus.connected) {
+            dispatch('unlistenMidi');
+            dispatch('listenMidi');
+          }
+        });
+        commit('addUnlistener', unlistenStatus);
+
+      }
+      if(state.midiHardwareConnected) {
+        startListening();
+      } else {
+
+        const unlistenStatus = Midi.listenStatus(hardwareStatus => {
+          if(hardwareStatus.connected) {
+            startListening();
+            unlistenStatus();
+          }
+        });
+        commit('addUnlistener', unlistenStatus);
 
       }
 
     },
+
+    unlistenMidi({ state, commit } ) {
+
+      if(!state.midiListening) return;
+      state.unlisteners.forEach(u => u());
+      state.unlisteners = [];
+      commit('setMidiListening', false);
+
+    },
+
   },
 
   getters: {

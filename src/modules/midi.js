@@ -44,19 +44,21 @@ const Midi = {
   },
   listenStatus: (setMidiHardwareStatus) => {
 
-    WebMidi.addListener('connected', () => {
+    const connectedHandler = () => {
       log('Device connected');
-      setMidiHardwareStatus({ connected: true })
-    });
-    WebMidi.addListener('disconnected', () => {
+      setMidiHardwareStatus({ connected: true });
+    };
+    const disconnectedHandler = () => {
       log('Device disconnected');
-      setMidiHardwareStatus({ connected: false })
-    });
+      setMidiHardwareStatus({ connected: false });
+    };
+    WebMidi.addListener('connected', connectedHandler);
+    WebMidi.addListener('disconnected', disconnectedHandler);
 
     return function() {
 
-      WebMidi.removeListener('connected');
-      WebMidi.removeListener('disconnected');
+      WebMidi.removeListener('connected', connectedHandler);
+      WebMidi.removeListener('disconnected', disconnectedHandler);
 
     };
 
