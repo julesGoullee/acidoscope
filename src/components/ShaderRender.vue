@@ -1,4 +1,3 @@
-<script src="../../tests/unit/store/index.spec.js"></script>
 <template>
   <div
     id="shader-container"
@@ -37,7 +36,7 @@
         'createShaderEngine',
         'stopShaderEngine',
         'listenMidi',
-        'unlistenMidi',
+        'unlistenMidiActions',
       ]),
     }
   }
