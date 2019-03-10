@@ -52,11 +52,13 @@ export const store = {
 
       if(value === 'up'){
 
-        state.shaderEngine.uniforms[controlId].value += param.gap;
+        const newValue = state.shaderEngine.getUniformValue(controlId) + param.step;
+        state.shaderEngine.setUniformValue(controlId, newValue);
 
       } else {
 
-        state.shaderEngine.uniforms[controlId].value -= param.gap;
+        const newValue = state.shaderEngine.getUniformValue(controlId) - param.step;
+        state.shaderEngine.setUniformValue(controlId, newValue);
 
       }
 

@@ -1,16 +1,18 @@
 import * as THREE from 'three'
 
 import ShaderParams from './shaderParams';
+//import DefaultVertex from './defaultVertex.vert';
 
 class ShaderEngine {
 
   constructor(shader, container) {
 
     this.shader = {
-      vertexShader: shader.vertexShader,
+      vertexShader: shader.vertexShader /*|| DefaultVertex*/,
       fragmentShader: shader.fragmentShader,
-      params: shader.params,
+      initialParams: shader.params || {},
     };
+
     this.shaderParams = new ShaderParams(this);
 
     this.container = container;
@@ -83,7 +85,7 @@ class ShaderEngine {
   render() {
 
     this.updateCanvas();
-    this.shaderParams.updateUniforms();
+    this.shaderParams.updateSpecialUniforms();
     this.renderer.render( this.three.scene, this.three.camera );
 
   }

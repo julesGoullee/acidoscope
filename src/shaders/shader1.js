@@ -140,7 +140,8 @@ void main(void)
       name: 'control1',
       type: 'f',
       defaultValue: 0.2,
-      gap: 0.01
+      range: [0., 0.],
+      step: 0.01,
     }
   ],
 }
