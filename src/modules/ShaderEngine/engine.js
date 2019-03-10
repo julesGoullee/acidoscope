@@ -1,14 +1,14 @@
 import * as THREE from 'three'
 
 import ShaderParams from './shaderParams';
-//import DefaultVertex from './defaultVertex.vert';
+import DefaultVertex from './defaultVertex.glsl';
 
 class ShaderEngine {
 
   constructor(shader, container) {
 
     this.shader = {
-      vertexShader: shader.vertexShader /*|| DefaultVertex*/,
+      vertexShader: shader.vertexShader || DefaultVertex,
       fragmentShader: shader.fragmentShader,
       initialParams: shader.params || {},
     };
