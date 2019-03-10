@@ -1,24 +1,10 @@
 <template>
-  <div>
-    Coucou midi
-    <div v-if="event !== null">
-      <ul>
-        <li>channel: {{ event.channel }} </li>
-        <li>type: {{ event.type }} </li>
-        <li>value: {{ event.value }} </li>
-        <li>
-          <ul>
-            <li>controller:</li>
-            <li>id: {{ event.controller.id }} </li>
-            <li>name: {{ event.controller.name }} </li>
-          </ul>
-          <ul>
-            <li>input:</li>
-            <li>id: {{ event.input.id }}</li>
-            <li>name: { {event.input.name }}</li>
-          </ul>
-        </li>
-      </ul>
+  <div id="midi-loader">
+    <div v-if="midiHardwareConnected">
+      isConnected
+    </div>
+    <div v-if="!midiHardwareConnected">
+      isDisconnected
     </div>
   </div>
 </template>
@@ -26,16 +12,10 @@
 <script>
 
   import { mapGetters, mapActions } from 'vuex';
-  import Midi from '../modules/helpers/midi'
+  import Midi from '@/modules/helpers/midi';
 
   export default {
-
     name: 'MidiLoader',
-    data: function () {
-      return {
-        event: null
-      };
-    },
     computed: {
       ...mapGetters([
         'midiHardwareConnected',
@@ -49,36 +29,27 @@
 
       }
 
-      const access = await Midi.requestAccess();
+      if(this.midiHardwareConnected){
 
-      if(!Midi.isConnected(access) ){
-
-        throw new Error('No input detected')
+        return true;
 
       }
 
-      Midi.onEvent( (id, value) => {
+      await Midi.requestAccess();
 
-        if(value < 126){
+      if(!Midi.isListening){
 
-          this.setMidiValue({ entry: `control${id}`, value: 'down' });
+        Midi.listenStatus(this.setMidiHardwareStatus);
 
-        } else if(value >= 126){
-
-          this.setMidiValue({ entry: `control${id}`, value: 'up' });
-
-        }
-
-      });
+      }
 
     },
     methods: {
-      ...mapActions(['setMidiValue']),
+      ...mapActions([
+        'setMidiHardwareStatus',
+      ])
     }
+
   }
 
 </script>
-
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
-<style scoped>
-</style>
