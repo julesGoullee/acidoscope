@@ -151,7 +151,36 @@ const Midi = {
       });
 
     };
+  },
+
+  danceColors() {
+
+    const padStartNumber = 36;
+    const colors = {
+      red: 127,
+      green: 126,
+      blue: 125,
+    };
+
+    const output = WebMidi.getOutputByName('Ableton Push 2 User Port');
+
+    function draw() {
+
+      for(let i=0; i<64; i++) {
+        const rand = Math.floor(Math.random() * 1000%3);
+        let color;
+        if(rand === 0) color = 'blue';
+        if(rand === 1) color = 'green';
+        if(rand === 2) color = 'red';
+        output.send(144, [padStartNumber+i, colors[color]], 0);
+      }
+
+    }
+
+    setInterval(draw, 100);
+
   }
+
 };
 
 export default Midi;

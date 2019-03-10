@@ -59,8 +59,6 @@ class ShaderEngine {
     this.running = true;
     this.startTime = Date.now();
     this.animate();
-
-    setTimeout(() => this.test(), 2000)
   }
 
   stop() {
@@ -92,24 +90,6 @@ class ShaderEngine {
 
   }
 
-  /*
-  testSendColor() {
-   import WebMidi from 'webmidi';
-   const canvas = this.renderer.domElement;
-    const gl = canvas.getContext('webgl');
-    const pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
-    gl.readPixels(0,0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-
-    console.log(pixels);
-    console.log(WebMidi.outputs)
-
-    const padNumber = 36;
-    const padColor = 127;
-    const output = WebMidi.getOutputByName('Ableton Push 2 User Port');
-    output.sendSysex([0, 33, 29], [1, 1, 10, 1]);
-    output.send(144, [padNumber, padColor], 0);
-  }
-  */
 }
 
 function reduceArrayToObject(obj) {
