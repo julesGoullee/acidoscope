@@ -66,6 +66,7 @@ export const store = {
       state.midiHardwareConnected = midiHardwareConnected;
 
     },
+
   },
   actions: {
 
@@ -127,13 +128,16 @@ export const store = {
 
       }
 
-    }
+    },
+
   },
   getters: {
+
     selectedVisualization: state => state.selectedVisualization,
     visualizations: state => state.visualizations,
     shaderEngine: state => state.shaderEngine,
     midiHardwareConnected: state => state.midiHardwareConnected,
+
   }
 };
 
