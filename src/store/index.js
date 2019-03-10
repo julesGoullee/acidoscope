@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 import GalleryModule from "./gallery";
 import MidiLinkModule from "./midiLink";
-import ShaderParamsModule from "./shaderParams";
+import ShaderModule from "./shader";
 
 Vue.use(Vuex);
 
@@ -12,7 +12,7 @@ export const store = {
   modules: {
     gallery: GalleryModule,
     midiLink: MidiLinkModule,
-    shaderParams: ShaderParamsModule,
+    shader: ShaderModule,
   },
 
 };

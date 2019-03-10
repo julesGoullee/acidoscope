@@ -18,7 +18,7 @@ void main(void){
 	vec2 v = (gl_FragCoord.xy - resolution.xy/2.) / min(resolution.y,resolution.x) * 30.;
 	vec2 vv = v; vec2 vvv = v;
 	float ft = time+360.1;
-	float tm = ft*0.1;
+	float tm = ft*control1;
 	float tm2 = ft*0.3;
 	vec2 mspt = (vec2(
 			sin(tm)+cos(tm*0.2)+sin(tm*0.5)+cos(tm*-0.4)+sin(tm*1.3),
@@ -104,9 +104,11 @@ void main(void){
     },
     {
       name: 'control1',
+      special: 'controllable',
       type: 'f',
-      defaultValue: 0.2,
-      gap: 0.01
+      range: [0.01, 0.2],
+      defaultValue: 0.1,
+      step: 0.001
     }
   ],
 }
