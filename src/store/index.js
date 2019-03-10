@@ -3,14 +3,20 @@ import Vuex from 'vuex';
 import assert from 'assert';
 
 import Midi from '@/modules/midi';
+import router from '@/router';
 import ShaderEngine from '@/modules/ShaderEngine';
 import shader1 from '@/shaders/shader1';
+import shader2 from '@/shaders/shader2';
+
+const shaders = [
+  shader1,
+  shader2,
+];
 
 Vue.use(Vuex);
 
 export const store = {
   state: {
-    selectedVisualization: null,
     visualizations: [],
     shaderEngine: null,
     midiHardwareConnected: false,
@@ -27,9 +33,9 @@ export const store = {
       state.visualizations = visualizations;
 
     },
-    createShaderEngine: (state, { container }) => {
+    createShaderEngine: (state, { shader, container }) => {
 
-      state.shaderEngine = new ShaderEngine(shader1, container);
+      state.shaderEngine = new ShaderEngine(shader, container);
       state.shaderEngine.init();
       state.shaderEngine.start();
 
@@ -74,20 +80,30 @@ export const store = {
 
       if(state.visualizations.length === 0){
 
-        commit('setVisualisations', { visualizations: [ shader1 ]} );
-
-      }
-
-      if(state.selectedVisualization === null){
-
-        commit('selectVisualization', { visualization: shader1 } );
+        commit('setVisualisations', { visualizations: [ shader1, shader2 ]} );
 
       }
 
     },
-    createShaderEngine: ({ commit }, { container }) => {
+    createShaderEngine: ({ state, commit, dispatch }, { container }) => {
 
-      commit('createShaderEngine', { container } );
+      dispatch('loadVisualisations');
+
+      assert(state.route && state.route.name === 'shader' && state.route.params && state.route.params.id, 'unknown_shader_id');
+
+      const shader = shaders[parseInt(state.route.params.id, 10) - 1];
+
+      if(!shader){
+
+        router.push({ path: '/' });
+
+        commit('createShaderEngine', { shader: shaders[0], container } );
+
+      } else {
+
+        commit('createShaderEngine', { shader, container } );
+
+      }
 
     },
     stopShaderEngine: ({ state, commit }) => {
@@ -133,11 +149,9 @@ export const store = {
   },
   getters: {
 
-    selectedVisualization: state => state.selectedVisualization,
     visualizations: state => state.visualizations,
     shaderEngine: state => state.shaderEngine,
     midiHardwareConnected: state => state.midiHardwareConnected,
-
   }
 };
 

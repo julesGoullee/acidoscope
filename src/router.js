@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
 
 Vue.use(Router);
 
@@ -10,13 +9,17 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'gallery',
+      component: () => import(/* webpackChunkName: "gallery" */ './views/Gallery.vue')
     },
     {
-      path: '/shader',
+      path: '/shader/:id',
       name: 'shader',
-      component: () => import(/* webpackChunkName: "shader" */ './views/Shader.vue')
+      component: () => import(/* webpackChunkName: "shader" */ './views/Shader.vue'),
+    },
+    {
+      path: "*",
+      redirect: '/'
     }
   ]
 });

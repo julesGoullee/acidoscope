@@ -2,12 +2,12 @@
 
 describe('Test', () => {
 
-  it('Should render home', () => {
+  it('Should render gallery', () => {
 
     cy.visit('/');
     cy.get('#app').should('be.visible');
-    cy.get('#home').should('be.visible');
-    cy.get('#home').find('img').should('be.visible');
+    cy.get('#gallery').should('be.visible');
+    cy.get('#gallery').find('img').should('be.visible');
 
   });
 
@@ -20,7 +20,7 @@ describe('Test', () => {
     cy.get('#shader-container').should('be.visible');
 
     cy.get('#nav > a:nth-child(1)').click();
-    cy.get('#home').should('be.visible');
+    cy.get('#gallery').should('be.visible');
 
   });
 
