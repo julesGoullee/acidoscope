@@ -1,11 +1,21 @@
 import WebMidi from 'webmidi';
+import assert from 'assert';
 
 const log = console.log.bind(null, '[MIDI]:');
 
 const Midi = {
   isSupported: () => WebMidi.supported,
   isConnected: () => WebMidi.inputs && WebMidi.inputs.length > 0,
-  requestAccess: async () => {
+  status: {
+    midiInitialized: false,
+    midiHardwareConnected: false,
+    midiListening: false,
+  },
+  unlisteners: [],
+  init: async () => {
+
+    assert(Midi.isSupported(), 'web_midi_not_supported');
+    if(Midi.status.midiInitialized) return;
 
     return new Promise( (resolve, reject) => {
 
@@ -17,6 +27,10 @@ const Midi = {
 
         } else {
 
+          Midi.midiHardwareConnected = Midi.isConnected();
+          Midi.listenStatus(hardwareStatus => {
+            Midi.midiHardwareConnected = hardwareStatus.connected;
+          });
           resolve();
 
         }
@@ -24,6 +38,7 @@ const Midi = {
       });
 
     });
+
   },
   listenStatus: (setMidiHardwareStatus) => {
 
@@ -46,6 +61,55 @@ const Midi = {
     };
 
   },
+
+  addListener(handler) {
+
+    let unlisteners = [];
+
+    function stopListening() {
+      unlisteners.forEach(u => u());
+      unlisteners = null;
+    }
+
+    function startListening() {
+
+      // Listen midi actions
+      const unlistenEvents = Midi.onEvent(handler);
+      unlisteners.push(unlistenEvents);
+
+      // Listen midi disconnection, unlisten and listen to wait for new connection
+      const unlistenStatus = Midi.listenStatus(hardwareStatus => {
+        if(!hardwareStatus.connected) {
+          stopListening();
+          Midi.addListener(handler)
+        }
+      });
+      unlisteners.push(unlistenStatus);
+
+    }
+
+    if(Midi.midiHardwareConnected) {
+
+      // If already connected, start listening
+      startListening();
+
+    } else {
+
+      // If not connected, wait connection then start listening
+      const unlistenStatus = Midi.listenStatus(hardwareStatus => {
+        if(hardwareStatus.connected) {
+          startListening();
+          unlistenStatus();
+        }
+      });
+      Midi.unlisteners.push(unlistenStatus); // Maybe have been unlistened previously
+
+    }
+
+    return stopListening;
+
+  },
+
   onEvent: (handler) => {
 
     WebMidi.inputs.forEach( (input) => {
@@ -78,6 +142,7 @@ const Midi = {
 
       WebMidi.inputs.forEach( (input) => {
 
+        // TODO target listeners
         input.removeListener('controlchange');
         input.removeListener('noteon');
         input.removeListener('noteoff');
