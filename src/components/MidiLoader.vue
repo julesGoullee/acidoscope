@@ -1,23 +1,25 @@
 <template>
-  <div id="midi-loader">
+  <v-btn
+    flat
+    icon
+    depressed
+  >
     <v-icon
+      id="midi-loader"
       :color="midiHardwareConnected ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
       size="30"
     >
       developer_board
     </v-icon>
-  </div>
+  </v-btn>
 </template>
 
 <script>
-  import { VIcon } from 'vuetify/lib'
   import { mapGetters, mapActions } from 'vuex';
+  import Midi from '@/modules/midi';
 
   export default {
     name: 'MidiLoader',
-    components: {
-      VIcon
-    },
     computed: {
       ...mapGetters([
         'midiHardwareConnected',
@@ -38,9 +40,5 @@
 
 </script>
 <style scoped>
-  #midi-loader {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-  }
+  #midi-loader {}
 </style>

@@ -1,5 +1,4 @@
 export default {
-  //vertexShader: ``,
   fragmentShader: `
 #ifdef GL_ES
 precision mediump float;
@@ -117,6 +116,7 @@ void main(void)
     {
       name: 'resolution',
       type: 'v2',
+      defaultValue: [0.,0.],
       special: 'resolution',
     },
     {
@@ -129,8 +129,7 @@ void main(void)
       name: 'control1',
       type: 'f',
       defaultValue: 0.2,
-      range: [0., 100.],
-      step: 0.01,
+      gap: 0.01
     }
   ],
 }

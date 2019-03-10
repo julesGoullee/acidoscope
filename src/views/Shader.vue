@@ -3,7 +3,7 @@
     id="svr"
     class="shader-view"
   >
-    <ShaderRender v-if="selectedVisualization" />
+    <ShaderRender />
     <div
       v-if="!isFullscreen"
       id="fsbtn"
@@ -41,11 +41,12 @@
 
 <script>
 
+  // const NoSleep = require('nosleep');
   import ShaderRender from '@/components/ShaderRender.vue'
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-    name: 'Shader',
+    name: 'ShaderView',
     components: {
       ShaderRender,
     },
@@ -54,19 +55,22 @@
     }),
     computed: {
       ...mapGetters([
-        'selectedVisualization',
         'visualizations'
       ]),
     },
     mounted: async function () {
 
-      if(this.visualizations.length === 0){
-        await this.loadVisualisations();
-      }
+      // console.log(NoSleep);
+      // const noSleep = new NoSleep();
+      await this.loadVisualisations();
 
-      document.addEventListener('fullscreenchange', () => {
+      document.addEventListener('fullscreenchange', function enableNoSleep(){
+
+        document.removeEventListener('click', enableNoSleep, false);
+        // noSleep.enable();
         this.isFullscreen = !!document.fullscreenElement;
-      });
+
+      }, false);
 
     },
     methods: {
