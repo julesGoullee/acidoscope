@@ -1,11 +1,11 @@
 <template>
   <div id="midi-loader">
-    <div v-if="midiHardwareConnected">
-      isConnected
-    </div>
-    <div v-if="!midiHardwareConnected">
-      isDisconnected
-    </div>
+    <v-icon
+      :color="midiHardwareConnected ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
+      size="30"
+    >
+      developer_board
+    </v-icon>
   </div>
 </template>
 
@@ -50,6 +50,13 @@
       ])
     }
 
-  }
+  };
 
 </script>
+<style scoped>
+  #midi-loader {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+</style>

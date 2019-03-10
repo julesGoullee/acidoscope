@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <MidiLoader />
     <div id="nav">
       <router-link to="/">
         Home
@@ -11,7 +12,18 @@
     <router-view />
   </div>
 </template>
+<script>
 
+  import MidiLoader from '@/components/MidiLoader.vue';
+
+  export default {
+    name: 'App',
+    components: {
+      MidiLoader
+    }
+  };
+
+</script>
 <style>
   body {
     margin: 0;

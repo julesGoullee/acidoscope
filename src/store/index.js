@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import assert from 'assert'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import assert from 'assert';
 
 import Midi from '@/modules/helpers/midi';
-import ShaderEngine from '@/modules/ShaderEngine'
-import shader1 from '@/shaders/shader1'
+import ShaderEngine from '@/modules/ShaderEngine';
+import shader1 from '@/shaders/shader1';
 
 Vue.use(Vuex);
 

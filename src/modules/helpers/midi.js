@@ -28,9 +28,9 @@ const Midi = {
 
     }
 
-    WebMidi.addListener('connected', setMidiHardwareStatus({ midiHardwareConnected: true }) );
+    WebMidi.addListener('connected', () => setMidiHardwareStatus({ midiHardwareConnected: true }) );
 
-    WebMidi.addListener('disconnected', setMidiHardwareStatus({ midiHardwareConnected: false }) );
+    WebMidi.addListener('disconnected', () => setMidiHardwareStatus({ midiHardwareConnected: false }) );
 
     Midi.isListening = true;
 

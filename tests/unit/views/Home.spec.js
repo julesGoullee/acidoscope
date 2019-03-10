@@ -2,7 +2,6 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
 import Home from '@/views/Home.vue';
-import MidiLoader from '@/components/MidiLoader.vue';
 
 describe('Views: Home.vue', function () {
 
@@ -22,10 +21,10 @@ describe('Views: Home.vue', function () {
 
   });
 
-  it('Should render MidiLoader', () => {
+  it('Should render logo', () => {
 
     const wrapper = shallowMount(Home, this.shallowConfig);
-    expect(wrapper.contains(MidiLoader) ).to.be.true;
+    expect(wrapper.contains('img') ).to.be.true;
 
   });
 

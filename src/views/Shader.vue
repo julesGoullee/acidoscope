@@ -3,7 +3,6 @@
     id="svr"
     class="shader-view"
   >
-    <MidiLoader />
     <ShaderRender v-if="selectedVisualization" />
     <div
       v-if="!isFullscreen"
@@ -42,14 +41,12 @@
 
 <script>
 
-  import MidiLoader from '@/components/MidiLoader.vue'
   import ShaderRender from '@/components/ShaderRender.vue'
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'Shader',
     components: {
-      MidiLoader,
       ShaderRender,
     },
     data: () => ({
