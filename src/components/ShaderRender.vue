@@ -1,11 +1,11 @@
 <template>
   <div
-    id="shader-container"
+    id="shader-renderer"
   />
 </template>
 
 <style scoped>
-  #shader-container {
+  #shader-renderer {
     width: 100%;
     height: 100%;
     background-color: black;
@@ -20,7 +20,7 @@
     name: 'ShaderRender',
     mounted: async function() {
 
-      const container = document.getElementById( 'shader-container');
+      const container = document.getElementById('shader-renderer');
       this.createShaderEngine({ container });
       await this.listenMidiActions();
 

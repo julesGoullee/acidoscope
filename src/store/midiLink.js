@@ -11,43 +11,11 @@ const MidiLinkModule = {
         controlNumber: 71,
         shaderParamName: 'control1',
       }
-    ]
+    ],
   },
 
   mutations: {
 
-    handleMidiAction: (state, midiAction) => {
-
-      const bindedParam = state.bindedParams.find(
-        p => (
-          p.midiActionType === midiAction.type &&
-          p.controlNumber === midiAction.controlNumber
-        )
-      );
-      if(!bindedParam) return;
-
-      const shaderParams = state.shaderEngine.shaderParams;
-      const initialParams = shaderParams.initialParams;
-      const initialParam = initialParams[bindedParam.shaderParamName];
-
-      if(!initialParam) throw new Error('Midi action binded to unknown shader param');
-
-      if(midiAction.type === 'controlchange') {
-        if(midiAction.value === 127) {
-
-          const newValue = shaderParams.getUniformValue(initialParam.name) + initialParam.step;
-          shaderParams.setUniformValue(initialParam.name, newValue);
-
-        } else if(midiAction.value === 1) {
-
-          const newValue = shaderParams.getUniformValue(initialParam.name) - initialParam.step;
-          shaderParams.setUniformValue(initialParam.name, newValue);
-
-        }
-      }
-      // TODO store param in the store
-
-    },
     setMidiHardwareConnected: (state, connected) => {
       state.midiHardwareConnected = connected;
     },
@@ -69,12 +37,12 @@ const MidiLinkModule = {
 
     },
 
-    listenMidiActions({ state, commit } ) {
+    listenMidiActions({ state, commit, dispatch } ) {
 
       if(state.midiListener) return;
 
       const listener = Midi.addListener(midiAction => {
-        commit('handleMidiAction', midiAction);
+        dispatch('handleMidiAction', midiAction);
       });
       commit('setMidiListener', listener);
 
@@ -85,6 +53,41 @@ const MidiLinkModule = {
       if(!state.midiListening) return;
       state.midiListener();
       commit('setMidiListener', null);
+
+    },
+
+    handleMidiAction: ({ state, rootGetters, commit }, midiAction) => {
+
+      const bindedParam = state.bindedParams.find(
+        p => (
+          p.midiActionType === midiAction.type &&
+          p.controlNumber === midiAction.controlNumber
+        )
+      );
+      if(!bindedParam) return;
+
+      const shaderEngine = rootGetters.shaderEngine;
+      const shaderParams = shaderEngine.shaderParams;
+      const initialParams = shaderParams.initialParams;
+      const initialParam = initialParams[bindedParam.shaderParamName];
+
+      if(!initialParam) throw new Error('Midi action binded to unknown shader param');
+
+      const paramName = initialParam.name;
+      let newValue = 0;
+
+      if(midiAction.type === 'controlchange') {
+        if(midiAction.value === 1) {
+
+          newValue = shaderParams.getUniformValue(paramName) + initialParam.step;
+
+        } else if(midiAction.value === 127) {
+
+          newValue = shaderParams.getUniformValue(paramName) - initialParam.step;
+
+        }
+      }
+      commit('setParamValue', {paramName, paramValue: newValue})
 
     },
 

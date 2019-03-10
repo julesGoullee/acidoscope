@@ -110,8 +110,8 @@ void main(void)
     {
       name: 'time',
       type: 'f',
-      defaultValue: 0.,
       special: 'time',
+      defaultValue: 0.,
     },
     {
       name: 'resolution',
@@ -121,15 +121,16 @@ void main(void)
     {
       name: 'mouse',
       type: 'v2',
-      defaultValue: [0.,0.],
       special: 'mouse',
+      defaultValue: [0.,0.],
     },
     {
       name: 'control1',
       type: 'f',
+      special: 'controllable',
       defaultValue: 0.2,
-      range: [0., 100.],
+      range: [0.01, 0.7],
       step: 0.01,
-    }
+    },
   ],
 }
