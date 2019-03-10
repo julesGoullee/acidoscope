@@ -1,27 +1,10 @@
 import WebMidi from 'webmidi';
 
-const controllerId = [
-  'resonance',
-  'soundreleasetime',
-  'soundattacktime',
-  'brightness',
-  'soundcontrol6',
-  'soundcontrol7',
-  'soundcontrol8',
-  'soundcontrol9',
-];
-
 const log = console.log.bind(null, '[MIDI]:');
 
 const Midi = {
   isSupported: () => WebMidi.supported,
   isConnected: () => WebMidi.inputs && WebMidi.inputs.length > 0,
-  controllerIdMap: controllerId.reduce( (acc, item, i) => {
-
-    acc[item] = i + 1;
-    return acc;
-
-  }, {}),
   requestAccess: async () => {
 
     return new Promise( (resolve, reject) => {
@@ -69,18 +52,16 @@ const Midi = {
 
       input.addListener('controlchange', 'all', (event) => {
 
-        const name = event.controller.name;
-        const number = event.controller.number;
-        const value = event.value;
-        log('controlchange', number, name, value);
+        const customEvent = {
+          type: 'controlchange',
+          controlName: event.controller.name,     // name is not always define, and can be wrong
+          controlNumber: event.controller.number,
+          value: event.value,
+        };
+//      const parsedValue = event.value < 126 ? 'down' : 'up';
 
-        const mappedName = Midi.controllerIdMap[event.controller.name];
-        if(mappedName !== undefined){
-
-          const parsedValue = event.value < 126 ? 'down' : 'up';
-          handler(`control${mappedName}`, parsedValue);
-
-        }
+        log(customEvent.type, customEvent.controlNumber, customEvent.value, customEvent.controlName);
+        handler(customEvent);
 
       });
 

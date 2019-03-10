@@ -1,10 +1,6 @@
 import assert from 'assert';
 import Midi from '@/modules/midi';
 
-const midiChannelToShaderParam = {
-  'control1': 'control1',
-};
-
 const MidiLink = {
 
   state: {
@@ -12,30 +8,47 @@ const MidiLink = {
     midiHardwareConnected: false,
     midiListening: false,
     unlisteners: [],
+    bindedParams: [
+      {
+        midiActionType: 'controlchange',
+        controlNumber: 71,
+        shaderParamName: 'control1',
+      }
+    ]
   },
 
   mutations: {
 
-    handleMidiValue: (state, { controlId, value }) => {
+    handleMidiAction: (state, midiAction) => {
+
+      const bindedParam = state.bindedParams.find(
+        p => (
+          p.midiActionType === midiAction.type &&
+          p.controlNumber === midiAction.controlNumber
+        )
+      );
+      if(!bindedParam) return;
 
       const shaderParams = state.shaderEngine.shaderParams;
-      const paramName = midiChannelToShaderParam[controlId];
       const initialParams = shaderParams.initialParams;
-      const initialParam = initialParams[paramName];
+      const initialParam = initialParams[bindedParam.shaderParamName];
 
-      if(!paramName || !initialParam) return;
+      if(!initialParam) throw new Error('Midi action binded to unknown shader param');
 
-      if(value === 'up') {
+      if(midiAction.type === 'controlchange') {
+        if(midiAction.value === 127) {
 
-        const newValue = shaderParams.getUniformValue(controlId) + initialParam.step;
-        shaderParams.setUniformValue(controlId, newValue);
+          const newValue = shaderParams.getUniformValue(initialParam.name) + initialParam.step;
+          shaderParams.setUniformValue(initialParam.name, newValue);
 
-      } else if(value === 'down') {
+        } else if(midiAction.value === 1) {
 
-        const newValue = shaderParams.getUniformValue(controlId) - initialParam.step;
-        shaderParams.setUniformValue(controlId, newValue);
+          const newValue = shaderParams.getUniformValue(initialParam.name) - initialParam.step;
+          shaderParams.setUniformValue(initialParam.name, newValue);
 
+        }
       }
+      // TODO store param in the store
 
     },
     setMidiHardwareConnected: (state, connected) => {
@@ -50,6 +63,9 @@ const MidiLink = {
 
     addUnlistener(state, unlistener) {
       state.unlisteners.push(unlistener);
+    },
+    cleanUnlisteners(state) {
+      state.unlisteners = [];
     },
 
   },
@@ -77,12 +93,14 @@ const MidiLink = {
 
       function startListening() {
 
-        const unlistenEvents = Midi.onEvent( (controlId, value) => {
-          commit('handleMidiValue', { controlId, value });
+        // Listen midi actions
+        const unlistenEvents = Midi.onEvent( midiAction => {
+          commit('handleMidiAction', midiAction);
         });
         commit('addUnlistener', unlistenEvents);
         commit('setMidiListening', true);
 
+        // Listen midi diconnection, unlisten and listen to wait for new connection
         const unlistenStatus = Midi.listenStatus(hardwareStatus => {
           if(!hardwareStatus.connected) {
             dispatch('unlistenMidi');
@@ -92,10 +110,15 @@ const MidiLink = {
         commit('addUnlistener', unlistenStatus);
 
       }
+
       if(state.midiHardwareConnected) {
+
+        // If already connected, start listening
         startListening();
+
       } else {
 
+        // If not connected, wait connection then start listening
         const unlistenStatus = Midi.listenStatus(hardwareStatus => {
           if(hardwareStatus.connected) {
             startListening();
@@ -112,7 +135,7 @@ const MidiLink = {
 
       if(!state.midiListening) return;
       state.unlisteners.forEach(u => u());
-      state.unlisteners = [];
+      commit('cleanUnlisteners');
       commit('setMidiListening', false);
 
     },
