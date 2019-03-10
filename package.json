@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.11",
+    "nosleep": "^2.0.0",
     "three": "^0.102.1",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",

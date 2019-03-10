@@ -1,24 +1,41 @@
 <template>
-  <div id="app">
-    <MidiLoader />
-    <div id="nav">
-      <router-link to="/">
-        Home
-      </router-link> |
-      <router-link to="/shader">
-        Shader
-      </router-link>
-    </div>
-    <router-view />
-  </div>
+  <v-app id="app">
+    <v-container grid-list-md>
+      <v-layout
+        row
+        wrap
+      >
+        <v-flex xs6>
+          <v-btn
+            v-if="$route.name === 'shader'"
+            flat
+            to="/"
+          >
+            Gallery
+          </v-btn>
+        </v-flex>
+        <v-flex xs5 />
+        <v-flex
+          xs1
+        >
+          <MidiLoader />
+        </v-flex>
+      </v-layout>
+      <router-view />
+    </v-container>
+  </v-app>
 </template>
 <script>
 
   import MidiLoader from '@/components/MidiLoader.vue';
+  import {
+    VApp,
+  } from 'vuetify/lib'
 
   export default {
     name: 'App',
     components: {
+      VApp,
       MidiLoader
     }
   };
@@ -33,8 +50,7 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+    height: 100%;
   }
 </style>

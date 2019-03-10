@@ -1,9 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
-import Home from '@/views/Home.vue';
+import Gallery from '@/views/Gallery.vue';
 
-describe('Views: Home.vue', function () {
+describe('Views: Gallery.vue', function () {
 
   beforeEach( () => {
 
@@ -23,7 +23,7 @@ describe('Views: Home.vue', function () {
 
   it('Should render logo', () => {
 
-    const wrapper = shallowMount(Home, this.shallowConfig);
+    const wrapper = shallowMount(Gallery, this.shallowConfig);
     expect(wrapper.contains('img') ).to.be.true;
 
   });

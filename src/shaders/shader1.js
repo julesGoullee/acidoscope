@@ -1,4 +1,5 @@
 export default {
+  id: 1,
   vertexShader: `
 #ifdef GL_ES
 precision mediump float;
