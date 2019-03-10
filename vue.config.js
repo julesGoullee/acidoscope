@@ -14,7 +14,7 @@ module.exports = {
     }
   },
   chainWebpack: config => {
-    // GraphQL Loader
+
     config.module
       .rule('glsl')
       .test(/\.glsl/)

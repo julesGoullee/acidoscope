@@ -66,9 +66,12 @@
 
 <script>
 
+  import NoSleep from 'nosleep.js';
   import ShaderRender from '@/components/ShaderRender.vue'
   import ShaderParams from '@/components/ShaderParams.vue';
   import { mapActions } from 'vuex';
+
+  const noSleep = new NoSleep();
 
   export default {
     name: 'ShaderView',
@@ -81,16 +84,19 @@
     }),
     mounted: async function () {
 
-      // console.log(NoSleep);
-      // const noSleep = new NoSleep();
+      document.addEventListener('fullscreenchange', function fullScreenChange(){
 
-      document.addEventListener('fullscreenchange', function onFullScreenChange(){
+        document.removeEventListener('click', fullScreenChange, false);
+        noSleep.enable();
 
-        //document.removeEventListener('click', onFullScreenChange, false);
-        // noSleep.enable();
         this.isFullscreen = !!document.fullscreenElement;
 
       }, false);
+
+    },
+    beforeDestroy: function() {
+
+      noSleep.disable();
 
     },
     methods: {
