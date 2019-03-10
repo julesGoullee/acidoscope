@@ -101,7 +101,7 @@ const ShaderParamsModule = {
           break;
         }
         case 'down': {
-          newValue = oldValue + initialParam.step;
+          newValue = oldValue - initialParam.step;
           break;
         }
         default: {

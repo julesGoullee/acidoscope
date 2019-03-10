@@ -15,7 +15,7 @@ const Midi = {
   init: async () => {
 
     assert(Midi.isSupported(), 'web_midi_not_supported');
-    if(Midi.status.midiInitialized) return;
+    if(Midi.status.midiInitialized) return Promise.resolve();
 
     return new Promise( (resolve, reject) => {
 
@@ -27,6 +27,7 @@ const Midi = {
 
         } else {
 
+          Midi.midiInitialized = true;
           Midi.midiHardwareConnected = Midi.isConnected();
           Midi.listenStatus(hardwareStatus => {
             Midi.midiHardwareConnected = hardwareStatus.connected;
@@ -35,7 +36,7 @@ const Midi = {
 
         }
 
-      });
+      }, true);
 
     });
 
@@ -50,6 +51,7 @@ const Midi = {
       log('Device disconnected');
       setMidiHardwareStatus({ connected: false });
     };
+
     WebMidi.addListener('connected', connectedHandler);
     WebMidi.addListener('disconnected', disconnectedHandler);
 
@@ -122,7 +124,6 @@ const Midi = {
           controlNumber: event.controller.number,
           value: event.value,
         };
-//      const parsedValue = event.value < 126 ? 'down' : 'up';
 
         log(customEvent.type, customEvent.controlNumber, customEvent.value, customEvent.controlName);
         handler(customEvent);
