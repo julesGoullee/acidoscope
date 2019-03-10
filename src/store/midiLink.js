@@ -1,4 +1,3 @@
-import assert from 'assert';
 import Midi from '@/modules/midi';
 
 const MidiLink = {
