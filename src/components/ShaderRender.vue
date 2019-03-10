@@ -18,21 +18,25 @@
 
   export default {
     name: 'ShaderRender',
-    mounted: function() {
+    mounted: async function() {
 
       const container = document.getElementById( 'shader-container');
       this.createShaderEngine({ container });
+      await this.listenMidiActions();
 
     },
     beforeDestroy: function() {
 
       this.stopShaderEngine();
+      this.unlistenMidiActions();
 
     },
     methods: {
       ...mapActions([
         'createShaderEngine',
         'stopShaderEngine',
+        'listenMidiActions',
+        'unlistenMidiActions',
       ]),
     }
   }

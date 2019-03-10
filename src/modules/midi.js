@@ -1,27 +1,21 @@
 import WebMidi from 'webmidi';
+import assert from 'assert';
 
-const controllerId = [
-  'resonance',
-  'soundreleasetime',
-  'soundattacktime',
-  'brightness',
-  'soundcontrol6',
-  'soundcontrol7',
-  'soundcontrol8',
-  'soundcontrol9',
-];
+const log = console.log.bind(null, '[MIDI]:');
 
 const Midi = {
-  isListening: false,
   isSupported: () => WebMidi.supported,
   isConnected: () => WebMidi.inputs && WebMidi.inputs.length > 0,
-  controllerIdMap: controllerId.reduce( (acc, item, i) => {
+  status: {
+    midiInitialized: false,
+    midiHardwareConnected: false,
+    midiListening: false,
+  },
+  unlisteners: [],
+  init: async () => {
 
-    acc[item] = i + 1;
-    return acc;
-
-  }, {}),
-  requestAccess: async () => {
+    assert(Midi.isSupported(), 'web_midi_not_supported');
+    if(Midi.status.midiInitialized) return;
 
     return new Promise( (resolve, reject) => {
 
@@ -33,6 +27,10 @@ const Midi = {
 
         } else {
 
+          Midi.midiHardwareConnected = Midi.isConnected();
+          Midi.listenStatus(hardwareStatus => {
+            Midi.midiHardwareConnected = hardwareStatus.connected;
+          });
           resolve();
 
         }
@@ -40,40 +38,118 @@ const Midi = {
       });
 
     });
+
   },
   listenStatus: (setMidiHardwareStatus) => {
 
-    if(Midi.isConnected() ){
+    const connectedHandler = () => {
+      log('Device connected');
+      setMidiHardwareStatus({ connected: true });
+    };
+    const disconnectedHandler = () => {
+      log('Device disconnected');
+      setMidiHardwareStatus({ connected: false });
+    };
+    WebMidi.addListener('connected', connectedHandler);
+    WebMidi.addListener('disconnected', disconnectedHandler);
 
-      setMidiHardwareStatus({ midiHardwareConnected: true });
+    return function() {
+
+      WebMidi.removeListener('connected', connectedHandler);
+      WebMidi.removeListener('disconnected', disconnectedHandler);
+
+    };
+
+  },
+
+  addListener(handler) {
+
+    let unlisteners = [];
+
+    function stopListening() {
+      unlisteners.forEach(u => u());
+      unlisteners = null;
+    }
+
+    function startListening() {
+
+      // Listen midi actions
+      const unlistenEvents = Midi.onEvent(handler);
+      unlisteners.push(unlistenEvents);
+
+      // Listen midi disconnection, unlisten and listen to wait for new connection
+      const unlistenStatus = Midi.listenStatus(hardwareStatus => {
+        if(!hardwareStatus.connected) {
+          stopListening();
+          Midi.addListener(handler)
+        }
+      });
+      unlisteners.push(unlistenStatus);
 
     }
 
-    WebMidi.addListener('connected', () => setMidiHardwareStatus({ midiHardwareConnected: true }) );
+    if(Midi.midiHardwareConnected) {
 
-    WebMidi.addListener('disconnected', () => setMidiHardwareStatus({ midiHardwareConnected: false }) );
+      // If already connected, start listening
+      startListening();
 
-    Midi.isListening = true;
+    } else {
+
+      // If not connected, wait connection then start listening
+      const unlistenStatus = Midi.listenStatus(hardwareStatus => {
+        if(hardwareStatus.connected) {
+          startListening();
+          unlistenStatus();
+        }
+      });
+      Midi.unlisteners.push(unlistenStatus); // Maybe have been unlistened previously
+
+    }
+
+    return stopListening;
 
   },
+
   onEvent: (handler) => {
 
     WebMidi.inputs.forEach( (input) => {
 
       input.addListener('controlchange', 'all', (event) => {
 
-        if(Midi.controllerIdMap[event.controller.name]){
+        const customEvent = {
+          type: 'controlchange',
+          controlName: event.controller.name,     // name is not always define, and can be wrong
+          controlNumber: event.controller.number,
+          value: event.value,
+        };
+//      const parsedValue = event.value < 126 ? 'down' : 'up';
 
-          const value = event.value < 126 ? 'down' : 'up';
-          const id = Midi.controllerIdMap[event.controller.name];
-          handler(`control${id}`, value);
-
-        }
+        log(customEvent.type, customEvent.controlNumber, customEvent.value, customEvent.controlName);
+        handler(customEvent);
 
       });
 
+      function noteListener(event) {
+        const { channel, note, rawVelocity, velocity, type } = event;
+        log(type, channel, note.name, rawVelocity, velocity);
+      }
+      input.addListener('noteon', 'all', noteListener);
+      input.addListener('noteoff', 'all', noteListener);
+
     });
 
+    return function() {
+
+      WebMidi.inputs.forEach( (input) => {
+
+        // TODO target listeners
+        input.removeListener('controlchange');
+        input.removeListener('noteon');
+        input.removeListener('noteoff');
+
+      });
+
+    };
   }
 };
 

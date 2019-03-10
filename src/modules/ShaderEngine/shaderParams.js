@@ -5,6 +5,10 @@ class ShaderParams {
   constructor(shaderEngine) {
 
     this.shaderEngine = shaderEngine;
+    this.initialParams = this.shaderEngine.shader.initialParams.reduce((acc, initialParam) => ({
+      ...acc,
+      [initialParam.name]: initialParam,
+    }), {});
     this.uniforms = null;
 
   }
@@ -15,38 +19,38 @@ class ShaderParams {
         return defaultValue || 0.;
       }
       case 'v2': {
-        if(!Array.isArray(defaultValue) || defaultValue.length !== 2) {
+        if(defaultValue && (!Array.isArray(defaultValue) || defaultValue.length !== 2)) {
           throw new Error(`Invalid v2 uniform default values ${defaultValue}`);
         }
-        const x = defaultValue[0] || 0.;
-        const y = defaultValue[1] || 0.;
+        const x = defaultValue ? defaultValue[0] : 0.;
+        const y = defaultValue ? defaultValue[1] : 0.;
         return new THREE.Vector2(x, y);
       }
       case 'v3': {
-        if(!Array.isArray(defaultValue) || defaultValue.length !== 3) {
+        if(defaultValue && (!Array.isArray(defaultValue) || defaultValue.length !== 3)) {
           throw new Error(`Invalid v3 uniform default values ${defaultValue}`);
         }
-        const x = defaultValue[0] || 0.;
-        const y = defaultValue[1] || 0.;
-        const z = defaultValue[2] || 0.;
+        const x = defaultValue ? defaultValue[0] : 0.;
+        const y = defaultValue ? defaultValue[1] : 0.;
+        const z = defaultValue ? defaultValue[2] : 0.;
         return new THREE.Vector3(x, y, z);
       }
       default: {
-        throw new Error(`Unknown uniform type ${type}`);
+        throw new Error(`Creating unknown uniform type ${type}`);
       }
     }
   }
 
-  forUniforms(fn) {
+  forInitialParams(fn) {
 
-    const params = this.shaderEngine.shader.params;
-    const props = Object.keys(params);
+    const initialParams = this.shaderEngine.shader.initialParams;
+    const paramNames = Object.keys(initialParams);
 
-    for(let prop in props) {
+    for(let index in paramNames) {
 
-      const param = params[prop];
+      const initialParam = initialParams[index];
 
-      fn(param);
+      fn(initialParam);
 
     }
 
@@ -56,7 +60,7 @@ class ShaderParams {
 
     this.uniforms = {};
 
-    this.forUniforms(param => {
+    this.forInitialParams(param => {
 
       const value = ShaderParams.getUniformDefaultValue(param.type, param.defaultValue);
 
@@ -71,17 +75,16 @@ class ShaderParams {
 
   }
 
-  updateUniforms() {
+  updateSpecialUniforms() {
 
-    this.forUniforms(param => {
+    this.forInitialParams(param => {
 
       switch(param.special) {
 
         case 'time': {
           const startTime = this.shaderEngine.startTime;
           const elapsedMilliseconds = Date.now() - startTime;
-          this.uniforms[param.name].value = elapsedMilliseconds / 1000.;
-          //this.uniforms.time.value = 0;
+          this.setUniformValue(param.name, elapsedMilliseconds / 1000.);
           break;
         }
 
@@ -89,8 +92,7 @@ class ShaderParams {
           const container = this.shaderEngine.container;
           const width = container.offsetWidth;
           const height = container.offsetHeight;
-          this.uniforms[param.name].value.x = width;
-          this.uniforms[param.name].value.y = height;
+          this.setUniformValue(param.name, {x: width, y: height});
           break;
         }
 
@@ -98,6 +100,56 @@ class ShaderParams {
     });
 
   }
+
+  getUniformValue(name) {
+
+    return this.uniforms[name].value;
+
+  }
+
+  setUniformValue(name, value) {
+
+    const initialParam = this.initialParams[name];
+
+    switch(initialParam.type) {
+      case 'f': {
+        this.uniforms[name].value = value;
+        if(initialParam.range && this.uniforms[name].value < initialParam.range[0]) {
+          this.uniforms[name].value = initialParam.range[0];
+        }
+        if(initialParam.range && this.uniforms[name].value > initialParam.range[1]) {
+          this.uniforms[name].value = initialParam.range[1];
+        }
+        break;
+      }
+      case 'v2': {
+        if(value.x !== undefined) {
+          this.uniforms[name].value.x = value.x;
+        }
+        if(value.y !== undefined) {
+          this.uniforms[name].value.y = value.y;
+        }
+        break;
+      }
+      case 'v3': {
+        if(value.x !== undefined) {
+          this.uniforms[name].value.x = value.x;
+        }
+        if(value.y !== undefined) {
+          this.uniforms[name].value.y = value.y;
+        }
+        if(value.z !== undefined) {
+          this.uniforms[name].value.z = value.z;
+        }
+        break;
+      }
+      default: {
+        throw new Error(`Setting unknown uniform type ${initialParam.type}`);
+      }
+    }
+
+  }
+
 
 }
 

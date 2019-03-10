@@ -15,9 +15,7 @@
 </template>
 
 <script>
-  import assert from 'assert';
   import { mapGetters, mapActions } from 'vuex';
-  import Midi from '@/modules/midi';
 
   export default {
     name: 'MidiLoader',
@@ -28,26 +26,12 @@
     },
     mounted: async function () {
 
-      assert(Midi.isSupported(), 'web_midi_not_supported');
-
-      if(this.midiHardwareConnected){
-
-        return true;
-
-      }
-
-      await Midi.requestAccess();
-
-      if(!Midi.isListening){
-
-        Midi.listenStatus(this.setMidiHardwareStatus);
-
-      }
+      await this.initMidi();
 
     },
     methods: {
       ...mapActions([
-        'setMidiHardwareStatus',
+        'initMidi',
       ])
     }
 

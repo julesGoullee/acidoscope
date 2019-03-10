@@ -68,7 +68,6 @@
 
         document.removeEventListener('click', enableNoSleep, false);
         // noSleep.enable();
-        console.log(!!document.fullscreenElement);
         this.isFullscreen = !!document.fullscreenElement;
 
       }, false);
