@@ -48,7 +48,6 @@ const GalleryModule = {
 
       dispatch('loadVisualisations');
 
-      console.log(rootState)
       assert(rootState.route && rootState.route.name === 'shader' && rootState.route.params && rootState.route.params.id, 'invalid_route');
 
       const shaderId = rootState.route.params.id;
@@ -58,8 +57,6 @@ const GalleryModule = {
       if(!shader){
 
         router.push({ path: '/' });
-
-        commit('createShaderEngine', { shader: shaders[0], container } );
 
       } else {
 
