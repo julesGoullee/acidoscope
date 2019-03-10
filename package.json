@@ -6,13 +6,20 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "dll": "vue-cli-service dll",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:e2e:headless": "yarn test:e2e --headless",
+    "test:unit": "NODE_ENV=test vue-cli-service test:unit -r tests/unit/test.config.js"
   },
   "dependencies": {
+    "lodash": "^4.17.11",
+    "three": "^0.102.1",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vuetify": "^1.5.5",
+    "vuex": "^3.0.1",
+    "vuex-router-sync": "^5.0.0",
+    "webmidi": "^2.3.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",
@@ -23,9 +30,21 @@
     "@vue/test-utils": "^1.0.0-beta.20",
     "babel-eslint": "^10.0.1",
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
-    "vue-template-compiler": "^2.5.21"
+    "sinon": "^7.2.7",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
+    "vue-cli-plugin-dll": "^1.1.5",
+    "vue-cli-plugin-vuetify": "^0.5.0",
+    "vue-template-compiler": "^2.5.21",
+    "vuetify-loader": "^1.0.5"
+  },
+  "babel": {
+    "presets": [
+      "@vue/app"
+    ]
   },
   "eslintConfig": {
     "root": true,
@@ -38,6 +57,9 @@
     ],
     "parserOptions": {
       "parser": "babel-eslint"
+    },
+    "rules": {
+      "no-console": 0
     }
   },
   "postcss": {

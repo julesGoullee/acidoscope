@@ -19,3 +19,9 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# Bundle
+public/dll
+
+# Test file
+tests/e2e/videos

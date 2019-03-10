@@ -1,8 +1,39 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-describe('My First Test', () => {
-  it('Visits the app root url', () => {
-    cy.visit('/')
-    cy.contains('h1', 'Welcome to Your Vue.js App')
-  })
-})
+describe('Test', () => {
+
+  it('Should render home', () => {
+
+    cy.visit('/');
+    cy.get('#app').should('be.visible');
+    cy.get('#home').should('be.visible');
+    cy.get('#home').find('img').should('be.visible');
+
+  });
+
+  it('Should navigate', () => {
+
+    cy.visit('/');
+    cy.get('#nav').should('be.visible');
+
+    cy.get('#nav > a:nth-child(2)').click();
+    cy.get('#shader-container').should('be.visible');
+
+    cy.get('#nav > a:nth-child(1)').click();
+    cy.get('#home').should('be.visible');
+
+  });
+
+  describe('Shader', () => {
+
+    it('Should render shader', () => {
+
+      cy.visit('/shader');
+      cy.get('#shader-container').should('be.visible');
+      cy.get('#shader-container').find('canvas').should('be.visible');
+
+    });
+
+  });
+
+});
