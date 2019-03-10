@@ -10,12 +10,16 @@
 </template>
 
 <script>
-
+  import assert from 'assert';
+  import { VIcon } from 'vuetify/lib'
   import { mapGetters, mapActions } from 'vuex';
-  import Midi from '@/modules/helpers/midi';
+  import Midi from '@/modules/midi';
 
   export default {
     name: 'MidiLoader',
+    components: {
+      VIcon
+    },
     computed: {
       ...mapGetters([
         'midiHardwareConnected',
@@ -23,11 +27,7 @@
     },
     mounted: async function () {
 
-      if(!Midi.isSupported() ){
-
-        throw new Error('WebMIDI is not supported in this browser.')
-
-      }
+      assert(Midi.isSupported(), 'web_midi_not_supported');
 
       if(this.midiHardwareConnected){
 
