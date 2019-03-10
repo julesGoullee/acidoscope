@@ -1,5 +1,4 @@
 export default {
-  id: 2,
   fragmentShader: `
 
 #ifdef GL_ES
