@@ -23,13 +23,13 @@
 
       const container = document.getElementById( 'shader-container');
       this.createShaderEngine({ container });
-      await this.listenMidi();
+      await this.listenMidiActions();
 
     },
     beforeDestroy: function() {
 
       this.stopShaderEngine();
-      this.unlistenMidi();
+      this.unlistenMidiActions();
 
     },
     methods: {
