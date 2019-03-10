@@ -14,27 +14,13 @@ const controllerId = [
 const Midi = {
   isListening: false,
   isSupported: () => WebMidi.supported,
+  isConnected: () => WebMidi.inputs && WebMidi.inputs.length > 0,
   controllerIdMap: controllerId.reduce( (acc, item, i) => {
 
     acc[item] = i + 1;
     return acc;
 
   }, {}),
-  listenStatus: (setMidiHardwareStatus) => {
-
-    if(Midi.isConnected() ){
-
-      setMidiHardwareStatus({ midiHardwareConnected: true });
-
-    }
-
-    WebMidi.addListener('connected', () => setMidiHardwareStatus({ midiHardwareConnected: true }) );
-
-    WebMidi.addListener('disconnected', () => setMidiHardwareStatus({ midiHardwareConnected: false }) );
-
-    Midi.isListening = true;
-
-  },
   requestAccess: async () => {
 
     return new Promise( (resolve, reject) => {
@@ -55,7 +41,21 @@ const Midi = {
 
     });
   },
-  isConnected: () => WebMidi.inputs && WebMidi.inputs.length > 0,
+  listenStatus: (setMidiHardwareStatus) => {
+
+    if(Midi.isConnected() ){
+
+      setMidiHardwareStatus({ midiHardwareConnected: true });
+
+    }
+
+    WebMidi.addListener('connected', () => setMidiHardwareStatus({ midiHardwareConnected: true }) );
+
+    WebMidi.addListener('disconnected', () => setMidiHardwareStatus({ midiHardwareConnected: false }) );
+
+    Midi.isListening = true;
+
+  },
   onEvent: (handler) => {
 
     WebMidi.inputs.forEach( (input) => {
