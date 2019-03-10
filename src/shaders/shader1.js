@@ -1,5 +1,4 @@
 export default {
-  id: 1,
   fragmentShader: `
 #ifdef GL_ES
 precision mediump float;
