@@ -26,7 +26,6 @@
             <v-card-text
             >
               {{ param.name }}
-              {{ getParamValue(param.name) }}
             </v-card-text>
           </v-container>
           <v-flex>
