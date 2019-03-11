@@ -1,19 +1,21 @@
 import * as THREE from 'three'
 
 import ShaderParams from './shaderParams';
-import DefaultVertex from './defaultVertex.glsl';
+import GlslWrapper from './glslWrapper';
 
 class ShaderEngine {
 
   constructor(shader, container) {
 
     this.shader = {
-      vertexShader: shader.vertexShader || DefaultVertex,
+      vertexShader: shader.vertexShader,
       fragmentShader: shader.fragmentShader,
+      wrapped: shader.wrapped,
       initialParams: shader.params || {},
     };
 
     this.shaderParams = new ShaderParams(this);
+    this.glslWrapper = new GlslWrapper(this);
 
     this.container = container;
     this.renderer = null;
@@ -27,8 +29,6 @@ class ShaderEngine {
 
   init() {
 
-    const { vertexShader, fragmentShader } = this.shader;
-
     this.three.camera = new THREE.PerspectiveCamera();
     this.three.camera.position.z = 1;
 
@@ -38,9 +38,10 @@ class ShaderEngine {
 
     const material = new THREE.ShaderMaterial( {
       uniforms: this.uniforms,
-      vertexShader,
-      fragmentShader,
+      vertexShader: this.glslWrapper.getVertexShader(),
+      fragmentShader: this.glslWrapper.getFragmentShader(),
     });
+    console.log(this.glslWrapper.getFragmentShader());
 
     const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), material );
     this.three.scene.add( mesh );
