@@ -1,7 +1,6 @@
 <template>
   <v-container
     grid-list-md
-    text-xs-center
   >
     <v-layout
       row
@@ -13,7 +12,7 @@
         :key="param.name"
         xs2
       >
-        <v-layout column >
+        <v-layout column text-xs-center>
             <CircularSlider
               :paramName="param.name"
               :paramValue="getParamValue(param.name)"
@@ -21,10 +20,7 @@
               :paramRangeEnd="param.range[1]"
               :onChange="onControlChange"
             />
-            <v-card-text
-            >
-              {{ param.name }}
-            </v-card-text>
+            {{ param.name }}
         </v-layout>
       </v-flex>
     </v-layout>

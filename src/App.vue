@@ -58,5 +58,6 @@
   }
   .app-container{
     width: 100%;
+    padding-top: 10px;
   }
 </style>

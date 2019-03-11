@@ -70,6 +70,9 @@
 </template>
 
 <style scoped>
+  .shader-view{
+    padding-top: 10px;
+  }
   .shader-container {
     height: 400px;
     z-index: 0;
