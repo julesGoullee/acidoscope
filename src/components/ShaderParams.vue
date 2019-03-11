@@ -23,7 +23,9 @@
             :param-range-end="param.range[1]"
             :on-change="onControlChange"
           />
-          {{ param.name }}
+          <span
+            class="text-capitalize"
+          >{{ param.name }}</span>
         </v-layout>
       </v-flex>
     </v-layout>
