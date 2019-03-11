@@ -98,9 +98,9 @@
       getShaderScreenshots(id) {
 
         try {
-          return require(`../assets/shaderScreenshots/${id}.png`);
+          return require(`@/assets/shaderScreenshots/${id}.png`);
         } catch(e) {
-          return require(`../assets/shaderScreenshots/default.png`);
+          return require(`@/assets/shaderScreenshots/default.png`);
         }
 
       }

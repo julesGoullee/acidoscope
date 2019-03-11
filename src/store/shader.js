@@ -93,7 +93,7 @@ const ShaderParamsModule = {
 
     },
 
-    changeParamValue({state, commit}, {paramName, action}) {
+    changeParamValue({state, commit}, { paramName, action, value }) {
 
       const initialParam = state.shaderEngine.shaderParams.initialParams[paramName];
       if(!initialParam) throw new Error('Unknown shader parameter to change');
@@ -108,6 +108,10 @@ const ShaderParamsModule = {
         }
         case 'down': {
           newValue = oldValue - initialParam.step;
+          break;
+        }
+        case 'value': {
+          newValue = value;
           break;
         }
         default: {
