@@ -6,16 +6,14 @@
     <v-layout
       row
       wrap
+      justify-center
     >
       <v-flex
         v-for="param in paramsList"
         :key="param.name"
         xs2
       >
-        <v-layout column>
-          <v-container
-            align-center
-          >
+        <v-layout column >
             <CircularSlider
               :paramName="param.name"
               :paramValue="getParamValue(param.name)"
@@ -27,10 +25,6 @@
             >
               {{ param.name }}
             </v-card-text>
-          </v-container>
-          <v-flex>
-            <v-card-text class="px-0"></v-card-text>
-          </v-flex>
         </v-layout>
       </v-flex>
     </v-layout>

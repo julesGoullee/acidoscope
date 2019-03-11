@@ -198,9 +198,10 @@
   }
 
   .slider {
-    display: block;
-    /*width: 5rem;*/
-    /*height: 5rem;*/
+    flex: 1 1 auto;
+    align-self: center;
+    width: 5rem;
+    height: 5rem;
     transform: rotate(-90deg);
     cursor: ns-resize;
   }
