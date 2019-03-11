@@ -120,7 +120,7 @@ void main(void){
       type: 'f',
       range: [0.3, 1],
       defaultValue: 0.4,
-      step: 0.01
+      step: 0.005
     },
     {
       name: 'control2',
@@ -128,7 +128,7 @@ void main(void){
       type: 'f',
       range: [0.3, 2],
       defaultValue: 1,
-      step: 0.01
+      step: 0.005
     },
     {
       name: 'control3',
@@ -136,7 +136,7 @@ void main(void){
       type: 'f',
       range: [0.1, 2],
       defaultValue: 0.35,
-      step: 0.01
+      step: 0.005
     },
     {
       name: 'control4',
@@ -144,7 +144,7 @@ void main(void){
       type: 'f',
       range: [0.1, 1],
       defaultValue: 0.99,
-      step: 0.01
+      step: 0.005
     }
   ],
 }
