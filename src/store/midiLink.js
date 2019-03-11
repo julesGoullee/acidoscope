@@ -1,5 +1,21 @@
 import Midi from '@/modules/midi';
 
+function encoderToUpDown(value) {
+  if(value > 125) {
+    return 'down';
+  } else if(value < 2) {
+    return 'up';
+  }
+  return null;
+}
+
+function touchToUpDown(value) {
+  if(value === 127) {
+    return 'down';
+  }
+  return null;
+}
+
 const MidiLinkModule = {
 
   state: {
@@ -12,31 +28,49 @@ const MidiLinkModule = {
         midiActionType: 'controlchange',
         controlNumber: 71,
         shaderParamIndex: 0,
+        type: 'uniform',
       },
       {
         midiActionType: 'controlchange',
         controlNumber: 72,
         shaderParamIndex: 1,
+        type: 'uniform',
       },
       {
         midiActionType: 'controlchange',
         controlNumber: 73,
         shaderParamIndex: 2,
+        type: 'uniform',
       },
       {
         midiActionType: 'controlchange',
         controlNumber: 74,
         shaderParamIndex: 3,
+        type: 'uniform',
       },
       {
         midiActionType: 'controlchange',
         controlNumber: 75,
         shaderParamIndex: 4,
+        type: 'uniform',
       },
       {
         midiActionType: 'controlchange',
         controlNumber: 76,
         shaderParamIndex: 5,
+        type: 'uniform',
+      },
+      {
+        midiActionType: 'controlchange',
+        controlNumber: 85,
+        type: 'action',
+        action: 'pause',
+      },
+      {
+        midiActionType: 'controlchange',
+        controlNumber: 28,
+        type: 'action',
+        action: 'nyan',
       },
     ],
   },
@@ -69,7 +103,7 @@ const MidiLinkModule = {
         commit('setMidiHardwareConnected', hardwareStatus.connected);
       });
 
-     //Midi.danceColors();
+      //Midi.danceColors();
 
     },
 
@@ -116,34 +150,38 @@ const MidiLinkModule = {
       );
       if(!bindedParam) return;
 
-      let paramName = null;
-      if(bindedParam.shaderParamName !== undefined) {
+      if(bindedParam.type === 'uniform') {
 
-        paramName = bindedParam.shaderParamName;
+        let paramName = null;
+        if(bindedParam.shaderParamName !== undefined) {
 
-      } else if(bindedParam.shaderParamIndex !== undefined) {
+          paramName = bindedParam.shaderParamName;
 
-        const param = rootGetters.paramsList[bindedParam.shaderParamIndex];
-        if(!param) return;
-        paramName = param.name;
+        } else if(bindedParam.shaderParamIndex !== undefined) {
 
-      } else {
+          const param = rootGetters.paramsList[bindedParam.shaderParamIndex];
+          if(!param) return;
+          paramName = param.name;
 
-        throw new Error('Nothing to bind midi action to');
+        } else {
 
-      }
-
-      if(midiAction.type === 'controlchange') {
-
-        if(midiAction.value === 1) {
-
-          dispatch('changeParamValue', { paramName, action: 'up' })
-
-        } else if(midiAction.value === 127) {
-
-          dispatch('changeParamValue', { paramName, action: 'down' })
+          throw new Error('Nothing to bind midi action to');
 
         }
+
+        if(midiAction.type === 'controlchange') {
+
+          const upDownValue = encoderToUpDown(midiAction.value);
+
+          dispatch('changeParamValue', { paramName, action: upDownValue })
+
+        }
+
+      } else if(bindedParam.type === 'action') {
+
+        const upDownValue = touchToUpDown(midiAction.value);
+        if(upDownValue)
+          dispatch('handleAction', { action: bindedParam.action })
 
       }
 

@@ -10,6 +10,7 @@ const Midi = {
     midiInitialized: false,
     midiHardwareConnected: false,
     midiListening: false,
+    dancing: false,
   },
   unlisteners: [],
   init: async () => {
@@ -36,7 +37,7 @@ const Midi = {
 
         }
 
-      }/*, true*/);
+      }, true);
 
     });
 
@@ -155,14 +156,26 @@ const Midi = {
 
   danceColors() {
 
+    const output = WebMidi.getOutputByName('Ableton Push 2 User Port');
     const padStartNumber = 36;
+
+    if(Midi.dancing) {
+      Midi.dancing();
+      Midi.dancing = false;
+
+      for(let i=0; i<64; i++) {
+        output.send(144, [padStartNumber+i, 122], 0);
+      }
+
+      return;
+    }
+
     const colors = {
       red: 127,
       green: 126,
       blue: 125,
     };
-
-    const output = WebMidi.getOutputByName('Ableton Push 2 User Port');
+    output.sendSysex([0, 33, 29], [1, 1, 10, 1]);
 
     function draw() {
 
@@ -177,7 +190,8 @@ const Midi = {
 
     }
 
-    setInterval(draw, 100);
+    const interval = setInterval(draw, 100);
+    Midi.dancing = () => clearInterval(interval);
 
   }
 
