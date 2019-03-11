@@ -20,6 +20,7 @@ class ShaderEngine {
     this.uniforms = {};
     this.three = {};
 
+    this.subTime = 0;
     this.running = false;
 
   }
@@ -57,12 +58,16 @@ class ShaderEngine {
 
   start() {
     this.running = true;
-    this.startTime = Date.now();
+
+    if(!this.startTime) this.startTime = Date.now();
+    if(this.pausedTime) this.subTime += (Date.now() - this.pausedTime);
+
     this.animate();
   }
 
   stop() {
     this.running = false;
+    this.pausedTime = Date.now();
   }
 
   animate() {

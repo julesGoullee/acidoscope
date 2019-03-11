@@ -35,7 +35,7 @@
         <v-btn
           raised
           block
-          color="success"
+          color="warning"
           @click="fullscreen"
         >
           VR
@@ -43,7 +43,23 @@
             right
             dark
           >
-            headset
+            toggle_off
+          </v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex>
+        <v-btn
+          raised
+          block
+          :color="shaderRunning ? 'error' : 'success'"
+          @click="pauseShader"
+        >
+          {{ shaderRunning ? 'Pause' : 'Play' }}
+          <v-icon
+            right
+            dark
+          >
+            {{ shaderRunning ? 'pause' : 'play_arrow' }}
           </v-icon>
         </v-btn>
       </v-flex>
@@ -69,7 +85,7 @@
   import NoSleep from 'nosleep.js';
   import ShaderRender from '@/components/ShaderRender.vue'
   import ShaderParams from '@/components/ShaderParams.vue';
-  import { mapActions } from 'vuex';
+  import { mapActions, mapGetters } from 'vuex';
 
   const noSleep = new NoSleep();
 
@@ -82,6 +98,11 @@
     data: () => ({
       isFullscreen: false,
     }),
+    computed: {
+      ...mapGetters([
+        'shaderRunning',
+      ])
+    },
     mounted: async function () {
 
       document.addEventListener('fullscreenchange', function fullScreenChange(){
@@ -100,7 +121,10 @@
 
     },
     methods: {
-      ...mapActions(['loadVisualisations']),
+      ...mapActions([
+        'loadVisualisations',
+        'pauseShader',
+      ]),
       fullscreen: function () {
 
         const el = document.getElementById('fullscreen-renderer');
