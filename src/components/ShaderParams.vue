@@ -12,15 +12,18 @@
         :key="param.name"
         xs2
       >
-        <v-layout column text-xs-center>
-            <CircularSlider
-              :paramName="param.name"
-              :paramValue="getParamValue(param.name)"
-              :paramRangeStart="param.range[0]"
-              :paramRangeEnd="param.range[1]"
-              :onChange="onControlChange"
-            />
-            {{ param.name }}
+        <v-layout
+          column
+          text-xs-center
+        >
+          <CircularSlider
+            :param-name="param.name"
+            :param-value="getParamValue(param.name)"
+            :param-range-start="param.range[0]"
+            :param-range-end="param.range[1]"
+            :on-change="onControlChange"
+          />
+          {{ param.name }}
         </v-layout>
       </v-flex>
     </v-layout>

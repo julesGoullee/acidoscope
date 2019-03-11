@@ -8,7 +8,7 @@
     >
       <circle
         class="slider-circle"
-        v-bind:style="{ strokeWidth: border }"
+        :style="{ strokeWidth: border }"
         :r="radius - border / 2"
         :cx="radius"
         :cy="radius"
