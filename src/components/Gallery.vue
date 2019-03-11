@@ -97,7 +97,11 @@
       ]),
       getShaderScreenshots(id) {
 
-        return require(`@/assets/shaderScreenshots/${id}.png`);
+        try {
+          return require(`@/assets/shaderScreenshots/${id}.png`);
+        } catch(e) {
+          return require(`@/assets/shaderScreenshots/default.png`);
+        }
 
       }
     }

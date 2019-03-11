@@ -1,4 +1,5 @@
 export default {
+  original: 'http://glslsandbox.com/e#53202.0',
   fragmentShader: `
 #ifdef GL_ES
 precision mediump float;

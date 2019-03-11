@@ -20,6 +20,7 @@ class ShaderEngine {
     this.uniforms = {};
     this.three = {};
 
+    this.subTime = 0;
     this.running = false;
 
   }
@@ -57,12 +58,16 @@ class ShaderEngine {
 
   start() {
     this.running = true;
-    this.startTime = Date.now();
+
+    if(!this.startTime) this.startTime = Date.now();
+    if(this.pausedTime) this.subTime += (Date.now() - this.pausedTime);
+
     this.animate();
   }
 
   stop() {
     this.running = false;
+    this.pausedTime = Date.now();
   }
 
   animate() {
@@ -74,7 +79,7 @@ class ShaderEngine {
     const canvas = this.renderer.domElement;
     const width = this.container.clientWidth;
     const height = this.container.clientHeight;
-    
+
     if (canvas.width !== width || canvas.height !== height) {
       this.renderer.setSize(width, height, true);
       //this.three.camera.aspect = width / height;

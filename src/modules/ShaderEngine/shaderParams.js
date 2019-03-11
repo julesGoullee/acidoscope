@@ -83,7 +83,7 @@ class ShaderParams {
 
         case 'time': {
           const startTime = this.shaderEngine.startTime;
-          const elapsedMilliseconds = Date.now() - startTime;
+          const elapsedMilliseconds = Date.now() - startTime - this.shaderEngine.subTime;
           this.setUniformValue(param.name, elapsedMilliseconds / 1000.);
           break;
         }

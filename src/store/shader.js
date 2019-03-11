@@ -8,6 +8,7 @@ const ShaderParamsModule = {
 
   state: {
     shaderEngine: null,
+    running: false,
     paramsList: [],
     paramsValue: {},
   },
@@ -52,6 +53,10 @@ const ShaderParamsModule = {
 
     },
 
+    setRunning: (state, running) => {
+      state.running = running;
+    },
+
   },
 
   actions: {
@@ -73,6 +78,7 @@ const ShaderParamsModule = {
       } else {
 
         commit('createShaderEngine', { shader, container } );
+        commit('setRunning', true);
 
       }
 
@@ -117,10 +123,21 @@ const ShaderParamsModule = {
 
     },
 
+    pauseShader({ state, commit }) {
+      if(state.running) {
+        state.shaderEngine.stop();
+        commit('setRunning', false);
+      } else {
+        state.shaderEngine.start();
+        commit('setRunning', true);
+      }
+    },
+
   },
 
   getters: {
     shaderEngine: state => state.shaderEngine,
+    shaderRunning: state => state.running,
     paramsList: state => state.paramsList,
     getParamValue: state => paramName => {
       return state.paramsValue[paramName];
