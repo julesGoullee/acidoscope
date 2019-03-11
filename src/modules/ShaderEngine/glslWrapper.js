@@ -1,5 +1,6 @@
 import DefaultVertex from './defaultVertex.glsl';
 import MainImage from './mainImage.glsl';
+import MainVR from './mainVR.glsl';
 
 class GlslWrapper {
 
@@ -7,27 +8,58 @@ class GlslWrapper {
     this.shaderEngine = shaderEngine;
   }
 
-  getUniformsDefinitions() {
-    // TODO
-    return '';
-  }
-  getFragmentShader() {
-
-    let fragmentShader = '';
-
-    fragmentShader += `
+  getPrecisionDefinitions() {
+    return `
 #ifdef GL_ES
 precision mediump float;
 #endif
 `;
+  }
 
-    fragmentShader += `
+  getUniformsDefinitions() {
+    // TODO
+    return `
       
 // Uniforms definitions
 
-${this.getUniformsDefinitions()}
-
 `;
+
+  }
+
+  getWrapper(type) {
+
+    switch(type) {
+      case 'image': {
+        return `
+      
+// main image function
+
+${MainImage}
+      
+`;
+      }
+      case 'vr': {
+        return `
+      
+// main VR function
+
+# define VR_SETTINGS_CARDBOARD
+${MainVR}
+      
+`;
+      }
+      default:
+        return '';
+    }
+
+  }
+
+  getFragmentShader() {
+
+    let fragmentShader = '';
+
+    fragmentShader += this.getPrecisionDefinitions();
+    fragmentShader += this.getUniformsDefinitions();
 
     fragmentShader += `
       
@@ -36,18 +68,10 @@ ${this.getUniformsDefinitions()}
 ${this.shaderEngine.shader.fragmentShader}
 
 `;
-
-    if(this.shaderEngine.shader.wrapped) {
-      fragmentShader += `
-      
-// main function
-
-${MainImage}
-      
-`;
-    }
+    fragmentShader += this.getWrapper(this.shaderEngine.shader.wrapper);
 
     return fragmentShader;
+
   }
 
   getVertexShader() {

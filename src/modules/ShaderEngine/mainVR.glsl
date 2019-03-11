@@ -1,6 +1,6 @@
 
 // mainImage code suffix
-//https://github.com/beautypi/shadertoy-iOS-v2/blob/master/shadertoy/shaders/fragment_main_vr.glsl
+// https://github.com/beautypi/shadertoy-iOS-v2/blob/master/shadertoy/shaders/fragment_main_vr.glsl
 
 #ifdef VR_SETTINGS_DEVICE_ORIENTATION
 uniform mat3 iDeviceRotationUniform;
@@ -68,17 +68,13 @@ mat3 iVrMatRotate( vec3 xyz ) {
                     co.x*si.y*co.z+si.x*si.z, co.x*si.y*si.z-si.x*co.z, co.x*co.y );
 }
 
-out vec4 glFragColor;
-
 void main()  {
-    glFragColor.w = 1.;
 
-
-    vec2 fragCoordScaled = (gl_FragCoord.xy + ifFragCoordOffsetUniform.xy) / iResolution.xy;
+    vec2 fragCoordScaled = (gl_FragCoord.xy) / resolution.xy;
 
     bool leftEye  = all( greaterThanEqual( fragCoordScaled.xy, iLeftEyeRect.xy ) ) && all( lessThanEqual( fragCoordScaled.xy, iLeftEyeRect.zw ) );
 
-    vec2 fragCoord = (gl_FragCoord.xy + ifFragCoordOffsetUniform.xy);
+    vec2 fragCoord = (gl_FragCoord.xy);
 
 #ifdef VR_SETTINGS_RED_CYAN
     float eyeID = mod(fragCoord.x + mod(fragCoord.y,2.0),2.0);
@@ -112,15 +108,17 @@ void main()  {
 
     ro += iDevicePositionUniform;
 #else
-    eyeRotation.yx = .5*mix( vec2(-3.1415926), vec2(3.1415926), abs(iMouse.xy) / iResolution.xy ) * vec2(1.,-1.);
+    eyeRotation.yx = .5*mix( vec2(-3.1415926), vec2(3.1415926), abs(mouse.xy) / resolution.xy ) * vec2(1.,-1.);
 
     mat3 rotation = iVrMatRotate( eyeRotation );
     rd = rotation * rd;
     ro = rotation * ro;
 #endif
 
-    mainVR( glFragColor, uv * iResolution.xy, ro, rd );
+    mainVR( gl_FragColor, uv * resolution.xy, ro, rd );
 
 #ifdef VR_SETTINGS_RED_CYAN
-    glFragColor.xyz *= vec3( eyeID, 1.0-eyeID, 1.0-eyeID );
+    gl_FragColor.xyz *= vec3( eyeID, 1.0-eyeID, 1.0-eyeID );
 #endif
+
+}

@@ -10,7 +10,7 @@ class ShaderEngine {
     this.shader = {
       vertexShader: shader.vertexShader,
       fragmentShader: shader.fragmentShader,
-      wrapped: shader.wrapped,
+      wrapper: shader.wrapper,
       initialParams: shader.params || {},
     };
 
