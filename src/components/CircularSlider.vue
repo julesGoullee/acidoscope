@@ -25,14 +25,12 @@
         :cy="radius"
       />
     </svg>
-    <p>{{ denormalize(value).toFixed(2) }}</p>
     <p>{{ paramValue.toFixed(2) }}</p>
   </v-flex>
 </template>
 
 
 <script>
-  import { throttle } from 'lodash';
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
@@ -92,7 +90,6 @@
       this.y = 0;
 
       document.addEventListener('mousemove', this.handleMouseMove);
-      // document.addEventListener('mousemove', throttle(this.handleMouseMove, 1, { trailing: false }) );
       document.addEventListener('mouseup', this.handleMouseUp);
 
     },
