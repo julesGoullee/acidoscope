@@ -1,4 +1,5 @@
 export default {
+  original: 'https://www.shadertoy.com/view/ltBcRc',
   fragmentShader: `
 
 #ifdef GL_ES
