@@ -123,6 +123,7 @@ class ShaderParams {
         break;
       }
       case 'v2': {
+        // TODO handle range
         if(value.x !== undefined) {
           this.uniforms[name].value.x = value.x;
         }

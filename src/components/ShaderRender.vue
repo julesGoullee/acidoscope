@@ -18,17 +18,30 @@
 
   export default {
     name: 'ShaderRender',
+    data: () => ({
+      listener: null,
+    }),
     mounted: async function() {
 
       const container = document.getElementById('shader-renderer');
       this.createShaderEngine({ container });
       await this.listenMidiActions();
 
+      this.listener = (e) => {
+        e.preventDefault();
+        if(e.code === 'Space') {
+          this.pauseShader();
+        }
+        return false;
+      };
+      window.addEventListener("keypress", this.listener);
+
     },
     beforeDestroy: function() {
 
       this.stopShaderEngine();
       this.unlistenMidiActions();
+      window.window.removeEventListener("keypress", this.listener);
 
     },
     methods: {
@@ -37,6 +50,7 @@
         'stopShaderEngine',
         'listenMidiActions',
         'unlistenMidiActions',
+        'pauseShader',
       ]),
     }
   }

@@ -3,6 +3,7 @@ import assert from 'assert';
 import router from '@/router';
 import ShaderEngine from '@/modules/ShaderEngine';
 import shaders from '@/shaders';
+import Midi from '@/modules/midi';
 
 const ShaderParamsModule = {
 
@@ -115,7 +116,7 @@ const ShaderParamsModule = {
           break;
         }
         default: {
-          throw new Error('Unknown shader change param action')
+          console.warn('Unknown shader change param action', action, paramName);
         }
       }
 
@@ -130,6 +131,24 @@ const ShaderParamsModule = {
       } else {
         state.shaderEngine.start();
         commit('setRunning', true);
+      }
+    },
+
+    handleAction({ dispatch }, { action }) {
+
+      switch(action) {
+        case 'pause': {
+          dispatch('pauseShader');
+          break;
+        }
+        case 'nyan': {
+          Midi.danceColors();
+          break;
+        }
+        default: {
+          console.warn('Unknown shader handle action', action);
+
+        }
       }
     },
 
