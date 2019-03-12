@@ -35,31 +35,15 @@
         <v-btn
           raised
           block
-          color="warning"
-          @click="fullscreen"
-        >
-          VR
-          <v-icon
-            right
-            dark
-          >
-            toggle_off
-          </v-icon>
-        </v-btn>
-      </v-flex>
-      <v-flex>
-        <v-btn
-          raised
-          block
-          :color="shaderRunning ? 'error' : 'success'"
+          :color="shaderRunning ? 'success' : 'error'"
           @click="pauseShader"
         >
-          {{ shaderRunning ? 'Pause' : 'Play' }}
+          {{ shaderRunning ? 'Play' : 'Pause' }}
           <v-icon
             right
             dark
           >
-            {{ shaderRunning ? 'pause' : 'play_arrow' }}
+            {{ shaderRunning ? 'play_arrow' : 'pause' }}
           </v-icon>
         </v-btn>
       </v-flex>
@@ -70,7 +54,6 @@
 
 <style scoped>
   .shader-view {
-    padding: 50px;
   }
   .shader-container {
     width: 80%;

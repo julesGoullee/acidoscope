@@ -1,5 +1,6 @@
 export default {
   original: 'https://www.shadertoy.com/view/ltBcRc',
+  name: 'Kaleidoic trip',
   fragmentShader: `
 
 #ifdef GL_ES
