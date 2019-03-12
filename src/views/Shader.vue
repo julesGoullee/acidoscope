@@ -15,7 +15,7 @@
         wrap
         justify-center
       >
-        <v-flex xs3>
+        <v-flex xs6>
           <v-btn
             raised
             block
@@ -31,23 +31,7 @@
             </v-icon>
           </v-btn>
         </v-flex>
-        <v-flex xs3>
-          <v-btn
-            raised
-            block
-            color="warning"
-            @click="fullscreen"
-          >
-            VR
-            <v-icon
-              right
-              dark
-            >
-              toggle_off
-            </v-icon>
-          </v-btn>
-        </v-flex>
-        <v-flex xs3>
+        <v-flex xs6>
           <v-btn
             raised
             block
