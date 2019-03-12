@@ -56,6 +56,14 @@ void main (void) {
       special: 'mouse',
     },
     {
+      name: 'speed',
+      type: 'f',
+      special: 'controllable',
+      defaultValue: 1.,
+      range: [0., 4.],
+      step: 0.01,
+    },
+    {
       name: 'speedUniform',
       special: 'controllable',
       type: 'f',

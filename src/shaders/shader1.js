@@ -128,6 +128,14 @@ void main(void)
       defaultValue: [0.,0.],
     },
     {
+      name: 'speed',
+      type: 'f',
+      special: 'controllable',
+      defaultValue: 1.,
+      range: [0., 4.],
+      step: 0.01,
+    },
+    {
       name: 'control1',
       type: 'f',
       special: 'controllable',
