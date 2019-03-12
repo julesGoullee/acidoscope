@@ -8,7 +8,7 @@
     >
       <circle
         class="slider-circle"
-        v-bind:style="{ strokeWidth: border }"
+        :style="{ strokeWidth: border }"
         :r="radius - border / 2"
         :cx="radius"
         :cy="radius"
@@ -25,7 +25,7 @@
         :cy="radius"
       />
     </svg>
-    <p>{{ paramValue.toFixed(2) }}</p>
+    <div class="slider-value">{{ paramValue.toFixed(2) }}</div>
   </v-flex>
 </template>
 
@@ -198,9 +198,10 @@
   }
 
   .slider {
-    display: block;
-    /*width: 5rem;*/
-    /*height: 5rem;*/
+    flex: 1 1 auto;
+    align-self: center;
+    width: 5rem;
+    height: 5rem;
     transform: rotate(-90deg);
     cursor: ns-resize;
   }
@@ -217,4 +218,7 @@
     stroke-dasharray: 0;
   }
 
+  .slider-value{
+    margin-top: 10px;
+  }
 </style>

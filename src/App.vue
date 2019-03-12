@@ -1,6 +1,9 @@
 <template>
   <v-app id="app">
-    <v-container grid-list-md>
+    <v-container
+      grid-list-md
+      class="app-container"
+    >
       <v-layout
         row
         wrap
@@ -52,5 +55,9 @@
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
     height: 100%;
+  }
+  .app-container{
+    width: 100%;
+    padding-top: 10px;
   }
 </style>

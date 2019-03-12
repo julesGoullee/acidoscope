@@ -1,36 +1,31 @@
 <template>
   <v-container
     grid-list-md
-    text-xs-center
   >
     <v-layout
       row
       wrap
+      justify-center
     >
       <v-flex
         v-for="param in paramsList"
         :key="param.name"
         xs2
       >
-        <v-layout column>
-          <v-container
-            align-center
-          >
-            <CircularSlider
-              :paramName="param.name"
-              :paramValue="getParamValue(param.name)"
-              :paramRangeStart="param.range[0]"
-              :paramRangeEnd="param.range[1]"
-              :onChange="onControlChange"
-            />
-            <v-card-text
-            >
-              {{ param.name }}
-            </v-card-text>
-          </v-container>
-          <v-flex>
-            <v-card-text class="px-0"></v-card-text>
-          </v-flex>
+        <v-layout
+          column
+          text-xs-center
+        >
+          <CircularSlider
+            :param-name="param.name"
+            :param-value="getParamValue(param.name)"
+            :param-range-start="param.range[0]"
+            :param-range-end="param.range[1]"
+            :on-change="onControlChange"
+          />
+          <span
+            class="text-capitalize"
+          >{{ param.name }}</span>
         </v-layout>
       </v-flex>
     </v-layout>

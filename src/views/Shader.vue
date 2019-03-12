@@ -1,79 +1,79 @@
 <template>
-  <v-layout
+  <v-container
     class="shader-view"
-    align-center
-    justify-start
-    column
   >
-    <div
+    <v-flex
       id="fullscreen-renderer"
       class="shader-container"
+      xs12
     >
       <ShaderRender />
-    </div>
-    <v-layout
-      row
-      wrap
-    >
-      <v-flex>
-        <v-btn
-          raised
-          block
-          color="info"
-          @click="fullscreen"
-        >
-          Fullscreen
-          <v-icon
-            right
-            dark
+    </v-flex>
+    <v-container>
+      <v-layout
+        row
+        wrap
+        justify-center
+      >
+        <v-flex xs3>
+          <v-btn
+            raised
+            block
+            color="info"
+            @click="fullscreen"
           >
-            fullscreen
-          </v-icon>
-        </v-btn>
-      </v-flex>
-      <v-flex>
-        <v-btn
-          raised
-          block
-          color="warning"
-          @click="fullscreen"
-        >
-          VR
-          <v-icon
-            right
-            dark
+            Fullscreen
+            <v-icon
+              right
+              dark
+            >
+              fullscreen
+            </v-icon>
+          </v-btn>
+        </v-flex>
+        <v-flex xs3>
+          <v-btn
+            raised
+            block
+            color="warning"
+            @click="fullscreen"
           >
-            toggle_off
-          </v-icon>
-        </v-btn>
-      </v-flex>
-      <v-flex>
-        <v-btn
-          raised
-          block
-          :color="shaderRunning ? 'error' : 'success'"
-          @click="pauseShader"
-        >
-          {{ shaderRunning ? 'Pause' : 'Play' }}
-          <v-icon
-            right
-            dark
+            VR
+            <v-icon
+              right
+              dark
+            >
+              toggle_off
+            </v-icon>
+          </v-btn>
+        </v-flex>
+        <v-flex xs3>
+          <v-btn
+            raised
+            block
+            :color="shaderRunning ? 'error' : 'success'"
+            @click="pauseShader"
           >
-            {{ shaderRunning ? 'pause' : 'play_arrow' }}
-          </v-icon>
-        </v-btn>
-      </v-flex>
-    </v-layout>
+            {{ shaderRunning ? 'Pause' : 'Play' }}
+            <v-icon
+              right
+              dark
+            >
+              {{ shaderRunning ? 'pause' : 'play_arrow' }}
+            </v-icon>
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-container>
     <ShaderParams />
-  </v-layout>
+  </v-container>
 </template>
 
 <style scoped>
-  .shader-view {
-    padding: 50px;
+  .shader-view{
+    padding-top: 10px;
   }
   .shader-container {
-    width: 80%;
     height: 400px;
     z-index: 0;
     position: relative;
