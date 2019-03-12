@@ -25,7 +25,9 @@
         :cy="radius"
       />
     </svg>
-    <div class="slider-value">{{ paramValue.toFixed(2) }}</div>
+    <div class="slider-value">
+      {{ paramValue.toFixed(2) }}
+    </div>
   </v-flex>
 </template>
 
