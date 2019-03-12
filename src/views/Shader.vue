@@ -51,15 +51,15 @@
           <v-btn
             raised
             block
-            :color="shaderRunning ? 'error' : 'success'"
+            :color="shaderRunning ? 'success' : 'error'"
             @click="pauseShader"
           >
-            {{ shaderRunning ? 'Pause' : 'Play' }}
+            {{ shaderRunning ? 'Play' : 'Pause' }}
             <v-icon
               right
               dark
             >
-              {{ shaderRunning ? 'pause' : 'play_arrow' }}
+              {{ shaderRunning ? 'play_arrow' : 'pause' }}
             </v-icon>
           </v-btn>
         </v-flex>
@@ -71,7 +71,6 @@
 
 <style scoped>
   .shader-view{
-    padding-top: 10px;
   }
   .shader-container {
     height: 400px;

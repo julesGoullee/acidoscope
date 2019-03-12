@@ -1,5 +1,6 @@
 export default {
   original: 'https://www.shadertoy.com/view/wdlSD2',
+  name: 'Anaglyph fractal',
   fragmentShader: `
   
 #ifdef GL_ES

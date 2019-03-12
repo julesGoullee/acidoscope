@@ -1,5 +1,5 @@
 <template>
-  <v-layout id="gallery-container">
+  <v-layout id="gallery-view">
     <Gallery />
   </v-layout>
 </template>

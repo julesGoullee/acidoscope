@@ -1,30 +1,36 @@
 <template>
   <v-app id="app">
-    <v-container
-      grid-list-md
-      class="app-container"
-    >
+    <v-container grid-list-md justify-space-between>
       <v-layout
         row
         wrap
       >
-        <v-flex xs6>
+        <v-flex xs4>
           <v-btn
             v-if="$route.name === 'shader'"
-            flat
+            color="#d6a8f3"
             to="/"
           >
+            <v-icon left dark>apps</v-icon>
             Gallery
           </v-btn>
         </v-flex>
-        <v-flex xs5 />
-        <v-flex
-          xs1
-        >
-          <MidiLoader />
+        <v-flex xs4>
+          <v-layout justify-center fill-height align-center>
+          <span class="app-name">
+            LittleShaderDimension
+          </span>
+          </v-layout>
+        </v-flex>
+        <v-flex xs4>
+          <v-layout justify-end>
+            <MidiLoader />
+          </v-layout>
         </v-flex>
       </v-layout>
-      <router-view />
+      <v-container class="view-container">
+        <router-view />
+      </v-container>
     </v-container>
   </v-app>
 </template>
@@ -56,8 +62,13 @@
     color: #2c3e50;
     height: 100%;
   }
-  .app-container{
-    width: 100%;
-    padding-top: 10px;
+  .app-name {
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #706a73;
+    margin-top: 15px;
+  }
+  .view-container{
+    padding-top: 50px;
   }
 </style>
