@@ -29,11 +29,11 @@ const link = new abletonlink();
     const beatStartTime = Date.now() - phaseMillisecond;
 
     io.emit('beat', { bpm, beat: beatInt, phase: phaseDecimal, beatStartTime});
-    console.log(`new beatInt ${beatInt} phaseDecimal ${phaseDecimal} phaseMillisecond ${phaseMillisecond} bpm ${bpm}`);
+    console.log(`new beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bpm ${bpm}`);
 
   });
 
-})().catch(console.error);
+})();
 
 server.listen(3000, () => {
   console.log("**** listen on localhost:3000 ****");
