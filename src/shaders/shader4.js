@@ -7,6 +7,8 @@ export default {
 precision mediump float;
 #endif
 
+#define PI 3.1492
+
 uniform float time;
 uniform vec2 resolution;
 uniform float control1;
@@ -18,7 +20,7 @@ mat2 m,n,nn;
 float map (vec3 p) {
     float d = length(p-light.xyz)-light.w;
     d = min(d,max(10.-p.z,0.));
-    float t = control1;
+    float t = 1.5 + cos(control1*PI)/2.;
     for (int i = 0; i < 13; i++) {
         t = t*control2;
         p.xy = m*p.xy;
@@ -83,6 +85,26 @@ void main() {
       special: 'time',
     },
     {
+      name: 'beat',
+      type: 'f',
+      special: 'beat',
+      defaultValue: 0.,
+    },
+    {
+      name: 'beatStartTime',
+      type: 'f',
+      special: 'beat',
+      defaultValue: 0.,
+    },
+    {
+      name: 'speed',
+      type: 'f',
+      special: 'controllable',
+      defaultValue: 1.,
+      range: [0., 4.],
+      step: 0.01,
+    },
+    {
       name: 'resolution',
       type: 'v2',
       special: 'resolution',
@@ -96,7 +118,7 @@ void main() {
       name: 'control1',
       special: 'controllable',
       type: 'f',
-      range: [1, 5],
+      range: [0, 5],
       defaultValue: 2.5,
       step: 0.01
     },

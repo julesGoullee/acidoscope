@@ -77,12 +77,21 @@ class ShaderParams {
 
   updateSpecialUniforms() {
 
+    const speed = this.initialParams['speed'] ? this.getUniformValue('speed') : 1.;
+    const beatStartTime = this.initialParams['beatStartTime'] ? this.getUniformValue('beatStartTime') : 0.;
+    const phase = (Date.now() - beatStartTime) / (1000 / speed);
+    // console.log(speed, beatStartTime, phase)
+    console.log(phase, (this.shaderEngine.currentTime / 1000.));
+
+
+    this.setUniformValue('control1', phase);
+
     this.forInitialParams(param => {
 
       switch(param.special) {
 
         case 'time': {
-          this.setUniformValue(param.name, this.shaderEngine.currentTime / 1000.);
+          this.setUniformValue(param.name, (this.shaderEngine.currentTime / 1000.) );
           break;
         }
 

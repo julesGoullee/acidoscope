@@ -1,4 +1,5 @@
 import Midi from '@/modules/midi';
+import io from 'socket.io-client';
 
 function encoderToUpDown(value) {
   if(value > 125) {
@@ -110,6 +111,17 @@ const MidiLinkModule = {
     listenMidiActions({ state, commit, dispatch } ) {
 
       if(state.midiListener) return;
+
+      const socket = io.connect('http://192.168.1.3:3000');
+
+      socket.on('beat', (data) => {
+
+        const speed = data.bpm / 60;
+        dispatch('changeParamValue', { paramName: 'beat', action: 'value', value: data.beat });
+        dispatch('changeParamValue', { paramName: 'beatStartTime', action: 'value', value: data.beatStartTime });
+        dispatch('changeParamValue', { paramName: 'speed', action: 'value', value: speed });
+
+      });
 
       if(state.midiEnabled) {
 

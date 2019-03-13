@@ -12,8 +12,12 @@
     "test:unit": "NODE_ENV=test vue-cli-service test:unit -r tests/unit/test.config.js"
   },
   "dependencies": {
+    "abletonlink": "0.0.7",
+    "express": "^4.16.4",
     "lodash": "^4.17.11",
     "nosleep.js": "^0.9.0",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
     "three": "^0.102.1",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
