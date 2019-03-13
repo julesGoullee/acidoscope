@@ -1,6 +1,9 @@
 <template>
   <v-app id="app">
-    <v-container grid-list-md justify-space-between>
+    <v-container
+      grid-list-md
+      justify-space-between
+    >
       <v-layout
         row
         wrap
@@ -11,20 +14,29 @@
             color="#d6a8f3"
             to="/"
           >
-            <v-icon left dark>apps</v-icon>
+            <v-icon
+              left
+              dark
+            >
+              apps
+            </v-icon>
             Gallery
           </v-btn>
         </v-flex>
         <v-flex xs4>
-          <v-layout justify-center fill-height align-center>
-          <span class="app-name">
-            LittleShaderDimension
-          </span>
+          <v-layout
+            justify-center
+            fill-height
+            align-center
+          >
+            <span class="app-name">
+              LittleShaderDimension
+            </span>
           </v-layout>
         </v-flex>
         <v-flex xs4>
           <v-layout justify-end>
-            <MidiLoader />
+            <Loaders />
           </v-layout>
         </v-flex>
       </v-layout>
@@ -36,7 +48,7 @@
 </template>
 <script>
 
-  import MidiLoader from '@/components/MidiLoader.vue';
+  import Loaders from '@/components/Loaders.vue';
   import {
     VApp,
   } from 'vuetify/lib'
@@ -45,7 +57,7 @@
     name: 'App',
     components: {
       VApp,
-      MidiLoader
+      Loaders: Loaders
     }
   };
 

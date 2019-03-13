@@ -1,11 +1,9 @@
-const path = require('path');
-
 const app = require('express')();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 io.on('connection', function(client){
-  client.on('event', function(data){});
+  // client.on('event', function(data){});
   client.on('disconnect', function(){});
 });
 
@@ -15,7 +13,7 @@ const link = new abletonlink();
 ( () => {
   let lastBeat = 0;
 
-  link.startUpdate(10, (beat, phase, bpm) => {
+  link.startUpdate(100, (beat, phase, bpm) => {
 
     //console.log(`beat ${beat} phase ${phase} bpm ${bpm}`);
 
@@ -28,8 +26,8 @@ const link = new abletonlink();
     const phaseMillisecond = phaseDecimal/bps;
     const beatStartTime = Date.now() - phaseMillisecond;
 
-    io.emit('beat', { bpm, beat: beatInt, phase: phaseDecimal, beatStartTime});
-    console.log(`new beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bpm ${bpm}`);
+    io.emit('beat', { bps, beat: beatInt, phase: phaseDecimal, beatStartTime});
+    console.log(`new beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bps ${bps}`);
 
   });
 

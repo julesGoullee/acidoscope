@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 import App from '@/App.vue';
 import router from '@/router';
-import MidiLoader from '@/components/MidiLoader.vue';
+import MidiLoader from '@/components/Loaders.vue';
 
 describe('Views: App.vue', function () {
 

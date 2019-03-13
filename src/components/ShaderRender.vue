@@ -26,6 +26,7 @@
       const container = document.getElementById('shader-renderer');
       this.createShaderEngine({ container });
       await this.listenMidiActions();
+      await this.listenLinkActions();
 
       this.listener = (e) => {
         e.preventDefault();
@@ -41,6 +42,7 @@
 
       this.stopShaderEngine();
       this.unlistenMidiActions();
+      this.unlistenLinkActions();
       window.window.removeEventListener("keypress", this.listener);
 
     },
@@ -50,6 +52,8 @@
         'stopShaderEngine',
         'listenMidiActions',
         'unlistenMidiActions',
+        'listenLinkActions',
+        'unlistenLinkActions',
         'pauseShader',
       ]),
     }
