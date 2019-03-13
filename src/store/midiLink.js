@@ -116,10 +116,10 @@ const MidiLinkModule = {
 
       socket.on('beat', (data) => {
 
-        const speed = data.bpm / 60;
+        const bps = data.bpm / 60;
         dispatch('changeParamValue', { paramName: 'beat', action: 'value', value: data.beat });
         dispatch('changeParamValue', { paramName: 'beatStartTime', action: 'value', value: data.beatStartTime });
-        dispatch('changeParamValue', { paramName: 'speed', action: 'value', value: speed });
+        dispatch('changeParamValue', { paramName: 'speed', action: 'value', value: bps });
 
       });
 

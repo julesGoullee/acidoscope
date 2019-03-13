@@ -14,31 +14,26 @@ const link = new abletonlink();
 
 ( () => {
   let lastBeat = 0;
-  let isWaiting = false;
 
-  link.startUpdate(100, (beat, phase, bpm) => {
-    console.log(`beat ${beat} phase ${phase} bpm ${bpm}`);
+  link.startUpdate(10, (beat, phase, bpm) => {
 
-    const beatInt = 0 ^ beat;
-    if(isWaiting ||  (beatInt - lastBeat) <= 0) return;
+    //console.log(`beat ${beat} phase ${phase} bpm ${bpm}`);
 
-    const beatDecimals = beat - beatInt;
-
-
-    console.log(beatDecimals);
-    const waitBeat = 1 - beatDecimals;
-    const wait = bpm/60/waitBeat;
+    const beatInt = Math.floor(beat);
+    if((beatInt - lastBeat) <= 0) return;
     lastBeat = beatInt;
-    // console.log(`new beat ${beatInt} decimals ${beatDecimals}, ${wait}, ${bpm}, ${beatInt + 1}`);
 
-    // isWaiting = true;
-    setTimeout(() => {
-      isWaiting = false;
-      io.emit('beat', { bpm, beat: beatInt + 1, phase, beatStartTime: Date.now()});
-    }, wait * 1000)
+    const bps = bpm/60;
+    const phaseDecimal = phase - Math.floor(phase);
+    const phaseMillisecond = phaseDecimal/bps;
+    const beatStartTime = Date.now() - phaseMillisecond;
+
+    io.emit('beat', { bpm, beat: beatInt, phase: phaseDecimal, beatStartTime});
+    console.log(`new beatInt ${beatInt} phaseDecimal ${phaseDecimal} phaseMillisecond ${phaseMillisecond} bpm ${bpm}`);
+
   });
 
-})();
+})().catch(console.error);
 
 server.listen(3000, () => {
   console.log("**** listen on localhost:3000 ****");

@@ -71,12 +71,9 @@ class ShaderEngine {
   animate() {
 
     this.running && requestAnimationFrame( this.animate.bind(this) );
-    const speed = this.shaderParams.initialParams['speed'] ? this.shaderParams.getUniformValue('speed') : 1.;
-    const beatStartTime = this.shaderParams.initialParams['beatStartTime'] ? this.shaderParams.getUniformValue('beatStartTime') : 0.;
-    const phase = (Date.now() - beatStartTime) / (1000 / speed);
 
-    const distortion = Math.abs(Math.cos(Math.PI * phase ))*3;
-    this.currentTime += (Date.now() - this.lastTime) * distortion;
+    const speed = this.shaderParams.initialParams['speed'] ? this.shaderParams.getUniformValue('speed') : 1.;
+    this.currentTime += speed * (Date.now() - this.lastTime);
     this.lastTime = Date.now();
 
     this.render();

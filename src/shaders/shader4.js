@@ -20,7 +20,7 @@ mat2 m,n,nn;
 float map (vec3 p) {
     float d = length(p-light.xyz)-light.w;
     d = min(d,max(10.-p.z,0.));
-    float t = 1.5 + cos(control1*PI)/2.;
+    float t = 1. + abs(sin(control1*PI + PI/2.));
     for (int i = 0; i < 13; i++) {
         t = t*control2;
         p.xy = m*p.xy;

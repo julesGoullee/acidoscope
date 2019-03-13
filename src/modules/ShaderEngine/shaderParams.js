@@ -79,9 +79,9 @@ class ShaderParams {
 
     const speed = this.initialParams['speed'] ? this.getUniformValue('speed') : 1.;
     const beatStartTime = this.initialParams['beatStartTime'] ? this.getUniformValue('beatStartTime') : 0.;
-    const phase = (Date.now() - beatStartTime) / (1000 / speed);
+    const phase = (Date.now() - beatStartTime) / 1000 * speed;
     // console.log(speed, beatStartTime, phase)
-    console.log(phase, (this.shaderEngine.currentTime / 1000.));
+    console.log(speed, beatStartTime, phase, (this.shaderEngine.currentTime / 1000.));
 
 
     this.setUniformValue('control1', phase);
