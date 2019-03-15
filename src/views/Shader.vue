@@ -3,7 +3,6 @@
     class="shader-view"
   >
     <v-flex
-      id="fullscreen-renderer"
       class="shader-container"
       xs12
     >
@@ -20,7 +19,7 @@
             raised
             block
             color="info"
-            @click="fullscreen"
+            @click="switchFullscreen"
           >
             Fullscreen
             <v-icon
@@ -65,12 +64,9 @@
 
 <script>
 
-  import NoSleep from 'nosleep.js';
   import ShaderRender from '@/components/ShaderRender.vue'
   import ShaderParams from '@/components/ShaderParams.vue';
   import { mapActions, mapGetters } from 'vuex';
-
-  const noSleep = new NoSleep();
 
   export default {
     name: 'ShaderView',
@@ -78,44 +74,16 @@
       ShaderParams,
       ShaderRender,
     },
-    data: () => ({
-      isFullscreen: false,
-    }),
     computed: {
       ...mapGetters([
         'shaderRunning',
       ])
     },
-    mounted: async function () {
-
-      document.addEventListener('fullscreenchange', function fullScreenChange(){
-
-        document.removeEventListener('click', fullScreenChange, false);
-        noSleep.enable();
-
-        this.isFullscreen = !!document.fullscreenElement;
-
-      }, false);
-
-    },
-    beforeDestroy: function() {
-
-      noSleep.disable();
-
-    },
     methods: {
       ...mapActions([
-        'loadVisualisations',
+        'switchFullscreen',
         'pauseShader',
       ]),
-      fullscreen: function () {
-
-        const el = document.getElementById('fullscreen-renderer');
-        if(el.requestFullscreen) {
-          el.requestFullscreen();
-        }
-
-      },
     }
   }
 </script>

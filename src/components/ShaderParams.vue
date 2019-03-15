@@ -52,13 +52,6 @@
         'loadVisualisations',
         'changeParamValue'
       ]),
-      fullscreen: function () {
-
-        const el = document.getElementById('fullscreen-renderer');
-        if(el.requestFullscreen) {
-          el.requestFullscreen();
-        }
-      },
       onControlChange: function(paramName, value){
 
         this.changeParamValue({
