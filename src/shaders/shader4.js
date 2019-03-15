@@ -3,10 +3,6 @@ export default {
   name: 'Anaglyph fractal',
   fragmentShader: `
   
-#ifdef GL_ES
-precision mediump float;
-#endif
-
 uniform float time;
 uniform vec2 resolution;
 uniform float control1;

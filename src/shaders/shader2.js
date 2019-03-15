@@ -3,10 +3,6 @@ export default {
   name: 'Kaleidoic trip',
   fragmentShader: `
 
-#ifdef GL_ES
-precision mediump float;
-#endif
-
 uniform float time;
 uniform float control1;
 uniform float control2;

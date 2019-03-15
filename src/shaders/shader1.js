@@ -2,9 +2,6 @@ export default {
   original: 'http://glslsandbox.com/e#53202.0',
   name: 'Spiral eyes',
   fragmentShader: `
-#ifdef GL_ES
-precision mediump float;
-#endif
 
 uniform float time;
 uniform float control1;
