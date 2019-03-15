@@ -11,7 +11,7 @@ class ShaderEngine {
       vertexShader: shader.vertexShader,
       fragmentShader: shader.fragmentShader,
       wrapper: shader.wrapper,
-      initialParams: shader.params || {},
+      controllableParams: shader.params || [],
     };
 
     this.shaderParams = new ShaderParams(this);
@@ -73,7 +73,8 @@ class ShaderEngine {
 
     this.running && requestAnimationFrame( this.animate.bind(this) );
 
-    this.currentTime += this.shaderParams.speed * (Date.now() - this.lastTime);
+    const speed = this.shaderParams.getUniformValue('speed');
+    this.currentTime += speed * (Date.now() - this.lastTime);
     this.lastTime = Date.now();
 
     this.render();
@@ -101,11 +102,5 @@ class ShaderEngine {
   }
 
 }
-
-function reduceArrayToObject(obj) {
-  return obj.reduce((acc, it) => ({...acc, [it]: it}), {});
-}
-ShaderEngine.TYPES = reduceArrayToObject(['f', 'v2', 'v3']);
-ShaderEngine.SPECIALS = reduceArrayToObject(['time', 'mouse', 'resolution', 'controllable']);
 
 export default ShaderEngine;

@@ -77,29 +77,7 @@ void main() {
 `,
   params: [
     {
-      name: 'time',
-      type: 'f',
-      special: 'time',
-    },
-    {
-      name: 'resolution',
-      type: 'v2',
-      special: 'resolution',
-    },
-    {
-      name: 'mouse',
-      type: 'v2',
-      special: 'mouse',
-    },
-    {
-      name: 'phase',
-      special: 'phase',
-      type: 'f',
-      defaultValue: 0.0,
-    },
-    {
       name: 'control1',
-      special: 'controllable',
       type: 'f',
       range: [0, 5],
       defaultValue: 2.5,
@@ -107,7 +85,6 @@ void main() {
     },
     {
       name: 'control2',
-      special: 'controllable',
       type: 'f',
       range: [0.5, 0.7],
       defaultValue: 0.66,

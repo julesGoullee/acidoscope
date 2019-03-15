@@ -29,12 +29,6 @@
       const container = document.getElementById('shader-renderer');
       this.createShaderEngine({ container });
 
-      await this.initMidi();
-      await this.initLink();
-
-      await this.listenMidiActions();
-      await this.listenLinkActions();
-
       this.listener = (e) => {
         e.preventDefault();
 
@@ -45,6 +39,10 @@
           }
           case 'KeyF': {
             this.switchFullscreen();
+            break;
+          }
+          case 'KeyG': {
+            this.goToGallery();
             break;
           }
         }
@@ -60,13 +58,20 @@
 
       }, false);
 
+      await this.initMidi();
+      await this.initLink();
+
+      this.listenMidiActions();
+      this.listenLinkActions();
+
     },
     beforeDestroy: function() {
+
+      window.removeEventListener("keypress", this.listener);
 
       this.stopShaderEngine();
       this.unlistenMidiActions();
       this.unlistenLinkActions();
-      window.window.removeEventListener("keypress", this.listener);
       noSleep.disable();
 
     },
@@ -75,6 +80,7 @@
         'createShaderEngine',
         'stopShaderEngine',
         'switchFullscreen',
+        'goToGallery',
         'initMidi',
         'initLink',
         'listenMidiActions',

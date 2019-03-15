@@ -39,7 +39,7 @@ const ShaderParamsModule = {
       state.paramsValue = {};
 
       shaderParams.forInitialParams(param => {
-        if(param.special === ShaderEngine.SPECIALS.controllable) {
+        if(!param.auto) {
           state.paramsList.push(param);
           state.paramsValue[param.name] = param.defaultValue;
         }
@@ -67,7 +67,7 @@ const ShaderParamsModule = {
 
       if(!shader){
 
-        router.push({ path: '/' });
+        dispatch('goToGallery');
 
       } else {
 

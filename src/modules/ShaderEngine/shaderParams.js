@@ -1,17 +1,55 @@
 import * as THREE from 'three'
 
+const defaultParams = [
+  {
+    name: 'time',
+    type: 'f',
+    defaultValue: 0.,
+    auto: true,
+  },
+  {
+    name: 'resolution',
+    type: 'v2',
+    defaultValue: [0.,0.],
+    auto: true,
+  },
+  {
+    name: 'mouse',
+    type: 'v2',
+    defaultValue: [0.,0.],
+    auto: true,
+  },
+  {
+    name: 'phase',
+    type: 'f',
+    defaultValue: 0.0,
+    auto: true,
+  },
+  {
+    name: 'speed',
+    type: 'f',
+    defaultValue: 1.0,
+    range: [0., 10.],
+  },
+];
+
 class ShaderParams {
 
   constructor(shaderEngine) {
 
     this.shaderEngine = shaderEngine;
-    this.initialParams = this.shaderEngine.shader.initialParams.reduce((acc, initialParam) => ({
-      ...acc,
-      [initialParam.name]: initialParam,
-    }), {});
-    this.uniforms = null;
 
-    this.speed = 1.0;
+    this.initialParams = []
+      .concat(defaultParams)
+      .concat(this.shaderEngine.shader.controllableParams)
+      .reduce((acc, param) => ({
+          ...acc,
+          [param.name]: param,
+        }),
+        {}
+      );
+
+    this.uniforms = null;
 
     this.beatData = {
       beatStartTime: 0,
@@ -52,16 +90,10 @@ class ShaderParams {
 
   forInitialParams(fn) {
 
-    const initialParams = this.shaderEngine.shader.initialParams;
+    const initialParams = this.initialParams;
     const paramNames = Object.keys(initialParams);
 
-    for(let index in paramNames) {
-
-      const initialParam = initialParams[index];
-
-      fn(initialParam);
-
-    }
+    paramNames.forEach(paramName => fn(initialParams[paramName]));
 
   }
 
@@ -86,31 +118,19 @@ class ShaderParams {
 
   updateSpecialUniforms() {
 
-    this.forInitialParams(param => {
 
-      switch(param.special) {
+    const time = this.shaderEngine.currentTime / 1000.;
+    this.setUniformValue('time', time);
 
-        case 'time': {
-          this.setUniformValue(param.name, (this.shaderEngine.currentTime / 1000.) );
-          break;
-        }
+    const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
+    this.setUniformValue('phase', phase);
 
-        case 'phase': {
-          const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
-          this.setUniformValue('phase', phase);
-          break;
-        }
+    const container = this.shaderEngine.container;
+    const width = container.offsetWidth;
+    const height = container.offsetHeight;
+    this.setUniformValue('resolution', {x: width, y: height});
 
-        case 'resolution': {
-          const container = this.shaderEngine.container;
-          const width = container.offsetWidth;
-          const height = container.offsetHeight;
-          this.setUniformValue(param.name, {x: width, y: height});
-          break;
-        }
-
-      }
-    });
+    // TODO mouse
 
   }
 
@@ -125,24 +145,18 @@ class ShaderParams {
     const initialParam = this.initialParams[name];
 
     switch(initialParam.type) {
+      case 'i':
       case 'f': {
         this.uniforms[name].value = value;
-        if(initialParam.range && this.uniforms[name].value < initialParam.range[0]) {
-          this.uniforms[name].value = initialParam.range[0];
+
+        if(initialParam.range) {
+          if(this.uniforms[name].value < initialParam.range[0]) {
+            this.uniforms[name].value = initialParam.range[0];
+          } else if(this.uniforms[name].value > initialParam.range[1]) {
+            this.uniforms[name].value = initialParam.range[1];
+          }
         }
-        if(initialParam.range && this.uniforms[name].value > initialParam.range[1]) {
-          this.uniforms[name].value = initialParam.range[1];
-        }
-        break;
-      }
-      case 'i': {
-        this.uniforms[name].value = value;
-        if(initialParam.range && this.uniforms[name].value < initialParam.range[0]) {
-          this.uniforms[name].value = initialParam.range[0];
-        }
-        if(initialParam.range && this.uniforms[name].value > initialParam.range[1]) {
-          this.uniforms[name].value = initialParam.range[1];
-        }
+
         break;
       }
       case 'v2': {
@@ -172,10 +186,6 @@ class ShaderParams {
       }
     }
 
-  }
-
-  setSpeed(speed) {
-    this.speed = speed;
   }
 
   setBeat(beatData) {
