@@ -13,6 +13,13 @@ class ShaderParams {
 
     this.speed = 1.0;
 
+    this.beatData = {
+      beatStartTime: 0,
+      bps: 1,
+      bpm: 60,
+      beat: 0,
+    };
+
   }
 
   static getUniformDefaultValue(type, defaultValue) {
@@ -84,7 +91,13 @@ class ShaderParams {
       switch(param.special) {
 
         case 'time': {
-          this.setUniformValue(param.name, this.shaderEngine.currentTime / 1000.);
+          this.setUniformValue(param.name, (this.shaderEngine.currentTime / 1000.) );
+          break;
+        }
+
+        case 'phase': {
+          const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
+          this.setUniformValue('phase', phase);
           break;
         }
 
@@ -163,6 +176,15 @@ class ShaderParams {
 
   setSpeed(speed) {
     this.speed = speed;
+  }
+
+  setBeat(beatData) {
+    this.beatData = {
+      beatStartTime: beatData.beatStartTime,
+      bps: beatData.bps,
+      bpm: beatData.bpm,
+      beat: beatData.beat,
+    };
   }
 
 }

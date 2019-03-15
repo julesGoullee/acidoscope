@@ -16,7 +16,7 @@ function touchToUpDown(value) {
   return null;
 }
 
-const MidiLinkModule = {
+const MidiModule = {
 
   state: {
     midiEnabled: false,
@@ -102,8 +102,6 @@ const MidiLinkModule = {
       Midi.listenStatus(hardwareStatus => {
         commit('setMidiHardwareConnected', hardwareStatus.connected);
       });
-
-      //Midi.danceColors();
 
     },
 
@@ -195,4 +193,4 @@ const MidiLinkModule = {
 
 };
 
-export default MidiLinkModule;
+export default MidiModule;

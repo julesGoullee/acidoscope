@@ -2,10 +2,10 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 
 import { waitNextTick } from '@/../tests/unit/test.utils';
-import MidiLoader from '@/components/MidiLoader.vue';
+import MidiLoader from '@/components/Loaders.vue';
 import Midi from '@/modules/midi';
 
-describe('Components: MidiLoader', function (){
+describe('Components: Loaders', function (){
 
   beforeEach(() => {
 

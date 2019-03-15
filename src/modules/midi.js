@@ -9,7 +9,6 @@ const Midi = {
   status: {
     midiInitialized: false,
     midiHardwareConnected: false,
-    midiListening: false,
     dancing: false,
   },
   unlisteners: [],
@@ -37,7 +36,7 @@ const Midi = {
 
         }
 
-      }, true);
+      }/*, true*/);
 
     });
 

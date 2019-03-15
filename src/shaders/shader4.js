@@ -2,11 +2,14 @@ export default {
   original: 'https://www.shadertoy.com/view/wdlSD2',
   name: 'Anaglyph fractal',
   fragmentShader: `
-  
+
+#define PI 3.1492
+
 uniform float time;
 uniform vec2 resolution;
 uniform float control1;
 uniform float control2;
+uniform float phase;
 
 vec4 light;
 float ui;
@@ -14,7 +17,7 @@ mat2 m,n,nn;
 float map (vec3 p) {
     float d = length(p-light.xyz)-light.w;
     d = min(d,max(10.-p.z,0.));
-    float t = control1;
+    float t = 1. + abs(sin(phase*PI + PI/2.));
     for (int i = 0; i < 13; i++) {
         t = t*control2;
         p.xy = m*p.xy;
@@ -89,10 +92,16 @@ void main() {
       special: 'mouse',
     },
     {
+      name: 'phase',
+      special: 'phase',
+      type: 'f',
+      defaultValue: 0.0,
+    },
+    {
       name: 'control1',
       special: 'controllable',
       type: 'f',
-      range: [1, 5],
+      range: [0, 5],
       defaultValue: 2.5,
       step: 0.01
     },

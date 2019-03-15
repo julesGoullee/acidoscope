@@ -28,7 +28,12 @@
 
       const container = document.getElementById('shader-renderer');
       this.createShaderEngine({ container });
+
+      await this.initMidi();
+      await this.initLink();
+
       await this.listenMidiActions();
+      await this.listenLinkActions();
 
       this.listener = (e) => {
         e.preventDefault();
@@ -60,6 +65,7 @@
 
       this.stopShaderEngine();
       this.unlistenMidiActions();
+      this.unlistenLinkActions();
       window.window.removeEventListener("keypress", this.listener);
       noSleep.disable();
 
@@ -69,8 +75,12 @@
         'createShaderEngine',
         'stopShaderEngine',
         'switchFullscreen',
+        'initMidi',
+        'initLink',
         'listenMidiActions',
         'unlistenMidiActions',
+        'listenLinkActions',
+        'unlistenLinkActions',
         'pauseShader',
       ]),
     }
