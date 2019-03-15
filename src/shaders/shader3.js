@@ -2,9 +2,6 @@ export default {
   original: 'http://glslsandbox.com/e#53200.0',
   name: 'Blobs',
   fragmentShader: `
-#ifdef GL_ES
-precision mediump float;
-#endif
 
 uniform float time;
 uniform vec2 mouse;
@@ -54,14 +51,6 @@ void main (void) {
       type: 'v2',
       defaultValue: [0.,0.],
       special: 'mouse',
-    },
-    {
-      name: 'speed',
-      type: 'f',
-      special: 'controllable',
-      defaultValue: 1.,
-      range: [0., 4.],
-      step: 0.01,
     },
     {
       name: 'speedUniform',

@@ -2,10 +2,6 @@ export default {
   original: 'https://www.shadertoy.com/view/wdlSD2',
   name: 'Anaglyph fractal',
   fragmentShader: `
-  
-#ifdef GL_ES
-precision mediump float;
-#endif
 
 #define PI 3.1492
 
@@ -95,14 +91,6 @@ void main() {
       type: 'f',
       special: 'beat',
       defaultValue: 0.,
-    },
-    {
-      name: 'speed',
-      type: 'f',
-      special: 'controllable',
-      defaultValue: 1.,
-      range: [0., 4.],
-      step: 0.01,
     },
     {
       name: 'resolution',

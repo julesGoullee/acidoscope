@@ -14,7 +14,10 @@
 
 <script>
 
+  import NoSleep from 'nosleep.js';
   import { mapActions } from 'vuex';
+
+  const noSleep = new NoSleep();
 
   export default {
     name: 'ShaderRender',
@@ -30,12 +33,28 @@
 
       this.listener = (e) => {
         e.preventDefault();
-        if(e.code === 'Space') {
-          this.pauseShader();
+
+        switch(e.code) {
+          case 'Space': {
+            this.pauseShader();
+            break;
+          }
+          case 'KeyF': {
+            this.switchFullscreen();
+            break;
+          }
         }
+
         return false;
       };
       window.addEventListener("keypress", this.listener);
+
+      document.addEventListener('fullscreenchange', function fullScreenChange(){
+
+        document.removeEventListener('click', fullScreenChange, false);
+        noSleep.enable();
+
+      }, false);
 
     },
     beforeDestroy: function() {
@@ -44,12 +63,14 @@
       this.unlistenMidiActions();
       this.unlistenLinkActions();
       window.window.removeEventListener("keypress", this.listener);
+      noSleep.disable();
 
     },
     methods: {
       ...mapActions([
         'createShaderEngine',
         'stopShaderEngine',
+        'switchFullscreen',
         'listenMidiActions',
         'unlistenMidiActions',
         'listenLinkActions',

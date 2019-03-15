@@ -34,23 +34,16 @@ const ShaderParamsModule = {
       state.shaderEngine.init();
       state.shaderEngine.start();
 
-
       const shaderParams = state.shaderEngine.shaderParams;
-      state.paramsValue = {};
       state.paramsList = [];
+      state.paramsValue = {};
+
       shaderParams.forInitialParams(param => {
         if(param.special === ShaderEngine.SPECIALS.controllable) {
           state.paramsList.push(param);
           state.paramsValue[param.name] = param.defaultValue;
         }
       });
-
-    },
-
-    stopShaderEngine: (state) => {
-
-      assert(state.shaderEngine, 'engine_not_exist');
-      state.shaderEngine.stop();
 
     },
 
@@ -84,11 +77,13 @@ const ShaderParamsModule = {
       }
 
     },
-    stopShaderEngine: ({ state, commit }) => {
+
+    stopShaderEngine: ({ state }) => {
+
 
       if(state.shaderEngine){
 
-        commit('stopShaderEngine');
+        state.shaderEngine.stop();
 
       }
 
@@ -132,6 +127,26 @@ const ShaderParamsModule = {
         state.shaderEngine.start();
         commit('setRunning', true);
       }
+    },
+
+    switchFullscreen({ state }) {
+
+      if (document.fullscreenElement) {
+
+        if(document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+
+      } else {
+
+        // TODO requestFullscreen doesnt work on oculus, ios...
+        const container = state.shaderEngine.container;
+        if(container.requestFullscreen) {
+          container.requestFullscreen();
+        }
+
+      }
+
     },
 
     handleAction({ dispatch }, { action }) {

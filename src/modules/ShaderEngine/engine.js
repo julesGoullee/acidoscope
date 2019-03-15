@@ -1,19 +1,21 @@
 import * as THREE from 'three'
 
 import ShaderParams from './shaderParams';
-import DefaultVertex from './defaultVertex.glsl';
+import GlslWrapper from './glslWrapper';
 
 class ShaderEngine {
 
   constructor(shader, container) {
 
     this.shader = {
-      vertexShader: shader.vertexShader || DefaultVertex,
+      vertexShader: shader.vertexShader,
       fragmentShader: shader.fragmentShader,
+      wrapper: shader.wrapper,
       initialParams: shader.params || {},
     };
 
     this.shaderParams = new ShaderParams(this);
+    this.glslWrapper = new GlslWrapper(this);
 
     this.container = container;
     this.renderer = null;
@@ -22,11 +24,10 @@ class ShaderEngine {
 
     this.currentTime = null;
     this.running = false;
+
   }
 
   init() {
-
-    const { vertexShader, fragmentShader } = this.shader;
 
     this.three.camera = new THREE.PerspectiveCamera();
     this.three.camera.position.z = 1;
@@ -37,8 +38,8 @@ class ShaderEngine {
 
     const material = new THREE.ShaderMaterial( {
       uniforms: this.uniforms,
-      vertexShader,
-      fragmentShader,
+      vertexShader: this.glslWrapper.getVertexShader(),
+      fragmentShader: this.glslWrapper.getFragmentShader(),
     });
 
     const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), material );
@@ -71,12 +72,12 @@ class ShaderEngine {
   animate() {
 
     this.running && requestAnimationFrame( this.animate.bind(this) );
-
     const speed = this.shaderParams.initialParams['speed'] ? this.shaderParams.getUniformValue('speed') : 1.;
     this.currentTime += speed * (Date.now() - this.lastTime);
     this.lastTime = Date.now();
 
     this.render();
+
   }
 
   updateCanvas() {

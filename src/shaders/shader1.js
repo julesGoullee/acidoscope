@@ -2,9 +2,6 @@ export default {
   original: 'http://glslsandbox.com/e#53202.0',
   name: 'Spiral eyes',
   fragmentShader: `
-#ifdef GL_ES
-precision mediump float;
-#endif
 
 uniform float time;
 uniform float control1;
@@ -138,14 +135,6 @@ void main(void)
       type: 'v2',
       special: 'mouse',
       defaultValue: [0.,0.],
-    },
-    {
-      name: 'speed',
-      type: 'f',
-      special: 'controllable',
-      defaultValue: 1.,
-      range: [0., 4.],
-      step: 0.01,
     },
     {
       name: 'control1',
