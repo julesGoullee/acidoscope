@@ -82,18 +82,6 @@ void main() {
       special: 'time',
     },
     {
-      name: 'beat',
-      type: 'f',
-      special: 'beat',
-      defaultValue: 0.,
-    },
-    {
-      name: 'beatStartTime',
-      type: 'f',
-      special: 'beat',
-      defaultValue: 0.,
-    },
-    {
       name: 'resolution',
       type: 'v2',
       special: 'resolution',

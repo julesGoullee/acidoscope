@@ -72,8 +72,8 @@ class ShaderEngine {
   animate() {
 
     this.running && requestAnimationFrame( this.animate.bind(this) );
-    const speed = this.shaderParams.initialParams['speed'] ? this.shaderParams.getUniformValue('speed') : 1.;
-    this.currentTime += speed * (Date.now() - this.lastTime);
+
+    this.currentTime += this.shaderParams.speed * (Date.now() - this.lastTime);
     this.lastTime = Date.now();
 
     this.render();
