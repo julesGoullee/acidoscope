@@ -41,7 +41,6 @@ class ShaderEngine {
       vertexShader: this.glslWrapper.getVertexShader(),
       fragmentShader: this.glslWrapper.getFragmentShader(),
     });
-    console.log(this.glslWrapper.getFragmentShader());
 
     const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), material );
     this.three.scene.add( mesh );
