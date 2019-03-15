@@ -16,7 +16,7 @@ function touchToUpDown(value) {
   return null;
 }
 
-const MidiLinkModule = {
+const MidiModule = {
 
   state: {
     midiEnabled: false,
@@ -193,4 +193,4 @@ const MidiLinkModule = {
 
 };
 
-export default MidiLinkModule;
+export default MidiModule;
