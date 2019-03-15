@@ -79,6 +79,7 @@
     font-weight: 500;
     color: #706a73;
     margin-top: 15px;
+    cursor: default;
   }
   .view-container{
     padding-top: 50px;
