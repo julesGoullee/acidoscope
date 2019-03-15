@@ -86,15 +86,18 @@ class ShaderParams {
 
   updateSpecialUniforms() {
 
-    const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
-    this.setUniformValue('phase', phase);
-
     this.forInitialParams(param => {
 
       switch(param.special) {
 
         case 'time': {
           this.setUniformValue(param.name, (this.shaderEngine.currentTime / 1000.) );
+          break;
+        }
+
+        case 'phase': {
+          const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
+          this.setUniformValue('phase', phase);
           break;
         }
 

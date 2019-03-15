@@ -92,15 +92,13 @@ void main() {
       special: 'mouse',
     },
     {
-      name: 'control1',
-      special: 'controllable',
+      name: 'phase',
+      special: 'phase',
       type: 'f',
-      range: [0, 5],
-      defaultValue: 2.5,
-      step: 0.01
+      defaultValue: 0.0,
     },
     {
-      name: 'phase',
+      name: 'control1',
       special: 'controllable',
       type: 'f',
       range: [0, 5],
