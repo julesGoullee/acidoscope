@@ -11,6 +11,8 @@ class ShaderParams {
     }), {});
     this.uniforms = null;
 
+    this.speed = 1.0;
+
   }
 
   static getUniformDefaultValue(type, defaultValue) {
@@ -159,6 +161,9 @@ class ShaderParams {
 
   }
 
+  setSpeed(speed) {
+    this.speed = speed;
+  }
 
 }
 
