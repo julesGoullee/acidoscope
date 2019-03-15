@@ -45,6 +45,10 @@
             this.goToGallery();
             break;
           }
+          case 'KeyN': {
+            this.nextVisualisation();
+            break;
+          }
         }
 
         return false;
@@ -88,6 +92,7 @@
         'listenLinkActions',
         'unlistenLinkActions',
         'pauseShader',
+        'nextVisualisation',
       ]),
     }
   }

@@ -6,7 +6,7 @@ const GalleryModule = {
 
   state: {
     visualizations: {},
-    selectedVisualization: null,
+    selectedVisualizationId: null,
   },
 
   mutations: {
@@ -17,9 +17,9 @@ const GalleryModule = {
 
     },
 
-    setVisualisation(state, visualisation) {
+    setVisualisationId(state, visualisationId) {
 
-      state.selectedVisualization = visualisation;
+      state.selectedVisualizationId = visualisationId;
 
     },
 
@@ -37,14 +37,30 @@ const GalleryModule = {
 
     },
 
-    setVisualisation({ state, commit }, name) {
+    setVisualisation({ state, commit }, visualisationId) {
 
-      const visualisation = state.visualizations[name];
+      const visualisation = state.visualizations[visualisationId];
       if(visualisation) {
-        commit('setVisualisation', visualisation);
+        commit('setVisualisationId', visualisationId);
       } else {
-        throw new Error(`Unknown visualisation ${name}`);
+        throw new Error(`Unknown visualisation ${visualisationId}`);
       }
+
+    },
+
+    nextVisualisation({ state }) {
+
+      const visualizations = state.visualizations;
+      const visualizationId = state.selectedVisualizationId;
+      const ids = Object.keys(visualizations);
+      const indexOfCurrent = ids.indexOf(visualizationId);
+      const nextIndex = (indexOfCurrent + 1) % (ids.length - 1);
+
+      const nextVizualisationId = ids[nextIndex];
+      router.push({ path: '/' });
+      setImmediate(() => {
+        router.push({ path: `/shader/${nextVizualisationId}` });
+      });
 
     },
 
@@ -59,7 +75,7 @@ const GalleryModule = {
   getters: {
 
     visualizationsArray: state => Object.keys(state.visualizations).reduce((acc, vizId) => acc.concat({...state.visualizations[vizId], id: vizId}), []),
-    selectedVisualization: state => state.selectedVisualization,
+    selectedVisualization: state => state.selectedVisualizationId ? state.visualizations[state.selectedVisualizationId] : null,
 
   },
 
