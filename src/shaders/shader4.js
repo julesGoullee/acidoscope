@@ -9,6 +9,7 @@ uniform float time;
 uniform vec2 resolution;
 uniform float control1;
 uniform float control2;
+uniform float phase;
 
 vec4 light;
 float ui;
@@ -16,7 +17,7 @@ mat2 m,n,nn;
 float map (vec3 p) {
     float d = length(p-light.xyz)-light.w;
     d = min(d,max(10.-p.z,0.));
-    float t = 1. + abs(sin(control1*PI + PI/2.));
+    float t = 1. + abs(sin(phase*PI + PI/2.));
     for (int i = 0; i < 13; i++) {
         t = t*control2;
         p.xy = m*p.xy;
@@ -104,6 +105,14 @@ void main() {
     },
     {
       name: 'control1',
+      special: 'controllable',
+      type: 'f',
+      range: [0, 5],
+      defaultValue: 2.5,
+      step: 0.01
+    },
+    {
+      name: 'phase',
       special: 'controllable',
       type: 'f',
       range: [0, 5],

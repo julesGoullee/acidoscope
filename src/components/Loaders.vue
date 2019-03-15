@@ -50,5 +50,4 @@
 
 </script>
 <style scoped>
-  #midi-loader {}
 </style>

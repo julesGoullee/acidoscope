@@ -3,16 +3,12 @@ import Link from '@/modules/link';
 const LinkModule = {
 
   state: {
-    linkEnabled: true,
     linkConnected: false,
     linkListener: null,
   },
 
   mutations: {
 
-    setLinkEnabled: (state, enabled) => {
-      state.linkEnabled = enabled;
-    },
     setLinkConnected(state, connected) {
       state.linkConnected = connected;
     },
@@ -26,7 +22,6 @@ const LinkModule = {
     async initLink({ commit } ) {
 
       await Link.init();
-      commit('setLinkConnected', Link.isConnected);
 
       Link.listenStatus(linkStatus => {
         commit('setLinkConnected', linkStatus);
@@ -34,19 +29,27 @@ const LinkModule = {
 
     },
 
-    listenLinkActions({ state, commit, dispatch } ) {
+    listenLinkActions({ rootState, state, commit, dispatch } ) {
 
       if(state.linkListener) return;
 
-      if(state.linkEnabled) {
+      if(state.linkConnected) {
 
-        const listener = Link.addListener(({ paramName, value }) => {
+        const listener = Link.addListener(beatData => {
 
-          dispatch('changeParamValue', { paramName, action: 'value', value });
+          rootState.shader.shaderEngine.shaderParams.setBeat(beatData);
 
         });
 
         commit('setLinkListener', listener);
+
+      } else {
+
+        Link.listenStatus(linkStatus => {
+          if(linkStatus) {
+            dispatch('listenLinkActions');
+          }
+        });
 
       }
 
@@ -58,12 +61,12 @@ const LinkModule = {
         state.linkListener();
         commit('setLinkListener', null);
       }
+
     },
 
   },
 
   getters: {
-    linkEnabled: state => state.linkEnabled,
     linkConnected: state => state.linkConnected,
   },
 

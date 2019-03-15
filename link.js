@@ -26,7 +26,7 @@ const link = new abletonlink();
     const phaseMillisecond = phaseDecimal/bps;
     const beatStartTime = Date.now() - phaseMillisecond;
 
-    io.emit('beat', { bps, beat: beatInt, phase: phaseDecimal, beatStartTime});
+    io.emit('beat', { bpm, bps, beat: beatInt, phase: phaseDecimal, beatStartTime});
     console.log(`new beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bps ${bps}`);
 
   });

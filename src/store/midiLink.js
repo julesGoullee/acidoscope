@@ -103,8 +103,6 @@ const MidiLinkModule = {
         commit('setMidiHardwareConnected', hardwareStatus.connected);
       });
 
-      //Midi.danceColors();
-
     },
 
     listenMidiActions({ state, commit, dispatch } ) {

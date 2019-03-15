@@ -28,6 +28,10 @@
 
       const container = document.getElementById('shader-renderer');
       this.createShaderEngine({ container });
+
+      await this.initMidi();
+      await this.initLink();
+
       await this.listenMidiActions();
       await this.listenLinkActions();
 
@@ -71,6 +75,8 @@
         'createShaderEngine',
         'stopShaderEngine',
         'switchFullscreen',
+        'initMidi',
+        'initLink',
         'listenMidiActions',
         'unlistenMidiActions',
         'listenLinkActions',

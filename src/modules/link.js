@@ -1,18 +1,16 @@
 import io from "socket.io-client";
 
 const Link = {
-  isConnected: false,
-  unlisteners: [],
   socket: null,
   init: () => {
 
+    if(Link.socket) return;
+
     try {
 
-      Link.socket = io.connect('http://192.168.1.3:3000');
+      Link.socket = io.connect('http://localhost:3000');
 
     } catch (error) {
-
-      debugger;
 
       // If not connected, wait connection then start listening
       // const unlistenStatus = Midi.listenStatus(hardwareStatus => {
@@ -55,24 +53,7 @@ const Link = {
 
     }
 
-    Link.socket.on('beat', (data) => {
-
-      handler({
-        paramName: 'beat',
-        value: event.beat,
-      });
-
-      handler({
-        paramName: 'beatStartTime',
-        value: data.beatStartTime,
-      });
-
-      handler({
-        paramName: 'speed',
-        value: data.bps,
-      });
-
-    });
+    Link.socket.on('beat', handler);
 
     return function(){
 
