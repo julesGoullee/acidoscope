@@ -1,24 +1,27 @@
 <template>
-  <v-btn
-    flat
-    icon
-    depressed
+  <v-container
+    justify-end
+    fill-height
+    align-center
   >
-    <v-icon
-      id="midi-loader"
-      :color="midiHardwareConnected ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
-      size="30"
-    >
-      developer_board
-    </v-icon>
-    <v-icon
-      id="link-loader"
+    <v-btn
+      flat
+      small
       :color="linkConnected ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
-      size="30"
     >
-      developer_board
-    </v-icon>
-  </v-btn>
+      LINK
+    </v-btn>
+    <v-btn
+      flat
+      icon
+    >
+      <v-icon
+        :color="midiHardwareConnected ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
+      >
+        developer_board
+      </v-icon>
+    </v-btn>
+  </v-container>
 </template>
 
 <script>
@@ -49,5 +52,6 @@
   };
 
 </script>
+
 <style scoped>
 </style>

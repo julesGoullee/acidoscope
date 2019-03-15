@@ -8,23 +8,29 @@
         row
         wrap
       >
-        <v-flex xs4>
-          <v-btn
-            v-if="$route.name === 'shader'"
-            color="#d6a8f3"
-            to="/"
+        <v-flex xs3>
+          <v-container
+            justify-start
+            fill-height
+            align-center
           >
-            <v-icon
-              left
-              dark
+            <v-btn
+              v-if="$route.name === 'shader'"
+              color="#d6a8f3"
+              to="/"
             >
-              apps
-            </v-icon>
-            Gallery
-          </v-btn>
+              <v-icon
+                left
+                dark
+              >
+                apps
+              </v-icon>
+              Gallery
+            </v-btn>
+          </v-container>
         </v-flex>
-        <v-flex xs4>
-          <v-layout
+        <v-flex xs6>
+          <v-container
             justify-center
             fill-height
             align-center
@@ -32,12 +38,10 @@
             <span class="app-name">
               LittleShaderDimension
             </span>
-          </v-layout>
+          </v-container>
         </v-flex>
-        <v-flex xs4>
-          <v-layout justify-end>
-            <Loaders />
-          </v-layout>
+        <v-flex xs3>
+          <Loaders />
         </v-flex>
       </v-layout>
       <v-container class="view-container">
