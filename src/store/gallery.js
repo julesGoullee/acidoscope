@@ -1,5 +1,7 @@
 import shaders from '@/shaders';
 
+import router from '@/router';
+
 const GalleryModule = {
 
   state: {
@@ -17,6 +19,7 @@ const GalleryModule = {
   },
 
   actions: {
+
     loadVisualisations: ({ state, commit }) => {
 
       if(Object.keys(state.visualizations).length === 0){
@@ -24,6 +27,12 @@ const GalleryModule = {
         commit('setVisualisations', { visualizations: shaders } );
 
       }
+
+    },
+
+    goToGallery() {
+
+      router.push({ path: '/' });
 
     },
 

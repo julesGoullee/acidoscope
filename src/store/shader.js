@@ -67,7 +67,7 @@ const ShaderParamsModule = {
 
       if(!shader){
 
-        router.push({ path: '/' });
+        dispatch('goToGallery');
 
       } else {
 

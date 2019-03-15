@@ -29,7 +29,6 @@
       const container = document.getElementById('shader-renderer');
       this.createShaderEngine({ container });
 
-
       this.listener = (e) => {
         e.preventDefault();
 
@@ -40,6 +39,10 @@
           }
           case 'KeyF': {
             this.switchFullscreen();
+            break;
+          }
+          case 'KeyG': {
+            this.goToGallery();
             break;
           }
         }
@@ -64,10 +67,11 @@
     },
     beforeDestroy: function() {
 
+      window.removeEventListener("keypress", this.listener);
+
       this.stopShaderEngine();
       this.unlistenMidiActions();
       this.unlistenLinkActions();
-      window.window.removeEventListener("keypress", this.listener);
       noSleep.disable();
 
     },
@@ -76,6 +80,7 @@
         'createShaderEngine',
         'stopShaderEngine',
         'switchFullscreen',
+        'goToGallery',
         'initMidi',
         'initLink',
         'listenMidiActions',
