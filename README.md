@@ -1,29 +1,29 @@
 # shaders-midi
 
-## Project setup
+Graphic animations gallery that you can control by MIDI
+
+## Development
+
+Install dependencies
 ```
-yarn install
+yarn
+```
+Development server
+```
+yarn serve
 ```
 
-### Compiles and hot-reloads for development
+Build production
 ```
-yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
+yarn build
 ```
 
-### Run your tests
+Run tests
 ```
 yarn run test
 ```
 
-### Lints and fixes files
+Lints and fixes files
 ```
-yarn run lint
+yarn lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

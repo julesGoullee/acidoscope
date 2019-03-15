@@ -8,7 +8,7 @@
     >
       <circle
         class="slider-circle"
-        v-bind:style="{ strokeWidth: border }"
+        :style="{ strokeWidth: border }"
         :r="radius - border / 2"
         :cx="radius"
         :cy="radius"
@@ -25,14 +25,14 @@
         :cy="radius"
       />
     </svg>
-    <p>{{ denormalize(value).toFixed(2) }}</p>
-    <p>{{ paramValue.toFixed(2) }}</p>
+    <div class="slider-value">
+      {{ paramValue.toFixed(2) }}
+    </div>
   </v-flex>
 </template>
 
 
 <script>
-  import { throttle } from 'lodash';
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
@@ -92,7 +92,6 @@
       this.y = 0;
 
       document.addEventListener('mousemove', this.handleMouseMove);
-      // document.addEventListener('mousemove', throttle(this.handleMouseMove, 1, { trailing: false }) );
       document.addEventListener('mouseup', this.handleMouseUp);
 
     },
@@ -201,9 +200,10 @@
   }
 
   .slider {
-    display: block;
-    /*width: 5rem;*/
-    /*height: 5rem;*/
+    flex: 1 1 auto;
+    align-self: center;
+    width: 5rem;
+    height: 5rem;
     transform: rotate(-90deg);
     cursor: ns-resize;
   }
@@ -220,4 +220,7 @@
     stroke-dasharray: 0;
   }
 
+  .slider-value{
+    margin-top: 10px;
+  }
 </style>

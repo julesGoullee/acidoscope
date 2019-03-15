@@ -120,6 +120,16 @@ class ShaderParams {
         }
         break;
       }
+      case 'i': {
+        this.uniforms[name].value = value;
+        if(initialParam.range && this.uniforms[name].value < initialParam.range[0]) {
+          this.uniforms[name].value = initialParam.range[0];
+        }
+        if(initialParam.range && this.uniforms[name].value > initialParam.range[1]) {
+          this.uniforms[name].value = initialParam.range[1];
+        }
+        break;
+      }
       case 'v2': {
         // TODO handle range
         if(value.x !== undefined) {

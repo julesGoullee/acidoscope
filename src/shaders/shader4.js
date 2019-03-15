@@ -1,13 +1,12 @@
 export default {
   original: 'https://www.shadertoy.com/view/wdlSD2',
+  name: 'Anaglyph fractal',
   fragmentShader: `
   
-#ifdef GL_ES
-precision mediump float;
-#endif
-
 uniform float time;
 uniform vec2 resolution;
+uniform float control1;
+uniform float control2;
 
 vec4 light;
 float ui;
@@ -15,9 +14,9 @@ mat2 m,n,nn;
 float map (vec3 p) {
     float d = length(p-light.xyz)-light.w;
     d = min(d,max(10.-p.z,0.));
-    float t = 2.5;
+    float t = control1;
     for (int i = 0; i < 13; i++) {
-        t = t*0.66;
+        t = t*control2;
         p.xy = m*p.xy;
         p.yz = n*p.yz;
         p.zx = nn*p.zx;
@@ -89,5 +88,21 @@ void main() {
       type: 'v2',
       special: 'mouse',
     },
+    {
+      name: 'control1',
+      special: 'controllable',
+      type: 'f',
+      range: [1, 5],
+      defaultValue: 2.5,
+      step: 0.01
+    },
+    {
+      name: 'control2',
+      special: 'controllable',
+      type: 'f',
+      range: [0.5, 0.7],
+      defaultValue: 0.66,
+      step: 0.001
+    }
   ],
 }
