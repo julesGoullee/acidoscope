@@ -10,7 +10,6 @@
  * array<object>  params:               Shader parameters to be passed as uniforms
  * string         params.name:          Name of the uniform
  * string         params.type:          Uniform type ['f', 'vec2', 'vec3']
- * string         params.special:       Special binding ['time' , 'mouse', 'controllable]
  * string         params.range:         Value range
  * string         params.defaultValue:  Default value
  * string         params.step:          step for increment
@@ -39,23 +38,7 @@ void main(void){
 `,
   params: [
     {
-      name: 'time',
-      type: 'f',
-      special: 'time',
-    },
-    {
-      name: 'resolution',
-      type: 'v2',
-      special: 'resolution',
-    },
-    {
-      name: 'mouse',
-      type: 'v2',
-      special: 'mouse',
-    },
-    {
       name: 'control1',
-      special: 'controllable',
       type: 'f',
       range: [0., 1.],
       defaultValue: 0.5,

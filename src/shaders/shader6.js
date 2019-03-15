@@ -187,21 +187,5 @@ void mainVR( out vec4 fragColor, in vec2 fragCoord, in vec3 fragRayOri, in vec3 
 }
 
 `,
-  params: [
-    {
-      name: 'time',
-      type: 'f',
-      special: 'time',
-    },
-    {
-      name: 'resolution',
-      type: 'v2',
-      special: 'resolution',
-    },
-    {
-      name: 'mouse',
-      type: 'v2',
-      special: 'mouse',
-    },
-  ],
+  //params: [],
 }

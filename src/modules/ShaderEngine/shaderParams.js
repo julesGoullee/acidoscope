@@ -1,14 +1,48 @@
 import * as THREE from 'three'
 
+const defaultParams = [
+  {
+    name: 'time',
+    type: 'f',
+    defaultValue: 0.,
+    auto: true,
+  },
+  {
+    name: 'resolution',
+    type: 'v2',
+    defaultValue: [0.,0.],
+    auto: true,
+  },
+  {
+    name: 'mouse',
+    type: 'v2',
+    defaultValue: [0.,0.],
+    auto: true,
+  },
+  {
+    name: 'phase',
+    type: 'f',
+    defaultValue: 0.0,
+    auto: true,
+  },
+];
+
 class ShaderParams {
 
   constructor(shaderEngine) {
 
     this.shaderEngine = shaderEngine;
-    this.initialParams = this.shaderEngine.shader.initialParams.reduce((acc, initialParam) => ({
-      ...acc,
-      [initialParam.name]: initialParam,
-    }), {});
+
+    this.initialParams = []
+      .concat(defaultParams)
+      .concat(this.shaderEngine.shader.controllableParams)
+      .reduce((acc, param) => ({
+          ...acc,
+          [param.name]: param,
+        }),
+        {}
+      );
+
     this.uniforms = null;
 
     this.speed = 1.0;
@@ -52,16 +86,10 @@ class ShaderParams {
 
   forInitialParams(fn) {
 
-    const initialParams = this.shaderEngine.shader.initialParams;
+    const initialParams = this.initialParams;
     const paramNames = Object.keys(initialParams);
 
-    for(let index in paramNames) {
-
-      const initialParam = initialParams[index];
-
-      fn(initialParam);
-
-    }
+    paramNames.forEach(paramName => fn(initialParams[paramName]));
 
   }
 
@@ -86,31 +114,17 @@ class ShaderParams {
 
   updateSpecialUniforms() {
 
-    this.forInitialParams(param => {
+    this.setUniformValue('time', (this.shaderEngine.currentTime / 1000.) );
 
-      switch(param.special) {
+    const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
+    this.setUniformValue('phase', phase);
 
-        case 'time': {
-          this.setUniformValue(param.name, (this.shaderEngine.currentTime / 1000.) );
-          break;
-        }
+    const container = this.shaderEngine.container;
+    const width = container.offsetWidth;
+    const height = container.offsetHeight;
+    this.setUniformValue('resolution', {x: width, y: height});
 
-        case 'phase': {
-          const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
-          this.setUniformValue('phase', phase);
-          break;
-        }
-
-        case 'resolution': {
-          const container = this.shaderEngine.container;
-          const width = container.offsetWidth;
-          const height = container.offsetHeight;
-          this.setUniformValue(param.name, {x: width, y: height});
-          break;
-        }
-
-      }
-    });
+    // TODO mouse
 
   }
 
@@ -125,17 +139,8 @@ class ShaderParams {
     const initialParam = this.initialParams[name];
 
     switch(initialParam.type) {
+      case 'i':
       case 'f': {
-        this.uniforms[name].value = value;
-        if(initialParam.range && this.uniforms[name].value < initialParam.range[0]) {
-          this.uniforms[name].value = initialParam.range[0];
-        }
-        if(initialParam.range && this.uniforms[name].value > initialParam.range[1]) {
-          this.uniforms[name].value = initialParam.range[1];
-        }
-        break;
-      }
-      case 'i': {
         this.uniforms[name].value = value;
         if(initialParam.range && this.uniforms[name].value < initialParam.range[0]) {
           this.uniforms[name].value = initialParam.range[0];

@@ -86,26 +86,7 @@ void main(void){
 `,
   params: [
     {
-      name: 'time',
-      type: 'f',
-      defaultValue: 0.,
-      special: 'time',
-    },
-    {
-      name: 'resolution',
-      type: 'v2',
-      defaultValue: [0.,0.],
-      special: 'resolution',
-    },
-    {
-      name: 'mouse',
-      type: 'v2',
-      defaultValue: [0.,0.],
-      special: 'mouse',
-    },
-    {
       name: 'control1',
-      special: 'controllable',
       type: 'f',
       range: [0.3, 1],
       defaultValue: 0.4,
@@ -113,7 +94,6 @@ void main(void){
     },
     {
       name: 'control2',
-      special: 'controllable',
       type: 'f',
       range: [0.3, 2],
       defaultValue: 1,
@@ -121,7 +101,6 @@ void main(void){
     },
     {
       name: 'control3',
-      special: 'controllable',
       type: 'f',
       range: [0.1, 2],
       defaultValue: 0.35,
@@ -129,7 +108,6 @@ void main(void){
     },
     {
       name: 'control4',
-      special: 'controllable',
       type: 'f',
       range: [0.1, 1],
       defaultValue: 0.99,

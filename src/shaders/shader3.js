@@ -35,26 +35,7 @@ void main (void) {
 `,
   params: [
     {
-      name: 'time',
-      type: 'f',
-      defaultValue: 0.,
-      special: 'time',
-    },
-    {
-      name: 'resolution',
-      type: 'v2',
-      defaultValue: [0.,0.],
-      special: 'resolution',
-    },
-    {
-      name: 'mouse',
-      type: 'v2',
-      defaultValue: [0.,0.],
-      special: 'mouse',
-    },
-    {
       name: 'speedUniform',
-      special: 'controllable',
       type: 'f',
       range: [1., 100.],
       defaultValue: 10.,
@@ -62,7 +43,6 @@ void main (void) {
     },
     {
       name: 'sizeUniform',
-      special: 'controllable',
       type: 'f',
       range: [0., 1.],
       defaultValue: 0.4,
@@ -70,7 +50,6 @@ void main (void) {
     },
     {
       name: 'colorUniform',
-      special: 'controllable',
       type: 'f',
       range: [0.1, 0.9],
       defaultValue: 0.6,
@@ -78,7 +57,6 @@ void main (void) {
     },
     {
       name: 'countUniform',
-      special: 'controllable',
       type: 'f',
       range: [1., 50.],
       defaultValue: 15.,
