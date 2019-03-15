@@ -6,7 +6,6 @@ export default {
 uniform float time;
 uniform vec2 mouse;
 uniform vec2 resolution;
-uniform float speedUniform;
 uniform float sizeUniform;
 uniform float colorUniform;
 uniform float countUniform;
@@ -23,7 +22,7 @@ void main (void) {
 		vec2 newv = v;
 		x = fract(u.x * u.y + 0.9);
 		x *= (1.0 - length(fract(v)*sizeUniform - vec2(0.1, 0.1)) * (3.0));
-		float speed = speedUniform * time; // speed control
+		float speed = 10. * time; // speed control
     newv.x += 0.8/float(i)*sin(float(i)*v.y+time/(100.0/speed)+0.2*float(i));
 	  newv.y += 0.9/float(i)*sin(float(i)*v.x+time/(100.0/speed)+0.2*float(i)+0.9)-0.3;
 		v = newv;
@@ -34,13 +33,6 @@ void main (void) {
 }
 `,
   params: [
-    {
-      name: 'speedUniform',
-      type: 'f',
-      range: [1., 100.],
-      defaultValue: 10.,
-      step: 0.4,
-    },
     {
       name: 'sizeUniform',
       type: 'f',

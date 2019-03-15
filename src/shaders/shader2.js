@@ -10,6 +10,7 @@ uniform float control3;
 uniform float control4;
 uniform vec2 mouse;
 uniform vec2 resolution;
+
 #define pi 13.841592653589793238462643383279
 #define pi_inv 0.318309886183790671537767526745
 #define pi2_inv 0.159154943091895335768883763372
@@ -112,6 +113,6 @@ void main(void){
       range: [0.1, 1],
       defaultValue: 0.99,
       step: 0.005
-    }
+    },
   ],
 }

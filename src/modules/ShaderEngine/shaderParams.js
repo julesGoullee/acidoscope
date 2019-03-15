@@ -25,6 +25,12 @@ const defaultParams = [
     defaultValue: 0.0,
     auto: true,
   },
+  {
+    name: 'speed',
+    type: 'f',
+    defaultValue: 1.0,
+    range: [0., 10.],
+  },
 ];
 
 class ShaderParams {
@@ -44,8 +50,6 @@ class ShaderParams {
       );
 
     this.uniforms = null;
-
-    this.speed = 1.0;
 
     this.beatData = {
       beatStartTime: 0,
@@ -114,7 +118,9 @@ class ShaderParams {
 
   updateSpecialUniforms() {
 
-    this.setUniformValue('time', (this.shaderEngine.currentTime / 1000.) );
+
+    const time = this.shaderEngine.currentTime / 1000.;
+    this.setUniformValue('time', time);
 
     const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
     this.setUniformValue('phase', phase);
@@ -142,12 +148,15 @@ class ShaderParams {
       case 'i':
       case 'f': {
         this.uniforms[name].value = value;
-        if(initialParam.range && this.uniforms[name].value < initialParam.range[0]) {
-          this.uniforms[name].value = initialParam.range[0];
+
+        if(initialParam.range) {
+          if(this.uniforms[name].value < initialParam.range[0]) {
+            this.uniforms[name].value = initialParam.range[0];
+          } else if(this.uniforms[name].value > initialParam.range[1]) {
+            this.uniforms[name].value = initialParam.range[1];
+          }
         }
-        if(initialParam.range && this.uniforms[name].value > initialParam.range[1]) {
-          this.uniforms[name].value = initialParam.range[1];
-        }
+
         break;
       }
       case 'v2': {
@@ -177,10 +186,6 @@ class ShaderParams {
       }
     }
 
-  }
-
-  setSpeed(speed) {
-    this.speed = speed;
   }
 
   setBeat(beatData) {

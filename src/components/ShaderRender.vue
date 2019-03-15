@@ -29,11 +29,6 @@
       const container = document.getElementById('shader-renderer');
       this.createShaderEngine({ container });
 
-      await this.initMidi();
-      await this.initLink();
-
-      await this.listenMidiActions();
-      await this.listenLinkActions();
 
       this.listener = (e) => {
         e.preventDefault();
@@ -59,6 +54,12 @@
         noSleep.enable();
 
       }, false);
+
+      await this.initMidi();
+      await this.initLink();
+
+      this.listenMidiActions();
+      this.listenLinkActions();
 
     },
     beforeDestroy: function() {
