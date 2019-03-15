@@ -1,7 +1,7 @@
 
 export default {
   original: 'https://www.shadertoy.com/view/Xs3Gzfs',
-  wrapper: 'vr',
+  wrapper: 'image',
   fragmentShader: `
   
 // eternal spheres
@@ -10,8 +10,6 @@ export default {
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0
 
 uniform float time;
-uniform float control1;
-uniform float control2;
 uniform vec2 mouse;
 uniform vec2 resolution;
 
@@ -183,7 +181,7 @@ void mainVR( out vec4 fragColor, in vec2 fragCoord, in vec3 fragRayOri, in vec3 
     ro.z -= time;
     
     fragColor = trace_spheres( ro + vec3(0.5, 1.5, 0.0), rd );
-    
+    // TODO inject fragRayOri, fragRayDir
     // initial mainVR
     //fragColor = trace_spheres( fragRayOri, fragRayDir );
 }
@@ -204,14 +202,6 @@ void mainVR( out vec4 fragColor, in vec2 fragCoord, in vec3 fragRayOri, in vec3 
       name: 'mouse',
       type: 'v2',
       special: 'mouse',
-    },
-    {
-      name: 'control1',
-      special: 'controllable',
-      type: 'f',
-      range: [0., 1.],
-      defaultValue: 0.5,
-      step: 0.001
     },
   ],
 }

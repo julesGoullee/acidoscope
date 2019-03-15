@@ -44,6 +44,7 @@ ${MainImage}
 // main VR function
 
 # define VR_SETTINGS_CARDBOARD
+
 ${MainVR}
       
 `;
