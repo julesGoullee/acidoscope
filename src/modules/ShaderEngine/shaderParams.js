@@ -82,9 +82,7 @@ class ShaderParams {
       switch(param.special) {
 
         case 'time': {
-          const startTime = this.shaderEngine.startTime;
-          const elapsedMilliseconds = Date.now() - startTime - this.shaderEngine.subTime;
-          this.setUniformValue(param.name, elapsedMilliseconds / 1000.);
+          this.setUniformValue(param.name, this.shaderEngine.currentTime / 1000.);
           break;
         }
 
@@ -113,6 +111,16 @@ class ShaderParams {
 
     switch(initialParam.type) {
       case 'f': {
+        this.uniforms[name].value = value;
+        if(initialParam.range && this.uniforms[name].value < initialParam.range[0]) {
+          this.uniforms[name].value = initialParam.range[0];
+        }
+        if(initialParam.range && this.uniforms[name].value > initialParam.range[1]) {
+          this.uniforms[name].value = initialParam.range[1];
+        }
+        break;
+      }
+      case 'i': {
         this.uniforms[name].value = value;
         if(initialParam.range && this.uniforms[name].value < initialParam.range[0]) {
           this.uniforms[name].value = initialParam.range[0];

@@ -40,25 +40,12 @@
                       >
                         <span
                           class="headline white--text"
-                          v-text="visualization.id"
+                          v-text="visualization.name || ''"
                         />
                       </v-flex>
                     </v-layout>
                   </v-container>
                 </v-img>
-
-                <v-card-actions>
-                  <v-spacer />
-                  <v-btn icon>
-                    <v-icon>favorite</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>bookmark</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>share</v-icon>
-                  </v-btn>
-                </v-card-actions>
               </v-card>
             </v-flex>
           </v-layout>
@@ -69,6 +56,9 @@
 </template>
 
 <style scoped>
+  .gallery-container {
+    margin-top: 50px;
+  }
 </style>
 
 <script>
@@ -98,9 +88,9 @@
       getShaderScreenshots(id) {
 
         try {
-          return require(`@/assets/shaderScreenshots/${id}.png`);
+          return require(`@/assets/shaderScreenshots/${id}.jpg`);
         } catch(e) {
-          return require(`@/assets/shaderScreenshots/default.png`);
+          return require(`@/assets/shaderScreenshots/default.jpg`);
         }
 
       }

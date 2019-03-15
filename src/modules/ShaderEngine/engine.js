@@ -22,7 +22,7 @@ class ShaderEngine {
     this.uniforms = {};
     this.three = {};
 
-    this.subTime = 0;
+    this.currentTime = null;
     this.running = false;
 
   }
@@ -60,19 +60,21 @@ class ShaderEngine {
   start() {
     this.running = true;
 
-    if(!this.startTime) this.startTime = Date.now();
-    if(this.pausedTime) this.subTime += (Date.now() - this.pausedTime);
+    this.lastTime = Date.now();
+    if(this.currentTime === null) this.currentTime = 0;
 
     this.animate();
   }
 
   stop() {
     this.running = false;
-    this.pausedTime = Date.now();
   }
 
   animate() {
     this.running && requestAnimationFrame( this.animate.bind(this) );
+    const speed = this.shaderParams.initialParams['speed'] ? this.shaderParams.getUniformValue('speed') : 1.;
+    this.currentTime += speed * (Date.now() - this.lastTime);
+    this.lastTime = Date.now();
     this.render();
   }
 
