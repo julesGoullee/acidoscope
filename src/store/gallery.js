@@ -6,13 +6,20 @@ const GalleryModule = {
 
   state: {
     visualizations: {},
+    selectedVisualization: null,
   },
 
   mutations: {
 
-    setVisualisations: (state, { visualizations }) => {
+    setVisualisations: (state, visualizations) => {
 
       state.visualizations = visualizations;
+
+    },
+
+    setVisualisation(state, visualisation) {
+
+      state.selectedVisualization = visualisation;
 
     },
 
@@ -24,8 +31,19 @@ const GalleryModule = {
 
       if(Object.keys(state.visualizations).length === 0){
 
-        commit('setVisualisations', { visualizations: shaders } );
+        commit('setVisualisations', shaders );
 
+      }
+
+    },
+
+    setVisualisation({ state, commit }, name) {
+
+      const visualisation = state.visualizations[name];
+      if(visualisation) {
+        commit('setVisualisation', visualisation);
+      } else {
+        throw new Error(`Unknown visualisation ${name}`);
       }
 
     },
@@ -40,7 +58,8 @@ const GalleryModule = {
 
   getters: {
 
-    visualizations: state => Object.keys(state.visualizations).reduce((acc, vizId) => acc.concat({...state.visualizations[vizId], id: vizId}), []),
+    visualizationsArray: state => Object.keys(state.visualizations).reduce((acc, vizId) => acc.concat({...state.visualizations[vizId], id: vizId}), []),
+    selectedVisualization: state => state.selectedVisualization,
 
   },
 

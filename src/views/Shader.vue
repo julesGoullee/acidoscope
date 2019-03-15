@@ -1,5 +1,6 @@
 <template>
   <v-container
+    v-if="selectedVisualization"
     class="shader-view"
   >
     <v-flex
@@ -64,9 +65,11 @@
 
 <script>
 
+  import assert from 'assert';
+
   import ShaderRender from '@/components/ShaderRender.vue'
   import ShaderParams from '@/components/ShaderParams.vue';
-  import { mapActions, mapGetters } from 'vuex';
+  import { mapState, mapActions, mapGetters } from 'vuex';
 
   export default {
     name: 'ShaderView',
@@ -77,12 +80,28 @@
     computed: {
       ...mapGetters([
         'shaderRunning',
-      ])
+        'selectedVisualization',
+      ]),
+      ...mapState([
+        'route',
+      ]),
+    },
+    mounted() {
+
+      assert(this.route.params && this.route.params.id, 'invalid_route');
+
+      const shaderId = this.route.params.id;
+
+      this.loadVisualisations();
+      this.setVisualisation(shaderId);
+
     },
     methods: {
       ...mapActions([
         'switchFullscreen',
         'pauseShader',
+        'loadVisualisations',
+        'setVisualisation',
       ]),
     }
   }

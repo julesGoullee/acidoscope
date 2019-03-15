@@ -16,7 +16,7 @@
             wrap
           >
             <v-flex
-              v-for="visualization in visualizations"
+              v-for="visualization in visualizationsArray"
               :key="visualization.id"
               xs3
             >
@@ -69,16 +69,12 @@
     name: 'Gallery',
     computed: {
       ...mapGetters([
-        'visualizations',
+        'visualizationsArray',
       ])
     },
     mounted: async function () {
 
-      if(this.visualizations.length === 0){
-
-        await this.loadVisualisations();
-
-      }
+      this.loadVisualisations();
 
     },
     methods: {
