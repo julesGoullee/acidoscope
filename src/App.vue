@@ -15,7 +15,6 @@
             align-center
           >
             <v-btn
-              v-if="$route.name === 'shader'"
               color="#d6a8f3"
               to="/"
             >
@@ -34,10 +33,15 @@
             justify-center
             fill-height
             align-center
+            to="/about"
           >
-            <span class="app-name">
+            <v-btn
+              to="/about"
+              class="app-name"
+              flat
+            >
               LittleShaderDimension
-            </span>
+            </v-btn>
           </v-container>
         </v-flex>
         <v-flex xs3>
@@ -84,6 +88,7 @@
     color: #706a73;
     margin-top: 15px;
     cursor: default;
+    text-transform: none;
   }
   .view-container{
     padding-top: 50px;
