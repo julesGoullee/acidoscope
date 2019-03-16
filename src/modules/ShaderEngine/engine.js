@@ -42,6 +42,8 @@ class ShaderEngine {
       fragmentShader: this.glslWrapper.getFragmentShader(),
     });
 
+    material.extensions.derivatives = true;
+
     const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), material );
     this.three.scene.add( mesh );
 
