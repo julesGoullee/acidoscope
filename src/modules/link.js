@@ -1,5 +1,7 @@
-import io from "socket.io-client";
 import { EventEmitter } from 'events';
+import io from "socket.io-client";
+
+const log = console.log.bind(null, '[LINK]:');
 
 class Link extends EventEmitter {
 
@@ -20,12 +22,14 @@ class Link extends EventEmitter {
 
       this.socket.on('connect', () => {
 
+        log('Link connected');
         this.emit('statusChanged', true);
 
       });
 
       this.socket.on('disconnect', () => {
 
+        log('Link disconnected');
         this.emit('statusChanged', false);
 
       });
