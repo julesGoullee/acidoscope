@@ -1,66 +1,58 @@
 import Link from '@/modules/link';
 
+const link = new Link();
+
 const LinkModule = {
 
   state: {
     linkConnected: false,
-    linkListener: null,
   },
 
   mutations: {
 
-    setLinkConnected(state, connected) {
-      state.linkConnected = connected;
-    },
-    setLinkListener(state, listener) {
-      state.linkListener = listener;
+    setLinkStatus(state, linkConnected) {
+      state.linkConnected = linkConnected;
     },
 
   },
   actions: {
 
-    async initLink({ commit } ) {
+    initLink({ commit, rootState }){
 
-      await Link.init();
+      link.init();
 
-      Link.listenStatus(linkStatus => {
-        commit('setLinkConnected', linkStatus);
+      link.on('statusChanged', (linkConnected) => {
+
+        if(!linkConnected){
+
+          rootState.shader.shaderEngine.shaderParams.setBeat({
+            beatStartTime: 0,
+            bps: 1,
+            bpm: 60,
+            beat: 0,
+          });
+
+        }
+
+        commit('setLinkStatus', linkConnected);
+
       });
 
     },
 
-    listenLinkActions({ rootState, state, commit, dispatch } ) {
+    listenLinkActions({ rootState } ){
 
-      if(state.linkListener) return;
+      link.on('beat', (beatData) => {
 
-      if(state.linkConnected) {
+        rootState.shader.shaderEngine.shaderParams.setBeat(beatData);
 
-        const listener = Link.addListener(beatData => {
-
-          rootState.shader.shaderEngine.shaderParams.setBeat(beatData);
-
-        });
-
-        commit('setLinkListener', listener);
-
-      } else {
-
-        Link.listenStatus(linkStatus => {
-          if(linkStatus) {
-            dispatch('listenLinkActions');
-          }
-        });
-
-      }
+      });
 
     },
 
-    unlistenLinkActions({ state, commit } ) {
+    unlistenLinkActions() {
 
-      if(state.linkListener) {
-        state.linkListener();
-        commit('setLinkListener', null);
-      }
+      link.removeAllListeners('beat');
 
     },
 

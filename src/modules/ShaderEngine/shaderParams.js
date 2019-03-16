@@ -30,6 +30,7 @@ const defaultParams = [
     type: 'f',
     defaultValue: 1.0,
     range: [0., 10.],
+    step: 0.1
   },
 ];
 

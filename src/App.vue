@@ -53,6 +53,7 @@
 <script>
 
   import Loaders from '@/components/Loaders.vue';
+  import { mapActions } from 'vuex';
   import {
     VApp,
   } from 'vuetify/lib'
@@ -62,6 +63,18 @@
     components: {
       VApp,
       Loaders: Loaders
+    },
+    mounted: async function () {
+
+      await this.initMidi();
+      await this.initLink();
+
+    },
+    methods: {
+      ...mapActions([
+        'initMidi',
+        'initLink',
+      ])
     }
   };
 
