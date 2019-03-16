@@ -1,10 +1,11 @@
 import Link from '@/modules/link';
 
+const link = new Link();
+
 const LinkModule = {
 
   state: {
     linkConnected: false,
-    linkListener: null,
   },
 
   mutations: {
@@ -12,55 +13,36 @@ const LinkModule = {
     setLinkConnected(state, connected) {
       state.linkConnected = connected;
     },
-    setLinkListener(state, listener) {
-      state.linkListener = listener;
-    },
 
   },
   actions: {
 
-    async initLink({ commit } ) {
+    initLink({ commit } ){
 
-      await Link.init();
+      link.init();
 
-      Link.listenStatus(linkStatus => {
+      link.on('statusChanged', (linkStatus) => {
+
         commit('setLinkConnected', linkStatus);
+
       });
 
     },
 
-    listenLinkActions({ rootState, state, commit, dispatch } ) {
+    listenLinkActions({ rootState } ){
 
-      if(state.linkListener) return;
 
-      if(state.linkConnected) {
+      link.on('beat', (beatData) => {
 
-        const listener = Link.addListener(beatData => {
+        rootState.shader.shaderEngine.shaderParams.setBeat(beatData);
 
-          rootState.shader.shaderEngine.shaderParams.setBeat(beatData);
-
-        });
-
-        commit('setLinkListener', listener);
-
-      } else {
-
-        Link.listenStatus(linkStatus => {
-          if(linkStatus) {
-            dispatch('listenLinkActions');
-          }
-        });
-
-      }
+      });
 
     },
 
-    unlistenLinkActions({ state, commit } ) {
+    unlistenLinkActions() {
 
-      if(state.linkListener) {
-        state.linkListener();
-        commit('setLinkListener', null);
-      }
+      link.removeAllListeners('beat');
 
     },
 

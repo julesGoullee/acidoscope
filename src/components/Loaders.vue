@@ -25,7 +25,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'Loaders',
@@ -35,18 +35,6 @@
         'linkEnable',
         'linkConnected',
       ]),
-    },
-    mounted: async function () {
-
-      await this.initMidi();
-      await this.initLink();
-
-    },
-    methods: {
-      ...mapActions([
-        'initMidi',
-        'initLink',
-      ])
     }
 
   };

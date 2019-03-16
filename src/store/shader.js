@@ -1,6 +1,5 @@
 import assert from 'assert';
 
-import router from '@/router';
 import ShaderEngine from '@/modules/ShaderEngine';
 import shaders from '@/shaders';
 import Midi from '@/modules/midi';
