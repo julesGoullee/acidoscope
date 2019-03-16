@@ -18,7 +18,7 @@
           <v-btn
             raised
             block
-            color="info"
+            color="accent"
             @click="switchFullscreen"
           >
             Fullscreen

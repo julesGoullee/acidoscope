@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" dark>
     <v-container
       grid-list-md
       justify-space-between
@@ -16,8 +16,8 @@
           >
             <v-btn
               v-if="$route.name === 'shader'"
-              color="#d6a8f3"
               to="/"
+              color="info"
             >
               <v-icon
                 left
@@ -75,13 +75,16 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
     height: 100%;
+    color: #E8F0E8;
+    background-color: #011600;
+  }
+  .v-sheet {
+    background-color: #171A00 !important;
   }
   .app-name {
     font-size: 1.8rem;
     font-weight: 500;
-    color: #706a73;
     margin-top: 15px;
     cursor: default;
   }
