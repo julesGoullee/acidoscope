@@ -1,6 +1,5 @@
 import assert from 'assert';
 
-import router from '@/router';
 import ShaderEngine from '@/modules/ShaderEngine';
 import shaders from '@/shaders';
 import Midi from '@/modules/midi';
@@ -12,9 +11,14 @@ const ShaderParamsModule = {
     running: false,
     paramsList: [],
     paramsValue: {},
+    quality: 1,
   },
 
   mutations: {
+
+    setQuality(state, quality) {
+      state.shaderEngine.setQuality(quality);
+    },
 
     setParamValue(state, { paramName, paramValue }) {
 

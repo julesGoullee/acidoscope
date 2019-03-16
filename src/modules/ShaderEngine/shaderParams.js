@@ -125,10 +125,10 @@ class ShaderParams {
     const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
     this.setUniformValue('phase', phase);
 
+    // Maybe not needed at each frames
     const container = this.shaderEngine.container;
     const width = container.offsetWidth * this.shaderEngine.quality;
     const height = container.offsetHeight * this.shaderEngine.quality;
-
     this.setUniformValue('resolution', { x: width, y: height });
 
     // TODO mouse
