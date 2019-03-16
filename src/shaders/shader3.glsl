@@ -7,6 +7,7 @@ vec2 c;
 
 void main (void) {
   vec2 v = (countUniform*gl_FragCoord.xy-resolution) /max(resolution.x,resolution.y);
+  float tt = 1. + abs(sin(phase*PI + PI/2.));
 
   for(int i=1;i<5;i++)
   {
@@ -16,7 +17,7 @@ void main (void) {
     x *= (1.0 - length(fract(v)*sizeUniform - vec2(0.1, 0.1)) * (3.0));
     float speed = 10. * time; // speed control
     newv.x += 0.8/float(i)*sin(float(i)*v.y+time/(100.0/speed)+0.2*float(i));
-    newv.y += 0.9/float(i)*sin(float(i)*v.x+time/(100.0/speed)+0.2*float(i)+0.9)-0.3;
+    newv.y += 0.9/float(i)*sin(float(i)*v.x+time/(100.0/speed)+0.2*float(i)+0.9)-0.3 * tt;
     v = newv;
 
   }

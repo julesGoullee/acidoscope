@@ -161,6 +161,7 @@ vec3 Shade(MarchResult hit, vec3 direction, vec3 camera)
 
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
+  float t = 1. + abs(sin(phase*PI + PI/2.));
   vec2 res = iResolution.xy / iResolution.y;
   vec2 uv = fragCoord.xy / iResolution.y;
 
@@ -183,7 +184,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
   mat3 rotate = Rotate(angles.yzx);
 
-  vec3 orig = vec3(0, 0,-2) * rotate;
+  vec3 orig = vec3(0, 0,-2) * rotate * t;
 
   vec3 dir = normalize(vec3(uv - res / 2.0, FOCAL_LENGTH)) * rotate;
 

@@ -18,6 +18,7 @@ float de(vec3 p) {
 }
 
 void mainImage(out vec4 fragColor, vec2 fragCoord ) {
+  float tt = 1. + abs(sin(phase*PI + PI/2.));
 
   // frag coords
   vec2 uv = -1.0 + 2.0*(fragCoord.xy/iResolution.xy);
@@ -28,7 +29,7 @@ void mainImage(out vec4 fragColor, vec2 fragCoord ) {
   vec3 ww = normalize(vec3(iTime - 3.0*sin(iTime), 2.0*smoothstep(-0.5, 0.5, cos(iTime))*sign(cos(iTime*0.5)), 0) - ro);
   vec3 uu = normalize(cross(vec3(0, 1, 0), ww));
   vec3 vv = normalize(cross(ww, uu));
-  vec3 rd = normalize(uu*uv.x + vv*uv.y + ww*1.97);
+  vec3 rd = normalize(uu*uv.x + vv*uv.y + ww*tt);
 
   // ray march and glow.
   float t = 0.0;

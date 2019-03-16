@@ -64,13 +64,16 @@ void main(void)
   vec2 uv_correct = 0.5 + (uv -0.5)/ aspect.yx;
   vec2 mouse_correct = 0.5 + (mouse.xy / resolution.xy - 0.5) / aspect.yx;
 
-  float phase = (sin(time)+1000.)*0.5;
+  float t = 1. + abs(sin(phase*PI + PI/2.));
+
+  float phaseS = (sin(time - t)+1000.)*0.5;
+
   float dist = 1.;
   vec2 uv_bipolar = mobius(uv_correct, vec2(0.5 - dist*0.5, 0.5), vec2(0.5 + dist*0.5, 0.5));
-  uv_bipolar = spiralzoom(uv_bipolar, vec2(0.), 5., -0.125*pi, 0.8, vec2(-0.125, 0.125)*phase*5.);
+  uv_bipolar = spiralzoom(uv_bipolar, vec2(0.), 5., -0.125*pi, 0.8, vec2(-0.125, 0.125)*phaseS*5.);
   uv_bipolar = vec2(-uv_bipolar.y, uv_bipolar.x);// 90° rotation
 
-  vec2 uv_spiral = spiralzoom(uv_correct, vec2(0.5), 5., -0.125*pi, 0.8, vec2(-0., 0.25)*phase);
+  vec2 uv_spiral = spiralzoom(uv_correct, vec2(0.5), 5., -0.125*pi, 0.8, vec2(-0., 0.25)*phaseS);
 
   vec2 uv_tilt = uv_spiral;
   uv_tilt.y = fract(uv_tilt).y;
@@ -78,12 +81,12 @@ void main(void)
   float logz = log(z);
   uv_tilt = 0.5 + (uv_tilt - 0.5) * logz;
 
-  float circle = geartile(uv_bipolar, -phase);
+  float circle = geartile(uv_bipolar, -phaseS);
   float circle_outline = circle*(1.-circle)*4.;
 
 
   //float grid = border((uv_spiral - 0.5)*1., 0.2);
-  float grid = geartile(uv_bipolar, -phase*1.);
+  float grid = geartile(uv_bipolar, -phaseS*1.);
 
   gl_FragColor = vec4(uv, 0., 1.0);
 
