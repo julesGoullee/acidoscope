@@ -10,27 +10,26 @@ const LinkModule = {
 
   mutations: {
 
-    setLinkConnected(state, connected) {
-      state.linkConnected = connected;
+    setLinkStatus(state, linkConnected) {
+      state.linkConnected = linkConnected;
     },
 
   },
   actions: {
 
-    initLink({ commit } ){
+    initLink({ commit }){
 
       link.init();
 
-      link.on('statusChanged', (linkStatus) => {
+      link.on('statusChanged', (linkConnected) => {
 
-        commit('setLinkConnected', linkStatus);
+        commit('setLinkStatus', linkConnected);
 
       });
 
     },
 
     listenLinkActions({ rootState } ){
-
 
       link.on('beat', (beatData) => {
 
