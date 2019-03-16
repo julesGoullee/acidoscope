@@ -17,11 +17,22 @@ const LinkModule = {
   },
   actions: {
 
-    initLink({ commit }){
+    initLink({ commit, rootState }){
 
       link.init();
 
       link.on('statusChanged', (linkConnected) => {
+
+        if(!linkConnected){
+
+          rootState.shader.shaderEngine.shaderParams.setBeat({
+            beatStartTime: 0,
+            bps: 1,
+            bpm: 60,
+            beat: 0,
+          });
+
+        }
 
         commit('setLinkStatus', linkConnected);
 
