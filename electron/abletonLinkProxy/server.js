@@ -14,16 +14,22 @@ const Server = {
 
     Server.http = http.createServer(app);
     Server.io = io(Server.http);
-    Server.link = new Abletonlink();
+
+    Server.link = new Abletonlink(0, 4.0, true);
 
     Server.io.on('connection', (client) => {
 
-      // client.on('event', (data) => {});
+      console.log('Client connected', client.conn.remoteAddress);
+
       client.on('disconnect', () => {
+
+        console.log('Client disconnected', client.conn.remoteAddress);
 
       });
 
     });
+
+    Server.link.on('numPeers', (numPeers) => console.log('NumPeers', numPeers) );
 
     Server.link.startUpdate(100, (beat, phase, bpm) => {
 
@@ -38,8 +44,12 @@ const Server = {
       const phaseMillisecond = phaseDecimal/bps;
       const beatStartTime = Date.now() - phaseMillisecond;
 
-      Server.io.emit('beat', { bpm, bps, beat: beatInt, phase: phaseDecimal, beatStartTime});
-      console.log(`new beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bps ${bps}`);
+      if(Server.link.getNumPeers() > 0){
+
+        Server.io.emit('beat', { bpm, bps, beat: beatInt, phase: phaseDecimal, beatStartTime});
+        console.log(`New beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bps ${bps}`);
+
+      }
 
     });
 
