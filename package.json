@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "linkproxy": "node ./abletonLinkProxy",
+    "linkproxy": "node ./electron/abletonLinkProxy",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "dll": "vue-cli-service dll",
