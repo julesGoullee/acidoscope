@@ -8,6 +8,7 @@ const Server = {
   io: null,
   link: null,
   lastBeat: 0,
+  numPeers: 0,
   async start(){
 
     const app = express();
@@ -29,7 +30,12 @@ const Server = {
 
     });
 
-    Server.link.on('numPeers', (numPeers) => console.log('NumPeers', numPeers) );
+    Server.link.on('numPeers', (numPeers) => {
+
+      Server.numPeers = numPeers;
+      console.log('NumPeers', numPeers);
+
+    });
 
     Server.link.startUpdate(100, (beat, phase, bpm) => {
 
@@ -44,7 +50,7 @@ const Server = {
       const phaseMillisecond = phaseDecimal/bps;
       const beatStartTime = Date.now() - phaseMillisecond;
 
-      if(Server.link.getNumPeers() > 0){
+      if(Server.numPeers > 0){
 
         Server.io.emit('beat', { bpm, bps, beat: beatInt, phase: phaseDecimal, beatStartTime});
         console.log(`New beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bps ${bps}`);
