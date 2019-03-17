@@ -7,7 +7,9 @@
     <v-btn
       flat
       small
-      :color="linkConnected ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
+      :disabled="!linkConnected"
+      :color="linkEnabled ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
+      @click="switchLinkEnable(!linkEnabled)"
     >
       LINK
     </v-btn>
@@ -25,15 +27,20 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'Loaders',
     computed: {
       ...mapGetters([
         'midiHardwareConnected',
-        'linkEnable',
+        'linkEnabled',
         'linkConnected',
+      ]),
+    },
+    methods: {
+      ...mapActions([
+        'switchLinkEnable',
       ]),
     }
 
