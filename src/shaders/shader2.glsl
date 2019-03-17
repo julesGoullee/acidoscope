@@ -4,6 +4,7 @@
 
 #define l 120
 void main(void){
+  float tt = 1. + abs(sin(phase*PI + PI/2.));
   vec2 v = (gl_FragCoord.xy - resolution.xy/2.) / min(resolution.y,resolution.x) * 30.;
   vec2 vv = v; vec2 vvv = v;
   float ft = time+360.1;
@@ -34,7 +35,7 @@ void main(void){
     float r2 = dot(vv,vv);
     if ( r > 1.0 )
     {
-      r = (1.0)/r ;
+      r = (tt)/r ;
       v.x = v.x * r;
       v.y = v.y * r;
     }
