@@ -1,6 +1,7 @@
 import Link from '@/modules/link';
+import Config from '@/../config';
 
-const link = new Link();
+const link = new Link({ uri: `${Config.SERVER_HOST}:${Config.SERVER_PORT}` });
 
 const LinkModule = {
 

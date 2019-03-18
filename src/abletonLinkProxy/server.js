@@ -9,7 +9,8 @@ const Server = {
   link: null,
   lastBeat: 0,
   numPeers: 0,
-  async start(){
+  port: null,
+  async start({ port = 0 } = {}){
 
     const app = express();
 
@@ -53,17 +54,24 @@ const Server = {
       if(Server.numPeers > 0){
 
         Server.io.emit('beat', { bpm, bps, beat: beatInt, phase: phaseDecimal, beatStartTime});
-        console.log(`New beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bps ${bps}`);
+        // console.log(`New beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bps ${bps}`);
 
       }
 
     });
 
-    Server.http.listen(3000, () => {
+    return new Promise((resolve) => {
 
-      console.log('AbletonLink proxy listen on localhost:3000');
+      Server.http.listen(port, () => {
+
+        Server.port = Server.http.address().port;
+        console.log(`AbletonLink proxy listen on localhost:${Server.port}`);
+        resolve();
+
+      });
 
     });
+
 
   },
   async stop(){

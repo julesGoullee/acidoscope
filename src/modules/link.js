@@ -5,9 +5,10 @@ const log = console.log.bind(null, '[LINK]:');
 
 class Link extends EventEmitter {
 
-  constructor(){
+  constructor({ uri }){
 
     super();
+    this.uri = uri || 'http://localhost:3000';
     this.socket = null;
 
   }
@@ -18,7 +19,7 @@ class Link extends EventEmitter {
 
     try {
 
-      this.socket = io.connect('http://localhost:3000');
+      this.socket = io.connect(this.uri);
 
       this.socket.on('connect', () => {
 
