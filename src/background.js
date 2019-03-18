@@ -6,7 +6,7 @@ import {
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
 
-import Server from '../abletonLinkProxy/server'
+import Server from './abletonLinkProxy/server'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 let win = null

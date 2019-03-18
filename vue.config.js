@@ -22,7 +22,7 @@ module.exports = {
           return args
         })
       },
-      mainProcessFile:  __dirname + '/src/electron/main.js',
+      mainProcessFile:  './src/background.js',
     }
   },
   chainWebpack: config => {

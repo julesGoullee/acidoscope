@@ -18,7 +18,7 @@
     "test:e2e:headless": "yarn test:e2e --headless",
     "test:unit": "NODE_ENV=test vue-cli-service test:unit -r tests/unit/test.config.js"
   },
-  "main": "src/electron/main.js",
+  "main": "background.js",
   "dependencies": {
     "abletonlink": "0.0.7",
     "express": "^4.16.4",
