@@ -1,6 +1,7 @@
+const Config = require('../../config');
 const Server = require('./server');
 
-Server.start().then( () => {
+Server.start({ port: Config.SERVER_PORT }).then( () => {
 
   console.log('Server ready');
 

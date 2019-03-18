@@ -1,14 +1,13 @@
 .DS_Store
 node_modules
 
-electron/node_modules
-electron/out
-
 /dist
 
 # local env files
 .env.local
 .env.*.local
+*.env
+!.sample.env
 
 # Log files
 npm-debug.log*
@@ -29,3 +28,6 @@ public/dll
 
 # Test file
 tests/e2e/videos
+
+#Electron-builder output
+/dist_electron
