@@ -3,8 +3,10 @@ import config from '@/../config';
 
 const plugins = [];
 
-if (config.ENV !== 'production') {
+if(config.ENV !== 'production'){
+
   plugins.push(createLogger());
+
 }
 
 export default plugins;
