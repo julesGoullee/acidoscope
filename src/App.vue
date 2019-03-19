@@ -1,5 +1,8 @@
 <template>
-  <v-app id="app" dark>
+  <v-app
+    id="app"
+    dark
+  >
     <v-container
       grid-list-md
       justify-space-between

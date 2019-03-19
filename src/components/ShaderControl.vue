@@ -62,7 +62,7 @@
               v-on="on"
             >
               {{
-              (qualities.find(q => q.value === quality) || {name: 'Custom quality'}).name
+                (qualities.find(q => q.value === quality) || {name: 'Custom quality'}).name
               }}
             </v-btn>
           </template>
@@ -104,20 +104,6 @@
 
   export default {
     name: 'ShaderControl',
-    computed: {
-      ...mapGetters([
-        'shaderRunning',
-        'quality',
-      ]),
-    },
-    methods: {
-      ...mapActions([
-        'switchFullscreen',
-        'pauseShader',
-        'takeScreenShot',
-        'setQuality',
-      ]),
-    },
     data: () => ({
       qualities: [
         {
@@ -142,5 +128,19 @@
         },
       ],
     }),
+    computed: {
+      ...mapGetters([
+        'shaderRunning',
+        'quality',
+      ]),
+    },
+    methods: {
+      ...mapActions([
+        'switchFullscreen',
+        'pauseShader',
+        'takeScreenShot',
+        'setQuality',
+      ]),
+    },
   }
 </script>
