@@ -3,13 +3,11 @@
     <v-card>
       <v-container>
 
-        <h1 class="headline">About</h1>
-
-        <v-card-text>
-          Hey there, good to have you here !
-        </v-card-text>
-
+        <v-layout justify-center>
+          <img alt="logo" src="@/assets/logo-192.png" />
+        </v-layout>
         <h2 class="headline">Description</h2>
+
         <v-card-text>
           LoudyShaderDimension is a web app that allows to display interactive visualisations.
         </v-card-text>

@@ -34,7 +34,9 @@
           class="app-name"
           flat
         >
+          <img alt="logo" src="@/assets/logo-32.png" class="title-logo"/>
           LoudyShaderDimension
+          <img alt="logo" src="@/assets/logo-32.png" class="title-logo flip"/>
         </v-btn>
       </v-container>
     </v-flex>
@@ -48,9 +50,19 @@
   .app-name {
     font-size: 1.8rem;
     font-weight: 500;
-    margin-top: 15px;
     cursor: pointer;
     text-transform: none;
+  }
+  .title-logo {
+    margin: 8px;
+  }
+  .flip {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
   }
 </style>
 
