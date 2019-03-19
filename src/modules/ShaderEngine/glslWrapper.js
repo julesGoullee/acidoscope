@@ -1,29 +1,13 @@
 import DefaultVertex from './defaultVertex.glsl';
 import MainImage from './mainImage.glsl';
 import MainVR from './mainVR.glsl';
+import Defines from './defines.glsl';
+import Uniforms from './uniforms.glsl';
 
 class GlslWrapper {
 
   constructor(shaderEngine) {
     this.shaderEngine = shaderEngine;
-  }
-
-  getPrecisionDefinitions() {
-    return `
-#ifdef GL_ES
-precision mediump float;
-#endif
-`;
-  }
-
-  getUniformsDefinitions() {
-    // TODO
-    return `
-      
-// Uniforms definitions
-
-`;
-
   }
 
   getWrapper(type) {
@@ -59,8 +43,9 @@ ${MainVR}
 
     let fragmentShader = '';
 
-    fragmentShader += this.getPrecisionDefinitions();
-    fragmentShader += this.getUniformsDefinitions();
+    fragmentShader += Defines;
+    fragmentShader += '\n';
+    fragmentShader += Uniforms;
 
     fragmentShader += `
       

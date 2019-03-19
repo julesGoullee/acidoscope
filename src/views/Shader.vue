@@ -9,47 +9,10 @@
     >
       <ShaderRender />
     </v-flex>
-    <v-container>
-      <v-layout
-        row
-        wrap
-        justify-center
-      >
-        <v-flex xs6>
-          <v-btn
-            raised
-            block
-            color="info"
-            @click="switchFullscreen"
-          >
-            Fullscreen
-            <v-icon
-              right
-              dark
-            >
-              fullscreen
-            </v-icon>
-          </v-btn>
-        </v-flex>
-        <v-flex xs6>
-          <v-btn
-            raised
-            block
-            :color="shaderRunning ? 'success' : 'error'"
-            @click="pauseShader"
-          >
-            {{ shaderRunning ? 'Play' : 'Pause' }}
-            <v-icon
-              right
-              dark
-            >
-              {{ shaderRunning ? 'play_arrow' : 'pause' }}
-            </v-icon>
-          </v-btn>
-        </v-flex>
-      </v-layout>
-    </v-container>
+
+    <ShaderControl />
     <ShaderParams />
+
   </v-container>
 </template>
 
@@ -67,6 +30,7 @@
 
   import assert from 'assert';
 
+  import ShaderControl from '@/components/ShaderControl.vue'
   import ShaderRender from '@/components/ShaderRender.vue'
   import ShaderParams from '@/components/ShaderParams.vue';
   import { mapState, mapActions, mapGetters } from 'vuex';
@@ -76,10 +40,10 @@
     components: {
       ShaderParams,
       ShaderRender,
+      ShaderControl,
     },
     computed: {
       ...mapGetters([
-        'shaderRunning',
         'selectedVisualization',
       ]),
       ...mapState([
@@ -98,8 +62,6 @@
     },
     methods: {
       ...mapActions([
-        'switchFullscreen',
-        'pauseShader',
         'loadVisualisations',
         'setVisualisation',
       ]),

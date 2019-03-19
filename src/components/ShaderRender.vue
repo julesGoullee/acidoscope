@@ -62,9 +62,6 @@
 
       }, false);
 
-      await this.initMidi();
-      await this.initLink();
-
       this.listenMidiActions();
       this.listenLinkActions();
 
@@ -85,8 +82,6 @@
         'stopShaderEngine',
         'switchFullscreen',
         'goToGallery',
-        'initMidi',
-        'initLink',
         'listenMidiActions',
         'unlistenMidiActions',
         'listenLinkActions',

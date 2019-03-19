@@ -1,6 +1,5 @@
 import assert from 'assert';
 
-import router from '@/router';
 import ShaderEngine from '@/modules/ShaderEngine';
 import shaders from '@/shaders';
 import Midi from '@/modules/midi';
@@ -15,6 +14,10 @@ const ShaderParamsModule = {
   },
 
   mutations: {
+
+    setQuality(state, quality) {
+      state.shaderEngine.setQuality(quality);
+    },
 
     setParamValue(state, { paramName, paramValue }) {
 
@@ -144,9 +147,19 @@ const ShaderParamsModule = {
         if(container.requestFullscreen) {
           container.requestFullscreen();
         }
-
+        if (container.requestFullScreen) {
+          container.requestFullScreen();
+        } else if (container.mozRequestFullScreen) {
+          container.mozRequestFullScreen();
+        } else if (container.webkitRequestFullScreen) {
+          container.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
+        }
       }
 
+    },
+
+    setQuality({ commit }, qualityValue) {
+      commit('setQuality', qualityValue);
     },
 
     handleAction({ dispatch }, { action }) {
@@ -171,6 +184,7 @@ const ShaderParamsModule = {
 
   getters: {
     shaderEngine: state => state.shaderEngine,
+    quality: state => state.shaderEngine ? state.shaderEngine.quality : 1,
     shaderRunning: state => state.running,
     paramsList: state => state.paramsList,
     getParamValue: state => paramName => {
