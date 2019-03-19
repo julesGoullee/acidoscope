@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import plugins from '@/store/plugins';
 import GalleryModule from "./gallery";
 import linkModule from "./link";
 import ShaderModule from "./shader";
@@ -16,6 +17,7 @@ export const store = {
     shader: ShaderModule,
     link: linkModule
   },
+  plugins,
 
 };
 
