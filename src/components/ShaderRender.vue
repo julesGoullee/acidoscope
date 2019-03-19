@@ -45,7 +45,7 @@
             this.goToGallery();
             break;
           }
-          case 'KeyN': {
+          case 'KeyP': {
             this.nextVisualisation();
             break;
           }
