@@ -10,7 +10,6 @@
         align-center
       >
         <v-btn
-          v-if="$route.name === 'shader'"
           to="/"
           color="info"
         >
@@ -35,7 +34,7 @@
           class="app-name"
           flat
         >
-          LittleShaderDimension
+          LoudyShaderDimension
         </v-btn>
       </v-container>
     </v-flex>
@@ -50,7 +49,8 @@
     font-size: 1.8rem;
     font-weight: 500;
     margin-top: 15px;
-    cursor: default;
+    cursor: pointer;
+    text-transform: none;
   }
 </style>
 
