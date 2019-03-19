@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import '@/plugins/vuetify';
+import '@/plugins/ga';
 import { sync } from 'vuex-router-sync';
 
 import '@/../config';
