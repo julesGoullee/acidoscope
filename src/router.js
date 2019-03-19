@@ -18,6 +18,11 @@ export default new Router({
       component: () => import(/* webpackChunkName: "shader" */ './views/Shader.vue'),
     },
     {
+      path: '/about',
+      name: 'about',
+      component: () => import(/* webpackChunkName: "shader" */ './views/About.vue'),
+    },
+    {
       path: "*",
       redirect: '/'
     }
