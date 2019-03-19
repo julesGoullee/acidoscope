@@ -308,8 +308,9 @@ vec2 rotate(vec2 pos, float angle)
 
 vec4 imageFunction(vec2 pos)
 {
+  float tt = 1. + abs(sin(phase*PI + PI/2.));
   float p0 = vec2(0.4,0.0).x;
-  float p1 =   vec2(0.5,0.0).x;
+  float p1 = vec2(0.5 * tt,0.0).x;
   float p2 = vec2(0.6,0.0).x;
   float p3 = vec2(0.7,0.0).x;
   float p4 = vec2(1.0,0.0).x;

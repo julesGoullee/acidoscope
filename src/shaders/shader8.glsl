@@ -27,7 +27,6 @@ vec3 glowColor = vec3(0.43, 0.85, 1.0);
 float glowStrength = 0.99;
 #endif
 
-#define PI 3.14159265359
 
 float distBox(vec2 p, vec2 b)
 {
@@ -177,8 +176,10 @@ float distShapeID(vec2 p, int ID, vec2 par)
 
 float distShapeCSG(vec2 p, int opID, int shapeID0, int shapeID1)
 {
-  vec2 param0 = vec2(4.0, 1.5);
-  vec2 param1 = vec2(4.0, 1.5);
+  float t = 1. + abs(sin(phase*PI + PI/2.));
+  vec2 param0 = vec2(4.0 * t, 1.5);
+  vec2 param1 = vec2(4.0 * t, 1.5);
+
   if(opID == 2) param1 *= 1.2;
   if(opID == 3) param1 *= 0.4;
 
