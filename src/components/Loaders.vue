@@ -7,7 +7,9 @@
     <v-btn
       flat
       small
-      :color="linkConnected ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
+      :disabled="!linkConnected"
+      :color="linkEnabled ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
+      @click="switchLinkEnable(!linkEnabled)"
     >
       LINK
     </v-btn>
@@ -32,21 +34,14 @@
     computed: {
       ...mapGetters([
         'midiHardwareConnected',
-        'linkEnable',
+        'linkEnabled',
         'linkConnected',
       ]),
     },
-    mounted: async function () {
-
-      await this.initMidi();
-      await this.initLink();
-
-    },
     methods: {
       ...mapActions([
-        'initMidi',
-        'initLink',
-      ])
+        'switchLinkEnable',
+      ]),
     }
 
   };

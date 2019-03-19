@@ -16,13 +16,12 @@ function touchToUpDown(value) {
   return null;
 }
 
+const midi = new Midi();
+
 const MidiModule = {
 
   state: {
-    midiEnabled: false,
     midiHardwareConnected: false,
-    midiListener: null,
-    midiListenerRetrier: null,
     bindedParams: [
       {
         midiActionType: 'controlchange',
@@ -77,64 +76,38 @@ const MidiModule = {
 
   mutations: {
 
-    setMidiEnabled: (state, enabled) => {
-      state.midiEnabled = enabled;
-    },
     setMidiHardwareConnected: (state, connected) => {
       state.midiHardwareConnected = connected;
-    },
-    setMidiListener(state, listener) {
-      state.midiListener = listener;
-    },
-    setMidiListenerRetrier(state, listener) {
-      state.midiListenerRetrier = listener;
     },
 
   },
   actions: {
 
-    async initMidi({ commit } ) {
+    initMidi({ commit } ) {
 
-      await Midi.init();
-      commit('setMidiEnabled', true);
+      midi.init();
 
-      commit('setMidiHardwareConnected', Midi.isConnected());
-      Midi.listenStatus(hardwareStatus => {
-        commit('setMidiHardwareConnected', hardwareStatus.connected);
+      midi.on('statusChanged', (hardwareConnected) => {
+
+        commit('setMidiHardwareConnected', hardwareConnected);
+
       });
 
     },
 
-    listenMidiActions({ state, commit, dispatch } ) {
+    listenMidiActions({ dispatch }) {
 
-      if(state.midiListener) return;
+      midi.on('input', (midiAction) => {
 
-      if(state.midiEnabled) {
+        dispatch('handleMidiAction', midiAction);
 
-        const listener = Midi.addListener(midiAction => {
-          dispatch('handleMidiAction', midiAction);
-        });
-        commit('setMidiListener', listener);
-
-      } else {
-        // TODO move that back into the midi helper
-        const timeout = setTimeout(() => dispatch('listenMidiActions'), 1000);
-        const clear = () => clearTimeout(timeout);
-        commit('setMidiListenerRetrier', clear);
-      }
+      });
 
     },
 
-    unlistenMidiActions({ state, commit } ) {
+    unlistenMidiActions() {
 
-      if(state.midiListenerRetrier) {
-        state.midiListenerRetrier();
-        commit('setMidiListenerRetrier', null);
-      }
-      if(state.midiListener) {
-        state.midiListener();
-        commit('setMidiListener', null);
-      }
+      midi.removeAllListeners('input');
 
     },
 
@@ -171,7 +144,11 @@ const MidiModule = {
 
           const upDownValue = encoderToUpDown(midiAction.value);
 
-          dispatch('changeParamValue', { paramName, action: upDownValue })
+          if(upDownValue){
+
+            dispatch('changeParamValue', { paramName, action: upDownValue })
+
+          }
 
         }
 

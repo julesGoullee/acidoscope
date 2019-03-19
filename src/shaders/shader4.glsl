@@ -1,4 +1,3 @@
-#define PI 3.1492
 
 vec4 light;
 float ui;

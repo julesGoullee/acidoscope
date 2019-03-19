@@ -1,66 +1,85 @@
 import Link from '@/modules/link';
+import Config from '@/../config';
+
+const link = new Link({ uri: `${Config.SERVER_HOST}:${Config.SERVER_PORT}` });
 
 const LinkModule = {
 
   state: {
     linkConnected: false,
-    linkListener: null,
+    linkEnabled: false
   },
 
   mutations: {
 
-    setLinkConnected(state, connected) {
-      state.linkConnected = connected;
+    setLinkStatus(state, linkConnected) {
+      state.linkConnected = linkConnected;
     },
-    setLinkListener(state, listener) {
-      state.linkListener = listener;
+    setLinkEnable(state, linkEnabled) {
+      state.linkEnabled = linkEnabled;
     },
-
   },
   actions: {
 
-    async initLink({ commit } ) {
+    initLink({ commit, dispatch }){
 
-      await Link.init();
+      link.init();
 
-      Link.listenStatus(linkStatus => {
-        commit('setLinkConnected', linkStatus);
+      commit('setLinkEnable', true);
+      link.on('statusChanged', (linkConnected) => {
+
+        if(!linkConnected){
+
+          dispatch('switchLinkEnable', false);
+
+        }
+
+        commit('setLinkStatus', linkConnected);
+
       });
 
     },
 
-    listenLinkActions({ rootState, state, commit, dispatch } ) {
+    listenLinkActions({ rootState, state } ){
 
-      if(state.linkListener) return;
+      link.on('beat', (beatData) => {
 
-      if(state.linkConnected) {
-
-        const listener = Link.addListener(beatData => {
+        if(state.linkEnabled){
 
           rootState.shader.shaderEngine.shaderParams.setBeat(beatData);
 
-        });
+        }
 
-        commit('setLinkListener', listener);
-
-      } else {
-
-        Link.listenStatus(linkStatus => {
-          if(linkStatus) {
-            dispatch('listenLinkActions');
-          }
-        });
-
-      }
+      });
 
     },
 
-    unlistenLinkActions({ state, commit } ) {
+    switchLinkEnable({ rootState, commit }, enable){
 
-      if(state.linkListener) {
-        state.linkListener();
-        commit('setLinkListener', null);
+      if(enable){
+
+        return commit('setLinkEnable', true);
+
       }
+
+      if(rootState.shader.shaderEngine){
+
+        rootState.shader.shaderEngine.shaderParams.setBeat({
+          beatStartTime: 0,
+          bps: 1,
+          bpm: 60,
+          beat: 0,
+        });
+
+      }
+
+      commit('setLinkEnable', false);
+
+    },
+
+    unlistenLinkActions() {
+
+      link.removeAllListeners('beat');
 
     },
 
@@ -68,6 +87,7 @@ const LinkModule = {
 
   getters: {
     linkConnected: state => state.linkConnected,
+    linkEnabled: state => state.linkEnabled,
   },
 
 };

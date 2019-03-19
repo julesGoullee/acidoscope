@@ -14,15 +14,31 @@
 <script>
 
   import Header from '@/components/Header'
+  import Loaders from '@/components/Loaders.vue';
+  
   import {
     VApp,
   } from 'vuetify/lib'
+  import { mapActions } from 'vuex';
 
   export default {
     name: 'App',
     components: {
       VApp,
       Header,
+      Loaders,
+    },
+    mounted: async function () {
+
+      await this.initMidi();
+      await this.initLink();
+
+    },
+    methods: {
+      ...mapActions([
+        'initMidi',
+        'initLink',
+      ])
     }
   };
 
