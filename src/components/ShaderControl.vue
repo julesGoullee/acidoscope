@@ -5,7 +5,7 @@
       wrap
       justify-center
     >
-      <v-flex xs4>
+      <v-flex xs3>
         <v-btn
           raised
           block
@@ -21,7 +21,7 @@
           </v-icon>
         </v-btn>
       </v-flex>
-      <v-flex xs4>
+      <v-flex xs3>
         <v-btn
           raised
           block
@@ -37,7 +37,22 @@
           </v-icon>
         </v-btn>
       </v-flex>
-      <v-flex xs4>
+      <v-flex xs3>
+        <v-btn
+          raised
+          block
+          @click="takeScreenShot"
+        >
+          Save
+          <v-icon
+            right
+            dark
+          >
+            camera_alt
+          </v-icon>
+        </v-btn>
+      </v-flex>
+      <v-flex xs3>
         <v-menu offset-y>
           <template v-slot:activator="{ on }">
             <v-btn
@@ -99,6 +114,7 @@
       ...mapActions([
         'switchFullscreen',
         'pauseShader',
+        'takeScreenShot',
         'setQuality',
       ]),
     },
