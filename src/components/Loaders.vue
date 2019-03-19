@@ -5,20 +5,18 @@
     align-center
   >
     <v-btn
-      flat
       small
       :disabled="!linkConnected"
-      :color="linkEnabled ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
+      :class="linkEnabled ? 'success--text' : ''"
       @click="switchLinkEnable(!linkEnabled)"
     >
       LINK
     </v-btn>
     <v-btn
-      flat
       icon
     >
       <v-icon
-        :color="midiHardwareConnected ? 'rgba(46, 195, 22, 1)' : 'rgba(0, 0, 0, 0.5)'"
+        :class="midiHardwareConnected ? 'success--text' : ''"
       >
         developer_board
       </v-icon>

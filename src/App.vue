@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" dark>
     <v-container
       grid-list-md
       justify-space-between
@@ -14,8 +14,7 @@
 <script>
 
   import Header from '@/components/Header'
-  import Loaders from '@/components/Loaders.vue';
-  
+
   import {
     VApp,
   } from 'vuetify/lib'
@@ -26,7 +25,6 @@
     components: {
       VApp,
       Header,
-      Loaders,
     },
     mounted: async function () {
 
@@ -52,8 +50,12 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
     height: 100%;
+    color: #E8F0E8;
+    background-color: #011600;
+  }
+  .v-sheet {
+    background-color: #171A00 !important;
   }
   .view-container{
     padding-top: 50px;
