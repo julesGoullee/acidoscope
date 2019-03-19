@@ -7,6 +7,7 @@ const LinkModule = {
 
   state: {
     linkConnected: false,
+    numPeers: 0,
     linkEnabled: false
   },
 
@@ -14,6 +15,9 @@ const LinkModule = {
 
     setLinkStatus(state, linkConnected) {
       state.linkConnected = linkConnected;
+    },
+    setNumPeers(state, numPeers) {
+      state.numPeers = numPeers;
     },
     setLinkEnable(state, linkEnabled) {
       state.linkEnabled = linkEnabled;
@@ -25,16 +29,22 @@ const LinkModule = {
 
       link.init();
 
-      commit('setLinkEnable', true);
       link.on('statusChanged', (linkConnected) => {
 
         if(!linkConnected){
 
+          commit('setNumPeers', 0 );
           dispatch('switchLinkEnable', false);
 
         }
 
         commit('setLinkStatus', linkConnected);
+
+      });
+
+      link.on('numPeers', (numPeers) => {
+
+        commit('setNumPeers', numPeers);
 
       });
 
@@ -87,6 +97,7 @@ const LinkModule = {
 
   getters: {
     linkConnected: state => state.linkConnected,
+    numPeers: state => state.numPeers,
     linkEnabled: state => state.linkEnabled,
   },
 
