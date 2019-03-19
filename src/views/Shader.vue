@@ -1,5 +1,6 @@
 <template>
   <v-container
+    v-if="selectedVisualization"
     class="shader-view"
   >
     <v-flex
@@ -8,47 +9,10 @@
     >
       <ShaderRender />
     </v-flex>
-    <v-container>
-      <v-layout
-        row
-        wrap
-        justify-center
-      >
-        <v-flex xs6>
-          <v-btn
-            raised
-            block
-            color="info"
-            @click="switchFullscreen"
-          >
-            Fullscreen
-            <v-icon
-              right
-              dark
-            >
-              fullscreen
-            </v-icon>
-          </v-btn>
-        </v-flex>
-        <v-flex xs6>
-          <v-btn
-            raised
-            block
-            :color="shaderRunning ? 'success' : 'error'"
-            @click="pauseShader"
-          >
-            {{ shaderRunning ? 'Play' : 'Pause' }}
-            <v-icon
-              right
-              dark
-            >
-              {{ shaderRunning ? 'play_arrow' : 'pause' }}
-            </v-icon>
-          </v-btn>
-        </v-flex>
-      </v-layout>
-    </v-container>
+
+    <ShaderControl />
     <ShaderParams />
+
   </v-container>
 </template>
 
@@ -64,25 +28,42 @@
 
 <script>
 
+  import assert from 'assert';
+
+  import ShaderControl from '@/components/ShaderControl.vue'
   import ShaderRender from '@/components/ShaderRender.vue'
   import ShaderParams from '@/components/ShaderParams.vue';
-  import { mapActions, mapGetters } from 'vuex';
+  import { mapState, mapActions, mapGetters } from 'vuex';
 
   export default {
     name: 'ShaderView',
     components: {
       ShaderParams,
       ShaderRender,
+      ShaderControl,
     },
     computed: {
       ...mapGetters([
-        'shaderRunning',
-      ])
+        'selectedVisualization',
+      ]),
+      ...mapState([
+        'route',
+      ]),
+    },
+    mounted() {
+
+      assert(this.route.params && this.route.params.id, 'invalid_route');
+
+      const shaderId = this.route.params.id;
+
+      this.loadVisualisations();
+      this.setVisualisation(shaderId);
+
     },
     methods: {
       ...mapActions([
-        'switchFullscreen',
-        'pauseShader',
+        'loadVisualisations',
+        'setVisualisation',
       ]),
     }
   }

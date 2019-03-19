@@ -15,6 +15,10 @@ const ShaderParamsModule = {
 
   mutations: {
 
+    setQuality(state, quality) {
+      state.shaderEngine.setQuality(quality);
+    },
+
     setParamValue(state, { paramName, paramValue }) {
 
       const shader = state.shaderEngine.shaderParams;
@@ -154,6 +158,10 @@ const ShaderParamsModule = {
 
     },
 
+    setQuality({ commit }, qualityValue) {
+      commit('setQuality', qualityValue);
+    },
+
     handleAction({ dispatch }, { action }) {
 
       switch(action) {
@@ -176,6 +184,7 @@ const ShaderParamsModule = {
 
   getters: {
     shaderEngine: state => state.shaderEngine,
+    quality: state => state.shaderEngine ? state.shaderEngine.quality : 1,
     shaderRunning: state => state.running,
     paramsList: state => state.paramsList,
     getParamValue: state => paramName => {

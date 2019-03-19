@@ -52,7 +52,7 @@ class ShaderEngine {
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.antialias = true;
-    //this.renderer.setPixelRatio( window.devicePixelRatio);
+    // this.renderer.setPixelRatio( window.devicePixelRatio );
 
     const width = this.container.innerWidth;
     const height = this.container.innerHeight;
@@ -84,7 +84,8 @@ class ShaderEngine {
     this.running && requestAnimationFrame( this.animate.bind(this) );
 
     const speed = this.shaderParams.getUniformValue('speed');
-    this.currentTime += speed * (Date.now() - this.lastTime);
+    const elapsed = Date.now() - this.lastTime;
+    this.currentTime += speed * elapsed;
     this.lastTime = Date.now();
 
     this.render();
@@ -103,6 +104,11 @@ class ShaderEngine {
     this.renderer.domElement.style.width = width + 'px';
     this.renderer.domElement.style.height = height + 'px';
 
+  }
+
+  setQuality(quality) {
+    this.quality = quality;
+    this.onWindowResize();
   }
 
   render() {

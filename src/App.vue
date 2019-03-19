@@ -1,49 +1,10 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" dark>
     <v-container
       grid-list-md
       justify-space-between
     >
-      <v-layout
-        row
-        wrap
-      >
-        <v-flex xs3>
-          <v-container
-            justify-start
-            fill-height
-            align-center
-          >
-            <v-btn
-              v-if="$route.name === 'shader'"
-              color="#d6a8f3"
-              to="/"
-            >
-              <v-icon
-                left
-                dark
-              >
-                apps
-              </v-icon>
-              Gallery
-            </v-btn>
-          </v-container>
-        </v-flex>
-        <v-flex xs6>
-          <v-container
-            justify-center
-            fill-height
-            align-center
-          >
-            <span class="app-name">
-              LittleShaderDimension
-            </span>
-          </v-container>
-        </v-flex>
-        <v-flex xs3>
-          <Loaders />
-        </v-flex>
-      </v-layout>
+      <Header />
       <v-container class="view-container">
         <router-view />
       </v-container>
@@ -52,17 +13,18 @@
 </template>
 <script>
 
-  import Loaders from '@/components/Loaders.vue';
-  import { mapActions } from 'vuex';
+  import Header from '@/components/Header'
+
   import {
     VApp,
   } from 'vuetify/lib'
+  import { mapActions } from 'vuex';
 
   export default {
     name: 'App',
     components: {
       VApp,
-      Loaders: Loaders
+      Header,
     },
     mounted: async function () {
 
@@ -88,15 +50,12 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
     height: 100%;
+    color: #E8F0E8;
+    background-color: #011600;
   }
-  .app-name {
-    font-size: 1.8rem;
-    font-weight: 500;
-    color: #706a73;
-    margin-top: 15px;
-    cursor: default;
+  .v-sheet {
+    background-color: #171A00 !important;
   }
   .view-container{
     padding-top: 50px;

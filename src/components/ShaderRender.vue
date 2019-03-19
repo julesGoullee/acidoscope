@@ -45,6 +45,10 @@
             this.goToGallery();
             break;
           }
+          case 'KeyP': {
+            this.nextVisualisation();
+            break;
+          }
         }
 
         return false;
@@ -83,6 +87,7 @@
         'listenLinkActions',
         'unlistenLinkActions',
         'pauseShader',
+        'nextVisualisation',
       ]),
     }
   }
