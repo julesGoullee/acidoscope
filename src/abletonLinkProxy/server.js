@@ -22,6 +22,7 @@ const Server = {
     Server.io.on('connection', (client) => {
 
       console.log('Client connected', client.conn.remoteAddress);
+      client.emit('numPeers', Server.numPeers);
 
       client.on('disconnect', () => {
 
@@ -35,6 +36,7 @@ const Server = {
 
       Server.numPeers = numPeers;
       console.log('NumPeers', numPeers);
+      Server.io.emit('numPeers', Server.numPeers);
 
     });
 

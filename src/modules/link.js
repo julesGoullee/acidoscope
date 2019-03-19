@@ -41,6 +41,12 @@ class Link extends EventEmitter {
 
       });
 
+      this.socket.on('numPeers', (numPeers) => {
+
+        this.emit('numPeers', numPeers);
+
+      });
+
     }
 
     catch(error) {

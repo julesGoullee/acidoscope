@@ -10,6 +10,10 @@
       :class="linkEnabled ? 'success--text' : ''"
       @click="switchLinkEnable(!linkEnabled)"
     >
+      <span
+        v-if="linkConnected || linkEnabled || numPeers !== 0"
+        class="num-peers"
+      >{{ numPeers }}</span>
       LINK
     </v-btn>
     <v-btn
@@ -33,6 +37,7 @@
       ...mapGetters([
         'midiHardwareConnected',
         'linkEnabled',
+        'numPeers',
         'linkConnected',
       ]),
     },
@@ -47,4 +52,9 @@
 </script>
 
 <style scoped>
+
+  .num-peers {
+    margin-right: 8px;
+  }
+
 </style>
