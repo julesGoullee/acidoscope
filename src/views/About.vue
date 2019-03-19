@@ -1,45 +1,44 @@
 <template>
-  <v-container>
+  <v-container tag="section">
     <v-card>
-      <v-container class="text-center">
+      <v-container>
 
-        <h1>About</h1>
-        <p>Hey there, good to have you here !</p>
+        <h1 class="headline">About</h1>
 
-        <h2>Description</h2>
-        <p>
+        <v-card-text>
+          Hey there, good to have you here !
+        </v-card-text>
+
+        <h2 class="headline">Description</h2>
+        <v-card-text>
           LittleShaderDimension is a web app that allows to display interactive visualisations.
-        </p>
+        </v-card-text>
 
-        <h2>MIDI</h2>
-        <p>
+        <h2 class="headline">MIDI</h2>
+        <v-card-text>
           Animation parameters can be controlled via a MIDI controller. <br/>
           Just plug your device and play with the encoders. Only Ableton Push controls have been mapped yet.<br/>
           Browser may request your permissions to access the hardware.
-        </p>
+        </v-card-text>
 
-        <h2>Link</h2>
-        <p>
+        <h2 class="headline">Link</h2>
+        <v-card-text>
           The animations can be synchronized to a tempo set by Link, available in Ableton Live and Traktor. <br/>
           Please refer to the documentation on the repository for further informations.
-        </p>
+        </v-card-text>
 
-        <h2>Code</h2>
-        <p>
+        <h2 class="headline">Code</h2>
+        <v-card-text>
           We're Open Source ;)
           <br/>
           <a href="https://github.com/julesgoullee/shaders-midi" target="_blank">https://github.com/julesgoullee/shaders-midi</a>
-        </p>
-
+        </v-card-text>
       </v-container>
     </v-card>
   </v-container>
 </template>
 
 <style scoped>
-  .text-center {
-    text-align: center;
-  }
 </style>
 
 <script>
