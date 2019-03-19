@@ -1,119 +1,52 @@
-import WebMidi from 'webmidi';
 import assert from 'assert';
+import { EventEmitter } from 'events';
+import WebMidi from 'webmidi';
 
 const log = console.log.bind(null, '[MIDI]:');
 
-const Midi = {
-  isSupported: () => WebMidi.supported,
-  isConnected: () => WebMidi.inputs && WebMidi.inputs.length > 0,
-  status: {
-    midiInitialized: false,
-    midiHardwareConnected: false,
-    dancing: false,
-  },
-  unlisteners: [],
-  init: async () => {
+class Midi extends EventEmitter {
 
-    assert(Midi.isSupported(), 'web_midi_not_supported');
-    if(Midi.status.midiInitialized) return Promise.resolve();
+  constructor() {
+    super();
+    this._isListening = false;
+  }
 
-    return new Promise( (resolve, reject) => {
+  isSupported(){ return WebMidi.supported }
 
-      WebMidi.enable( (error) => {
+  init(){
 
-        if(error){
+    assert(this.isSupported(), 'web_midi_not_supported');
 
-          reject(error);
+    WebMidi.enable( (error) => {
 
-        } else {
+      if(error){
 
-          Midi.midiInitialized = true;
-          Midi.midiHardwareConnected = Midi.isConnected();
-          Midi.listenStatus(hardwareStatus => {
-            Midi.midiHardwareConnected = hardwareStatus.connected;
-          });
-          resolve();
+        return log(error);
 
-        }
+      }
 
-      }/*, true*/);
+      WebMidi.addListener('connected', () => {
+        log('Device connected');
+        this.listenInputs();
+        this.emit('statusChanged', true);
 
-    });
-
-  },
-  listenStatus: (setMidiHardwareStatus) => {
-
-    const connectedHandler = () => {
-      log('Device connected');
-      setMidiHardwareStatus({ connected: true });
-    };
-    const disconnectedHandler = () => {
-      log('Device disconnected');
-      setMidiHardwareStatus({ connected: false });
-    };
-
-    WebMidi.addListener('connected', connectedHandler);
-    WebMidi.addListener('disconnected', disconnectedHandler);
-
-    return function() {
-
-      WebMidi.removeListener('connected', connectedHandler);
-      WebMidi.removeListener('disconnected', disconnectedHandler);
-
-    };
-
-  },
-
-  addListener(handler) {
-
-    let unlisteners = [];
-
-    function stopListening() {
-      unlisteners.forEach(u => u());
-      unlisteners = null;
-    }
-
-    function startListening() {
-
-      // Listen midi actions
-      const unlistenEvents = Midi.onEvent(handler);
-      unlisteners.push(unlistenEvents);
-
-      // Listen midi disconnection, unlisten and listen to wait for new connection
-      const unlistenStatus = Midi.listenStatus(hardwareStatus => {
-        if(!hardwareStatus.connected) {
-          stopListening();
-          Midi.addListener(handler)
-        }
       });
-      unlisteners.push(unlistenStatus);
-
-    }
-
-    if(Midi.midiHardwareConnected) {
-
-      // If already connected, start listening
-      startListening();
-
-    } else {
-
-      // If not connected, wait connection then start listening
-      const unlistenStatus = Midi.listenStatus(hardwareStatus => {
-        if(hardwareStatus.connected) {
-          startListening();
-          unlistenStatus();
-        }
+      WebMidi.addListener('disconnected', () => {
+        log('Device disconnected');
+        this._isListening = false;
+        this.emit('statusChanged', false);
       });
-      Midi.unlisteners.push(unlistenStatus); // Maybe have been unlistened previously
 
+    }/*, true*/);
+
+  }
+
+  listenInputs(){
+
+    if(this._isListening){
+      return;
     }
-
-    return stopListening;
-
-  },
-
-  onEvent: (handler) => {
-
+    this._isListening = true;
     WebMidi.inputs.forEach( (input) => {
 
       input.addListener('controlchange', 'all', (event) => {
@@ -126,41 +59,31 @@ const Midi = {
         };
 
         log(customEvent.type, customEvent.controlNumber, customEvent.value, customEvent.controlName);
-        handler(customEvent);
+        this.emit('input', customEvent);
 
       });
 
-      function noteListener(event) {
+      function noteListener(event){
+
         const { channel, note, rawVelocity, velocity, type } = event;
         log(type, channel, note.name, rawVelocity, velocity);
+
       }
       input.addListener('noteon', 'all', noteListener);
       input.addListener('noteoff', 'all', noteListener);
 
     });
 
-    return function() {
-
-      WebMidi.inputs.forEach( (input) => {
-
-        // TODO target listeners
-        input.removeListener('controlchange');
-        input.removeListener('noteon');
-        input.removeListener('noteoff');
-
-      });
-
-    };
-  },
+  }
 
   danceColors() {
 
     const output = WebMidi.getOutputByName('Ableton Push 2 User Port');
     const padStartNumber = 36;
 
-    if(Midi.dancing) {
-      Midi.dancing();
-      Midi.dancing = false;
+    if(this.dancing) {
+      this.dancing();
+      this.dancing = false;
 
       for(let i=0; i<64; i++) {
         output.send(144, [padStartNumber+i, 122], 0);
@@ -190,10 +113,10 @@ const Midi = {
     }
 
     const interval = setInterval(draw, 100);
-    Midi.dancing = () => clearInterval(interval);
+    this.dancing = () => clearInterval(interval);
 
   }
 
-};
+}
 
 export default Midi;

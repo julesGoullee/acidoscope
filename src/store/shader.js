@@ -1,6 +1,5 @@
 import assert from 'assert';
 
-import router from '@/router';
 import ShaderEngine from '@/modules/ShaderEngine';
 import shaders from '@/shaders';
 import Midi from '@/modules/midi';
@@ -144,7 +143,13 @@ const ShaderParamsModule = {
         if(container.requestFullscreen) {
           container.requestFullscreen();
         }
-
+        if (container.requestFullScreen) {
+          container.requestFullScreen();
+        } else if (container.mozRequestFullScreen) {
+          container.mozRequestFullScreen();
+        } else if (container.webkitRequestFullScreen) {
+          container.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
+        }
       }
 
     },

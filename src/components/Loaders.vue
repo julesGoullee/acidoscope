@@ -6,7 +6,9 @@
   >
     <v-btn
       small
-      :class="linkConnected ? 'success--text' : ''"
+      :disabled="!linkConnected"
+      :class="linkEnabled ? 'success--text' : ''"
+      @click="switchLinkEnable(!linkEnabled)"
     >
       LINK
     </v-btn>
@@ -30,21 +32,14 @@
     computed: {
       ...mapGetters([
         'midiHardwareConnected',
-        'linkEnable',
+        'linkEnabled',
         'linkConnected',
       ]),
     },
-    mounted: async function () {
-
-      await this.initMidi();
-      await this.initLink();
-
-    },
     methods: {
       ...mapActions([
-        'initMidi',
-        'initLink',
-      ])
+        'switchLinkEnable',
+      ]),
     }
 
   };

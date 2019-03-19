@@ -1,3 +1,4 @@
+import { throttle } from 'lodash';
 import * as THREE from 'three'
 
 import ShaderParams from './shaderParams';
@@ -20,19 +21,21 @@ class ShaderEngine {
     this.container = container;
     this.renderer = null;
     this.uniforms = {};
-    this.three = {};
 
     this.currentTime = null;
     this.running = false;
 
+    this.quality = 1;
+
+    this.onWindowResize = throttle(this.onWindowResize.bind(this), 200);
   }
 
   init() {
 
-    this.three.camera = new THREE.PerspectiveCamera();
-    this.three.camera.position.z = 1;
+    this.camera = new THREE.PerspectiveCamera();
+    this.camera.position.z = 1;
 
-    this.three.scene = new THREE.Scene();
+    this.scene = new THREE.Scene();
 
     this.uniforms = this.shaderParams.createUniforms();
 
@@ -45,16 +48,21 @@ class ShaderEngine {
     material.extensions.derivatives = true;
 
     const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), material );
-    this.three.scene.add( mesh );
+    this.scene.add( mesh );
 
     this.renderer = new THREE.WebGLRenderer();
-    this.container.appendChild( this.renderer.domElement );
+    this.renderer.antialias = true;
+    //this.renderer.setPixelRatio( window.devicePixelRatio);
 
-    const width = this.container.offsetWidth;
-    const height = this.container.offsetHeight;
+    const width = this.container.innerWidth;
+    const height = this.container.innerHeight;
     this.uniforms.resolution.value.x = width;
     this.uniforms.resolution.value.y = height;
-    this.renderer.setSize( width, height );
+
+    this.container.appendChild( this.renderer.domElement );
+    this.onWindowResize();
+    window.addEventListener('resize', () => this.onWindowResize());
+    window.addEventListener("fullscreenchange", () => this.onWindowResize());
 
   }
 
@@ -83,23 +91,24 @@ class ShaderEngine {
 
   }
 
-  updateCanvas() {
-    const canvas = this.renderer.domElement;
+  onWindowResize() {
+
     const width = this.container.clientWidth;
     const height = this.container.clientHeight;
 
-    if (canvas.width !== width || canvas.height !== height) {
-      this.renderer.setSize(width, height, true);
-      //this.three.camera.aspect = width / height;
-      //this.three.camera.updateProjectionMatrix();
-    }
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+
+    this.renderer.setSize(width * this.quality, height * this.quality);
+    this.renderer.domElement.style.width = width + 'px';
+    this.renderer.domElement.style.height = height + 'px';
+
   }
 
   render() {
 
-    this.updateCanvas();
     this.shaderParams.updateSpecialUniforms();
-    this.renderer.render( this.three.scene, this.three.camera );
+    this.renderer.render( this.scene, this.camera );
 
   }
 

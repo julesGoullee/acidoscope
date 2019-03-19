@@ -30,6 +30,7 @@ const defaultParams = [
     type: 'f',
     defaultValue: 1.0,
     range: [0., 10.],
+    step: 0.1
   },
 ];
 
@@ -126,9 +127,10 @@ class ShaderParams {
     this.setUniformValue('phase', phase);
 
     const container = this.shaderEngine.container;
-    const width = container.offsetWidth;
-    const height = container.offsetHeight;
-    this.setUniformValue('resolution', {x: width, y: height});
+    const width = container.offsetWidth * this.shaderEngine.quality;
+    const height = container.offsetHeight * this.shaderEngine.quality;
+
+    this.setUniformValue('resolution', { x: width, y: height });
 
     // TODO mouse
 

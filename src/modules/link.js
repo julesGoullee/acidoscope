@@ -1,16 +1,49 @@
+import { EventEmitter } from 'events';
 import io from "socket.io-client";
 
-const Link = {
-  socket: null,
-  init: () => {
+const log = console.log.bind(null, '[LINK]:');
 
-    if(Link.socket) return;
+class Link extends EventEmitter {
+
+  constructor({ uri }){
+
+    super();
+    this.uri = uri || 'http://localhost:3000';
+    this.socket = null;
+
+  }
+
+  init(){
+
+    if(this.socket) return;
 
     try {
 
-      Link.socket = io.connect('http://localhost:3000');
+      this.socket = io.connect(this.uri);
 
-    } catch (error) {
+      this.socket.on('connect', () => {
+
+        log('Link connected');
+        this.emit('statusChanged', true);
+
+      });
+
+      this.socket.on('disconnect', () => {
+
+        log('Link disconnected');
+        this.emit('statusChanged', false);
+
+      });
+
+      this.socket.on('beat', (beatData) => {
+
+        this.emit('beat', beatData);
+
+      });
+
+    }
+
+    catch(error) {
 
       // If not connected, wait connection then start listening
       // const unlistenStatus = Midi.listenStatus(hardwareStatus => {
@@ -23,46 +56,9 @@ const Link = {
 
     }
 
-  },
-  listenStatus: (handler) => {
+  }
 
-    if(!Link.socket){
 
-      return;
-
-    }
-
-    Link.socket.on('connect', () => {
-
-      handler(true);
-
-    });
-
-    Link.socket.on('disconnect', () => {
-
-      handler(false);
-
-    });
-
-  },
-  addListener: (handler) => {
-
-    if(!Link.socket){
-
-      return;
-
-    }
-
-    Link.socket.on('beat', handler);
-
-    return function(){
-
-      Link.socket.removeListener('beat');
-
-    };
-
-  },
-
-};
+}
 
 export default Link;
