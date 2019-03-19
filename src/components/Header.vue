@@ -39,7 +39,7 @@
             src="@/assets/logo-32.png"
             class="title-logo"
           >
-          LoudyShaderDimension
+          Acidity
           <img
             alt="logo"
             src="@/assets/logo-32.png"
@@ -56,10 +56,13 @@
 
 <style scoped>
   .app-name {
-    font-size: 1.8rem;
+    font-size: 3.5rem;
     font-weight: 500;
     cursor: pointer;
     text-transform: none;
+    /* font-family: 'Jura', sans-serif; */
+    font-family: 'Poiret One', cursive;
+    /* font-family: 'Orbitron', sans-serif; */
   }
   .title-logo {
     margin: 8px;
