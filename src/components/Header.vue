@@ -52,6 +52,9 @@
     font-weight: 500;
     cursor: pointer;
     text-transform: none;
+    /* font-family: 'Jura', sans-serif; */
+    font-family: 'Poiret One', cursive;
+    /* font-family: 'Orbitron', sans-serif; */
   }
   .title-logo {
     margin: 8px;
