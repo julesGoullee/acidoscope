@@ -9,7 +9,7 @@
         <h2 class="headline">Description</h2>
 
         <v-card-text>
-          LoudyShaderDimension is a web app that allows to display interactive visualisations.
+          <b>Acidity</b> is a web app that allows to display interactive visualisations.
         </v-card-text>
 
         <h2 class="headline">MIDI</h2>

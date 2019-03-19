@@ -35,7 +35,7 @@
           flat
         >
           <img alt="logo" src="@/assets/logo-32.png" class="title-logo"/>
-          LoudyShaderDimension
+          Acidity
           <img alt="logo" src="@/assets/logo-32.png" class="title-logo flip"/>
         </v-btn>
       </v-container>
@@ -48,7 +48,7 @@
 
 <style scoped>
   .app-name {
-    font-size: 1.8rem;
+    font-size: 3.5rem;
     font-weight: 500;
     cursor: pointer;
     text-transform: none;
