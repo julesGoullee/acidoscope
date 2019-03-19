@@ -1,4 +1,5 @@
 import Link from '@/modules/link';
+import { event } from 'vue-analytics';
 import Config from '@/../config';
 
 const link = new Link({ uri: `${Config.SERVER_HOST}:${Config.SERVER_PORT}` });
@@ -13,9 +14,11 @@ const LinkModule = {
   mutations: {
 
     setLinkStatus(state, linkConnected) {
+      event('connection', 'link', 'status', linkConnected ? 1 : 0);
       state.linkConnected = linkConnected;
     },
     setLinkEnable(state, linkEnabled) {
+      event('connection', 'link', 'enable', linkEnabled ? 1 : 0);
       state.linkEnabled = linkEnabled;
     },
   },
