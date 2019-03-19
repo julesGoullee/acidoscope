@@ -196,3 +196,17 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
   fragColor = vec4(color, 1.0);
 }
+
+void mainVR( out vec4 fragColor, in vec2 fragCoord, in vec3 fragRayOri, in vec3 fragRayDir )
+{
+
+  fragRayOri += vec3(0, 0,-2);
+  //Ray marching
+  MarchResult hit = MarchRay(fragRayOri, fragRayDir);
+
+  //Shading
+  vec3 color = Shade(hit, fragRayDir, fragRayOri);
+
+  fragColor = vec4(color, 1.0);
+
+}

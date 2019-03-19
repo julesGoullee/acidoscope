@@ -27,7 +27,8 @@ ${MainImage}
       
 // main VR function
 
-# define VR_SETTINGS_CARDBOARD
+#define VR_SETTINGS_CARDBOARD
+#define VR_SETTINGS_FIXED_ROTATION
 
 ${MainVR}
       
