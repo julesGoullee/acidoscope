@@ -12,7 +12,6 @@
 
     <ShaderControl />
     <ShaderParams />
-
   </v-container>
 </template>
 

@@ -132,6 +132,12 @@ const ShaderParamsModule = {
       }
     },
 
+    takeScreenShot({ state }){
+
+      state.shaderEngine.downloadScreenShot();
+
+    },
+
     switchFullscreen({ state }) {
 
       if (document.fullscreenElement) {
