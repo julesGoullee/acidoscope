@@ -3,6 +3,7 @@ import * as THREE from 'three'
 
 import ShaderParams from './shaderParams';
 import GlslWrapper from './glslWrapper';
+import { download } from '../utils';
 
 class ShaderEngine {
 
@@ -13,6 +14,7 @@ class ShaderEngine {
       fragmentShader: shader.fragmentShader,
       wrapper: shader.wrapper,
       controllableParams: shader.params || [],
+      name: shader.name
     };
 
     this.shaderParams = new ShaderParams(this);
@@ -50,7 +52,9 @@ class ShaderEngine {
     const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), material );
     this.scene.add( mesh );
 
-    this.renderer = new THREE.WebGLRenderer();
+    this.renderer = new THREE.WebGLRenderer({
+      preserveDrawingBuffer: true
+    });
     this.renderer.antialias = true;
     // this.renderer.setPixelRatio( window.devicePixelRatio );
 
@@ -115,6 +119,14 @@ class ShaderEngine {
 
     this.shaderParams.updateSpecialUniforms();
     this.renderer.render( this.scene, this.camera );
+
+  }
+
+  downloadScreenShot(){
+
+    const dataUrl = this.renderer.domElement.toDataURL();
+
+    download(`${this.shader.name.replace(' ', '_')}_${new Date().toISOString()}.png`, dataUrl);
 
   }
 

@@ -34,9 +34,17 @@
           class="app-name"
           flat
         >
-          <img alt="logo" src="@/assets/logo-32.png" class="title-logo"/>
+          <img
+            alt="logo"
+            src="@/assets/logo-32.png"
+            class="title-logo"
+          >
           LoudyShaderDimension
-          <img alt="logo" src="@/assets/logo-32.png" class="title-logo flip"/>
+          <img
+            alt="logo"
+            src="@/assets/logo-32.png"
+            class="title-logo flip"
+          >
         </v-btn>
       </v-container>
     </v-flex>

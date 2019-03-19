@@ -37,6 +37,10 @@
             this.pauseShader();
             break;
           }
+          case 'KeyS': {
+            this.takeScreenShot();
+            break;
+          }
           case 'KeyF': {
             this.switchFullscreen();
             break;
@@ -87,6 +91,7 @@
         'listenLinkActions',
         'unlistenLinkActions',
         'pauseShader',
+        'takeScreenShot',
         'nextVisualisation',
       ]),
     }
