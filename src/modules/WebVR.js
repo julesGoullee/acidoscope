@@ -5,23 +5,11 @@ export default {
 
       const displays = await navigator.getVRDisplays();
 
-      return displays.length !== 0;
+      return displays;
 
     } else {
       return false;
     }
-  },
-
-  setupRenderer(renderer, options) {
-
-    renderer.vr.enabled = true;
-
-    if ( options && options.frameOfReferenceType ) {
-
-      renderer.vr.setFrameOfReferenceType( options.frameOfReferenceType );
-
-    }
-
   },
 
   createButton(renderer) {
@@ -48,47 +36,22 @@ export default {
     button.onmouseenter = function () { button.style.opacity = '1.0'; };
     button.onmouseleave = function () { button.style.opacity = '0.5'; };
 
-    function enableDevice(device) {
-
-      button.style.display = '';
-
-      button.onclick = function () {
-        device.isPresenting ? device.exitPresent() : device.requestPresent( [ { source: renderer.domElement } ] );
-      };
-
-      renderer.vr.setDevice( device );
-
-    }
     navigator.getVRDisplays().then(displays => {
 
       if(displays.length === 0) return;
 
-      enableDevice(displays[0]);
-
-    });
-
-    window.addEventListener( 'vrdisplayconnect', function ( event ) {
-
-      enableDevice( event.display );
-
-    }, false );
-
-    window.addEventListener( 'vrdisplaydisconnect', function () {
+      const device = displays[0];
+      button.onclick = function () {
+        device.isPresenting ? device.exitPresent() : device.requestPresent( [ { source: renderer.domElement } ] );
+      };
 
       button.style.display = '';
-      renderer.vr.setDevice( null );
 
-    }, false );
+    });
 
     window.addEventListener( 'vrdisplaypresentchange', function ( event ) {
 
       button.textContent = event.display.isPresenting ? 'EXIT VR' : 'ENTER VR';
-
-    }, false );
-
-    window.addEventListener( 'vrdisplayactivate', function ( event ) {
-
-      event.display.requestPresent( [ { source: renderer.domElement } ] );
 
     }, false );
 

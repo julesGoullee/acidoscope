@@ -40,7 +40,7 @@ ${MainVR}
 
   }
 
-  getFragmentShader() {
+  getFragmentShader(renderType = 'image') {
 
     let fragmentShader = '';
 
@@ -55,7 +55,7 @@ ${MainVR}
 ${this.shaderEngine.shader.fragmentShader}
 
 `;
-    fragmentShader += this.getWrapper(this.shaderEngine.shader.wrapper);
+    fragmentShader += this.getWrapper(renderType);
 
     return fragmentShader;
 

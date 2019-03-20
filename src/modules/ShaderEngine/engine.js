@@ -13,7 +13,6 @@ class ShaderEngine {
     this.shader = {
       vertexShader: shader.vertexShader,
       fragmentShader: shader.fragmentShader,
-      wrapper: shader.wrapper,
       controllableParams: shader.params || [],
       name: shader.name
     };
@@ -49,13 +48,16 @@ class ShaderEngine {
 
     material.extensions.derivatives = true;
 
-    const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), material );
-    this.scene.add( mesh );
+    this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), material );
+    this.scene.add( this.mesh );
 
     this.renderer = new THREE.WebGLRenderer({
       preserveDrawingBuffer: true
     });
     this.renderer.antialias = true;
+    this.renderer.vr.enabled = true;
+    this.renderer.vr.setFrameOfReferenceType( 'eye-level' ); // 'eye-level' , 'head-model' ???
+    this.renderer.vr.setDevice( null );
     // this.renderer.setPixelRatio( window.devicePixelRatio );
 
     const width = this.container.innerWidth;
@@ -69,13 +71,7 @@ class ShaderEngine {
     window.addEventListener('resize', () => this.onWindowResize());
     window.addEventListener("fullscreenchange", () => this.onWindowResize());
 
-    WebVR.isVRCompatible().then(compatible => {
-      if(compatible) {
-        WebVR.setupRenderer(this.renderer);
-        const VRButton = WebVR.createButton( this.renderer );
-        this.container.appendChild( VRButton );
-      }
-    }).catch(console.error);
+    this.handleVR();
 
   }
 
@@ -135,6 +131,37 @@ class ShaderEngine {
 
     download(`${this.shader.name.replace(' ', '_')}_${new Date().toISOString()}.png`, dataUrl);
 
+  }
+
+  handleVR() {
+
+    WebVR.isVRCompatible().then(devices => {
+
+      if(devices) {
+
+        this.renderer.vr.setDevice( devices[0] );
+
+        window.addEventListener( 'vrdisplaypresentchange', event => {
+
+          /* TODO
+          const isVR = event.display.isPresenting;
+          const shaderWrapper = isVR ? 'vr' : 'image';
+          this.mesh.material = new THREE.ShaderMaterial({
+            uniforms: this.uniforms,
+            vertexShader: this.glslWrapper.getVertexShader(),
+            fragmentShader: this.glslWrapper.getFragmentShader(shaderWrapper),
+          });*/
+
+        }, false);
+
+        const VRButton = WebVR.createButton( this.renderer );
+        this.container.appendChild( VRButton );
+
+      }
+
+    }).catch(console.error);
+
+    // todo handle device connection event
   }
 
 }
