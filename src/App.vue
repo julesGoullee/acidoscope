@@ -34,8 +34,8 @@
     },
     mounted: async function () {
 
-      await this.initMidi();
-      await this.initLink();
+      this.initMidi().catch(console.error);
+      this.initLink().catch(console.error);
 
     },
     methods: {
