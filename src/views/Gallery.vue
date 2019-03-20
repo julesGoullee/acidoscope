@@ -1,7 +1,11 @@
 <template>
-  <v-layout id="gallery-view">
+  <v-container
+    id="gallery-view"
+    style="padding-top: 0!important;"
+    :style="[$vuetify.breakpoint.xsOnly ? { 'padding': '0!important' } : '']"
+  >
     <Gallery />
-  </v-layout>
+  </v-container>
 </template>
 
 <script>

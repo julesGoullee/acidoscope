@@ -6,11 +6,11 @@
     <v-container
       grid-list-md
       justify-space-between
-      :style="[$vuetify.breakpoint.xsOnly ? { 'padding': '0px!important' } : '']"
+      :style="[$vuetify.breakpoint.xsOnly ? { 'padding': '10px 0px!important' } : '']"
     >
       <Header />
       <v-flex
-        :style="[$vuetify.breakpoint.smAndDown ? { 'padding': '10px 5px!important' } : '']"
+        :style="[$vuetify.breakpoint.xsOnly ? { 'padding': '10px 0px!important' } : '']"
       >
         <router-view />
       </v-flex>
