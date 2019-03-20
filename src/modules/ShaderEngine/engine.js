@@ -33,42 +33,37 @@ class ShaderEngine {
 
   init() {
 
-    this.camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 3 );
-    this.camera.position.z = 2;
-
-    this.scene = new THREE.Scene();
-
-    this.uniforms = this.shaderParams.createUniforms();
-
-    const shaderMaterial = new THREE.ShaderMaterial( {
-      uniforms: this.uniforms,
-      vertexShader: this.glslWrapper.getVertexShader(),
-      fragmentShader: this.glslWrapper.getFragmentShader(),
-    });
-    shaderMaterial.extensions.derivatives = true;
-    const planeGeometry = new THREE.PlaneBufferGeometry( 2, 2 );
-    const shaderMesh = new THREE.Mesh( planeGeometry, shaderMaterial );
-    this.scene.add( shaderMesh );
-
-    // 3D testing mesh
-    const basicMaterial = new THREE.MeshBasicMaterial( { color: 0xfc1100 } );
-    const cubeGeometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
-    this.cubeMesh = new THREE.Mesh( cubeGeometry, basicMaterial );
-    this.cubeMesh.position.z = 0.5;
-    this.cubeMesh.rotation.y = 0.5;
-    this.cubeMesh.rotation.z = 0.5;
-    //this.scene.add( this.cubeMesh );
-
     this.renderer = new THREE.WebGLRenderer({
       preserveDrawingBuffer: true
     });
     this.renderer.antialias = true;
-    // this.renderer.setPixelRatio( window.devicePixelRatio );
+    //this.renderer.setPixelRatio( window.devicePixelRatio );
 
-    const width = this.container.innerWidth;
-    const height = this.container.innerHeight;
-    this.uniforms.resolution.value.x = width;
-    this.uniforms.resolution.value.y = height;
+    this.camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0, 10 );
+    this.scene = new THREE.Scene();
+
+    this.uniforms = this.shaderParams.createUniforms();
+
+    const planeGeometry = new THREE.PlaneBufferGeometry( 2, 2 );
+    const shaderMaterial = this.getShaderMaterial();
+
+    this.shaderMesh = new THREE.Mesh( planeGeometry, shaderMaterial );
+    this.shaderMesh.position.z = -2;
+    this.scene.add( this.shaderMesh );
+
+    /*
+    // 3D testing mesh
+    const basicMaterial = new THREE.MeshBasicMaterial( { color: 0xfc1100 } );
+    const cubeGeometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
+    this.cubeMesh = new THREE.Mesh( cubeGeometry, basicMaterial );
+    this.cubeMesh.position.z = -1;
+    this.cubeMesh.rotation.y = 0.3;
+    this.cubeMesh.rotation.z = 0.4;
+    this.scene.add( this.cubeMesh );
+    */
+
+    this.uniforms.resolution.value.x = this.container.innerWidth;
+    this.uniforms.resolution.value.y = this.container.innerHeight;
 
     this.container.appendChild( this.renderer.domElement );
 
@@ -139,6 +134,22 @@ class ShaderEngine {
 
   }
 
+  getShaderMaterial() {
+
+    const vrDevice = this.renderer.vr.getDevice();
+    const shaderWrapper = (vrDevice && vrDevice.isPresenting) ? 'vr' : 'image';
+
+    const shaderMaterial = new THREE.ShaderMaterial({
+      uniforms: this.uniforms,
+      vertexShader: this.glslWrapper.getVertexShader(),
+      fragmentShader: this.glslWrapper.getFragmentShader(shaderWrapper),
+    });
+    shaderMaterial.extensions.derivatives = true;
+
+    return shaderMaterial;
+
+  }
+
   handleVR() {
 
     WebVR.isVRCompatible().then(devices => {
@@ -147,21 +158,24 @@ class ShaderEngine {
 
         this.renderer.vr.enabled = true;
         this.renderer.vr.setFrameOfReferenceType( 'eye-level' ); // 'eye-level' , 'head-model' ???
-        this.renderer.vr.setDevice( devices[0] );
 
-        const VRButton = WebVR.createButton( this.renderer );
+        const device = devices[0];
+
+        const enableVR = () => {
+          this.renderer.vr.setDevice(device);
+          device.requestPresent( [ { source: this.renderer.domElement } ] );
+        };
+
+        const VRButton = WebVR.createButton( enableVR );
         this.container.appendChild( VRButton );
 
-        window.addEventListener( 'vrdisplaypresentchange', event => {
+        window.addEventListener('vrdisplaypresentchange', event => {
 
-          /* TODO
           const isVR = event.display.isPresenting;
-          const shaderWrapper = isVR ? 'vr' : 'image';
-          this.mesh.material = new THREE.ShaderMaterial({
-            uniforms: this.uniforms,
-            vertexShader: this.glslWrapper.getVertexShader(),
-            fragmentShader: this.glslWrapper.getFragmentShader(shaderWrapper),
-          });*/
+          if(!isVR) {
+            this.renderer.vr.setDevice(null);
+          }
+          this.shaderMesh.material = this.getShaderMaterial();
 
         }, false);
 
@@ -169,7 +183,8 @@ class ShaderEngine {
 
     }).catch(console.error);
 
-    // todo handle device connection event
+    // TODO handle device connection event
+
   }
 
 }

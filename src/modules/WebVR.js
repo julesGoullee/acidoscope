@@ -12,7 +12,7 @@ export default {
     }
   },
 
-  createButton(renderer) {
+  createButton(enableVR) {
 
     const button = document.createElement( 'button' );
     button.style.display = 'none';
@@ -40,20 +40,10 @@ export default {
 
       if(displays.length === 0) return;
 
-      const device = displays[0];
-      button.onclick = function () {
-        device.isPresenting ? device.exitPresent() : device.requestPresent( [ { source: renderer.domElement } ] );
-      };
-
+      button.onclick = enableVR;
       button.style.display = '';
 
     });
-
-    window.addEventListener( 'vrdisplaypresentchange', function ( event ) {
-
-      button.textContent = event.display.isPresenting ? 'EXIT VR' : 'ENTER VR';
-
-    }, false );
 
     return button;
 

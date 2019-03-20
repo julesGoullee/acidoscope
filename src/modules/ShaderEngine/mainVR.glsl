@@ -7,7 +7,6 @@ uniform mat3 iDeviceRotationUniform;
 uniform vec3 iDevicePositionUniform;
 #endif
 
-
 #ifdef VR_SETTINGS_FULLSCREEN
     #define iLeftEyeRect vec4( 0., 0., 1., 1.)
     #define iLeftEyeDegrees vec4( -0.75, 0.422, 0.75, -0.422)
@@ -19,7 +18,6 @@ uniform vec3 iDevicePositionUniform;
     #define iRightEyeTranslation vec3( 0., 0., 0. )
     #define iRightEyeRotation vec3( 0., 0., 0. )
 #endif
-
 
 #ifdef VR_SETTINGS_DOUBLE
     #define iLeftEyeRect vec4( 0., 0., .5, 1.)
@@ -33,7 +31,6 @@ uniform vec3 iDevicePositionUniform;
     #define iRightEyeRotation vec3( 0., 0., 0. )
 #endif
 
-
 #ifdef VR_SETTINGS_CARDBOARD
     #define iLeftEyeRect vec4( 0., 0., .5, 1.)
     #define iLeftEyeDegrees vec4( -.8, 0.84, .8, -0.84)
@@ -46,7 +43,6 @@ uniform vec3 iDevicePositionUniform;
     #define iRightEyeRotation vec3( 0., 0., 0. )
 #endif
 
-
 #ifdef VR_SETTINGS_CROSS_EYE
     #define iLeftEyeRect vec4( 0.5, 0., 1., 1.)
     #define iLeftEyeDegrees vec4( -0.75, 0.422, 0.75, -0.422)
@@ -58,7 +54,6 @@ uniform vec3 iDevicePositionUniform;
     #define iRightEyeTranslation vec3( 0.063, 0., 0. )
     #define iRightEyeRotation vec3( 0., 0., 0. )
 #endif
-
 
 #ifdef VR_SETTINGS_RED_CYAN
     #define iLeftEyeRect vec4( 0., 0., 1., 1.)
@@ -94,9 +89,9 @@ void main()  {
     leftEye = eyeID > 0.;
 #endif
 
-    vec4 eyeRect        = leftEye ? iLeftEyeRect : iRightEyeRect;
-    vec3 eyeRotation    = leftEye ? iLeftEyeRotation : iRightEyeRotation;
-    vec4 eyeDegrees     = (leftEye ? iLeftEyeDegrees : iRightEyeDegrees);
+    vec4 eyeRect        = leftEye ? iLeftEyeRect        : iRightEyeRect;
+    vec3 eyeRotation    = leftEye ? iLeftEyeRotation    : iRightEyeRotation;
+    vec4 eyeDegrees     = leftEye ? iLeftEyeDegrees     : iRightEyeDegrees;
     vec3 eyeTranslation = leftEye ? iLeftEyeTranslation : iRightEyeTranslation;
 
     vec2 uv = (fragCoordScaled-eyeRect.xy)/(eyeRect.zw-eyeRect.xy);

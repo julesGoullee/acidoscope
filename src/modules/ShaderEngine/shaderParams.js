@@ -119,18 +119,32 @@ class ShaderParams {
 
   updateSpecialUniforms() {
 
-
+    // Time uniform
     const time = this.shaderEngine.currentTime / 1000.;
     this.setUniformValue('time', time);
 
+    // Phase uniform
     const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
     this.setUniformValue('phase', phase);
 
+    // Resolution uniform
     // Maybe not needed at each frames
-    const container = this.shaderEngine.container;
-    const width = container.offsetWidth * this.shaderEngine.quality;
-    const height = container.offsetHeight * this.shaderEngine.quality;
-    this.setUniformValue('resolution', { x: width, y: height });
+    const vrDevice = this.shaderEngine.renderer.vr.getDevice();
+    if(vrDevice) {
+
+      const eyeParameters = vrDevice.getEyeParameters( 'left' );
+      const renderWidth = eyeParameters.renderWidth;
+      const renderHeight = eyeParameters.renderHeight;
+      this.setUniformValue('resolution', { x: 2*renderWidth, y: renderHeight });
+
+    } else {
+
+      const container = this.shaderEngine.container;
+      const width = container.offsetWidth * this.shaderEngine.quality;
+      const height = container.offsetHeight * this.shaderEngine.quality;
+      this.setUniformValue('resolution', { x: width, y: height });
+
+    }
 
     // TODO mouse
 
