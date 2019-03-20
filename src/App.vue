@@ -63,4 +63,8 @@
   .v-sheet {
     background-color: #171A00 !important;
   }
+  a {
+    color: #b393f9;
+    text-decoration: none;
+  }
 </style>

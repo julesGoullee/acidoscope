@@ -57,8 +57,22 @@
           Code
         </h2>
         <v-card-text>
-          We're Open Source ;)
+          Made with 💜 by
+          <a
+            href="https://github.com/julesgoullee"
+            target="_blank"
+          >@julesgoullee
+            </a>
+          &amp;
+          <a
+            href="https://github.com/pakokrew"
+            target="_blank"
+          >
+            @pakokrew
+          </a>
+
           <br>
+          We're Open Source ;)
           <a
             href="https://github.com/julesgoullee/shaders-midi"
             target="_blank"
