@@ -22,7 +22,6 @@ class ShaderEngine {
 
     this.container = container;
     this.renderer = null;
-    this.uniforms = {};
 
     this.currentTime = null;
 
@@ -42,7 +41,7 @@ class ShaderEngine {
     this.camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0, 10 );
     this.scene = new THREE.Scene();
 
-    this.uniforms = this.shaderParams.createUniforms();
+    this.shaderParams.createUniforms();
 
     const planeGeometry = new THREE.PlaneBufferGeometry( 2, 2 );
     const shaderMaterial = this.getShaderMaterial();
@@ -62,8 +61,8 @@ class ShaderEngine {
     this.scene.add( this.cubeMesh );
     */
 
-    this.uniforms.resolution.value.x = this.container.innerWidth;
-    this.uniforms.resolution.value.y = this.container.innerHeight;
+    this.shaderParams.uniforms.resolution.value.x = this.container.innerWidth;
+    this.shaderParams.uniforms.resolution.value.y = this.container.innerHeight;
 
     this.container.appendChild( this.renderer.domElement );
 
@@ -140,7 +139,7 @@ class ShaderEngine {
     const shaderWrapper = (vrDevice && vrDevice.isPresenting) ? 'vr' : 'image';
 
     const shaderMaterial = new THREE.ShaderMaterial({
-      uniforms: this.uniforms,
+      uniforms: this.shaderParams.uniforms,
       vertexShader: this.glslWrapper.getVertexShader(),
       fragmentShader: this.glslWrapper.getFragmentShader(shaderWrapper),
     });

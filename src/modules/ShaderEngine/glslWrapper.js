@@ -29,6 +29,7 @@ ${MainImage}
 
 #define VR_SETTINGS_CARDBOARD
 #define VR_SETTINGS_FIXED_ROTATION
+//#define VR_SETTINGS_DEVICE_ORIENTATION
 
 ${MainVR}
       
