@@ -6,11 +6,14 @@
     <v-container
       grid-list-md
       justify-space-between
+      :style="[$vuetify.breakpoint.xsOnly ? { 'padding': '10px 0px!important' } : '']"
     >
       <Header />
-      <v-container class="view-container">
+      <v-flex
+        :style="[$vuetify.breakpoint.xsOnly ? { 'padding': '10px 0px!important' } : '']"
+      >
         <router-view />
-      </v-container>
+      </v-flex>
     </v-container>
   </v-app>
 </template>
@@ -59,8 +62,5 @@
   }
   .v-sheet {
     background-color: #171A00 !important;
-  }
-  .view-container{
-    padding-top: 50px;
   }
 </style>

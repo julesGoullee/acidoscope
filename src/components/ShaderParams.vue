@@ -10,7 +10,7 @@
       <v-flex
         v-for="param in paramsList"
         :key="param.name"
-        xs2
+        xs6 sm4 md2
       >
         <v-layout
           column

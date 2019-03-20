@@ -18,7 +18,7 @@
             <v-flex
               v-for="visualization in visualizationsArray"
               :key="visualization.id"
-              xs3
+              xs6 sm4 md3
             >
               <v-card
                 :to="`/shader/${visualization.id}`"
@@ -40,6 +40,7 @@
                       >
                         <span
                           class="headline white--text"
+                          :style="[$vuetify.breakpoint.xsOnly ? { 'font-size': '16px!important' } : '']"
                           v-text="visualization.name || ''"
                         />
                       </v-flex>
