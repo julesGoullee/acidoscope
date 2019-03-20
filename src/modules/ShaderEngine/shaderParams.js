@@ -131,8 +131,7 @@ class ShaderParams {
     const width = container.offsetWidth * this.shaderEngine.quality;
     const height = container.offsetHeight * this.shaderEngine.quality;
     this.setUniformValue('resolution', { x: width, y: height });
-
-    // TODO mouse
+    this.setUniformValue('mouse', { x: this.shaderEngine.mouse.x, y: this.shaderEngine.mouse.y });
 
   }
 
