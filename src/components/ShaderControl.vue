@@ -1,16 +1,18 @@
 <template>
-  <v-container>
+  <v-container style="padding:5px 16px">
     <v-layout
       row
       wrap
       justify-center
     >
-      <v-flex xs3>
+      <v-flex xs12 sm6 md3>
         <v-btn
           raised
           block
           color="accent"
           @click="switchFullscreen"
+          :small="$vuetify.breakpoint.xsOnly"
+          :class="{'btn-small': $vuetify.breakpoint.smAndDown}"
         >
           Fullscreen
           <v-icon
@@ -21,12 +23,14 @@
           </v-icon>
         </v-btn>
       </v-flex>
-      <v-flex xs3>
+      <v-flex xs12 sm6 md3>
         <v-btn
           raised
           block
           :color="shaderRunning ? 'success' : 'error'"
           @click="pauseShader"
+          :small="$vuetify.breakpoint.xsOnly"
+          :class="{'btn-small': $vuetify.breakpoint.smAndDown}"
         >
           {{ shaderRunning ? 'Play' : 'Pause' }}
           <v-icon
@@ -37,11 +41,13 @@
           </v-icon>
         </v-btn>
       </v-flex>
-      <v-flex xs3>
+      <v-flex xs12 sm6 md3>
         <v-btn
           raised
           block
           @click="takeScreenShot"
+          :small="$vuetify.breakpoint.xsOnly"
+          :class="{'btn-small': $vuetify.breakpoint.smAndDown}"
         >
           Save
           <v-icon
@@ -52,7 +58,7 @@
           </v-icon>
         </v-btn>
       </v-flex>
-      <v-flex xs3>
+      <v-flex xs12 sm6 md3>
         <v-menu offset-y>
           <template v-slot:activator="{ on }">
             <v-btn
@@ -60,9 +66,11 @@
               block
               dark
               v-on="on"
+              :small="$vuetify.breakpoint.xsOnly"
+              :class="{'btn-small': $vuetify.breakpoint.smAndDown}"
             >
               {{
-                (qualities.find(q => q.value === quality) || {name: 'Custom quality'}).name
+              (qualities.find(q => q.value === quality) || {name: 'Custom quality'}).name
               }}
             </v-btn>
           </template>
@@ -96,6 +104,10 @@
 </template>
 
 <style scoped>
+  .btn-small {
+    margin-bottom: 0!important;
+    font-size: 10px;
+  }
 </style>
 
 <script>

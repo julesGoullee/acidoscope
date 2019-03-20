@@ -3,11 +3,9 @@
     row
     wrap
   >
-    <v-flex xs3>
+    <v-flex xs12 sm6 md3 v-if="$route.name === 'shader'">
       <v-container
-        justify-start
-        fill-height
-        align-center
+        :style="[$vuetify.breakpoint.smAndDown ? { 'padding': '5px!important' } : '']"
       >
         <v-btn
           to="/"
@@ -23,11 +21,10 @@
         </v-btn>
       </v-container>
     </v-flex>
-    <v-flex xs6>
+    <v-flex xs12 sm4 md6 :offset-sm4="$route.name !== 'shader'" :offset-md3="$route.name !== 'shader'">
       <v-container
-        justify-center
-        fill-height
-        align-center
+        :style="[$vuetify.breakpoint.smAndDown ? { 'padding': '0!important' } : '']"
+        text-xs-center
       >
         <v-btn
           :to="$route.name === 'about' ? '/' : '/about'"
@@ -48,7 +45,7 @@
         </v-btn>
       </v-container>
     </v-flex>
-    <v-flex xs3>
+    <v-flex xs3 class="hidden-sm-and-down">
       <Loaders />
     </v-flex>
   </v-layout>
