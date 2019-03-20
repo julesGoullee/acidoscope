@@ -1,7 +1,6 @@
 export default {
   original: 'https://www.shadertoy.com/view/wdlSD2',
   name: 'Anaglyph fractal',
-  wrapper: 'image',
   fragmentShader: require('./shader4.glsl'),
   params: [
     {

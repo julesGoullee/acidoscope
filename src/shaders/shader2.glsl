@@ -3,9 +3,9 @@
 #define pi2_inv 0.159154943091895335768883763372
 
 #define l 120
-void main(void){
+void mainImage (out vec4 fragColor, in vec2 fragCoord){
   float tt = 1. + abs(sin(phase*PI + PI/2.));
-  vec2 v = (gl_FragCoord.xy - resolution.xy/2.) / min(resolution.y,resolution.x) * 30.;
+  vec2 v = (fragCoord.xy - resolution.xy/2.) / min(resolution.y,resolution.x) * 30.;
   vec2 vv = v; vec2 vvv = v;
   float ft = time+360.1;
   float tm = ft*0.1;
@@ -69,6 +69,6 @@ void main(void){
   float c = ((mod(R,2.0)>1.0)?1.0-fract(R):fract(R));
   float cc = ((mod(RR,2.0)>1.0)?1.0-fract(RR):fract(RR));
   float ccc = ((mod(RRR,2.0)>1.0)?1.0-fract(RRR):fract(RRR));
-  gl_FragColor = vec4(ccc, cc, c, 1.0);
+  fragColor = vec4(ccc, cc, c, 1.0);
 
 }

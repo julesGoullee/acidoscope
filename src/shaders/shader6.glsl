@@ -156,23 +156,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
 void mainVR( out vec4 fragColor, in vec2 fragCoord, in vec3 fragRayOri, in vec3 fragRayDir )
 {
-  // copied from mainImage
-
-  vec2 p = (-resolution.xy + 2.0*fragCoord.xy)/ resolution.y;
-
-  vec2 m = vec2(0.0, -0.5);// mouse.xy/resolution.xy;
-
-  // camera
-  vec3 ro = 4.0*normalize(vec3(sin(3.0*m.x), 0.4*m.y, cos(3.0*m.x)));
-  vec3 ta = vec3(-3.0*cos(time*0.1), -1.0, 0.0);
-  mat3 ca = setCamera( ro, ta, 0.0 );
-  // ray
-  vec3 rd = ca * normalize( vec3(p.xy,2.0));
-
-  ro.z -= time;
-
-  fragColor = trace_spheres( ro + vec3(0.5, 1.5, 0.0), rd );
-  // TODO inject fragRayOri, fragRayDir
-  // initial mainVR
-  //fragColor = trace_spheres( fragRayOri, fragRayDir );
+  fragColor = trace_spheres( fragRayOri, fragRayDir );
 }
