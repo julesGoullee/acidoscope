@@ -3,7 +3,7 @@ import * as THREE from 'three'
 
 import ShaderParams from './shaderParams';
 import GlslWrapper from './glslWrapper';
-import { download } from '../utils';
+import { download, mobileCheck } from '../utils';
 
 class ShaderEngine {
 
@@ -27,7 +27,7 @@ class ShaderEngine {
     this.currentTime = null;
     this.running = false;
 
-    this.quality = 1;
+    this.quality = mobileCheck() ? 0.6: 1;
 
     this.onWindowResize = throttle(this.onWindowResize.bind(this), 200);
   }
