@@ -33,31 +33,36 @@ class ShaderEngine {
 
   init() {
 
-    this.camera = new THREE.PerspectiveCamera();
-    this.camera.position.z = 1;
+    this.camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 3 );
+    this.camera.position.z = 2;
 
     this.scene = new THREE.Scene();
 
     this.uniforms = this.shaderParams.createUniforms();
 
-    const material = new THREE.ShaderMaterial( {
+    const shaderMaterial = new THREE.ShaderMaterial( {
       uniforms: this.uniforms,
       vertexShader: this.glslWrapper.getVertexShader(),
       fragmentShader: this.glslWrapper.getFragmentShader(),
     });
+    shaderMaterial.extensions.derivatives = true;
+    const planeGeometry = new THREE.PlaneBufferGeometry( 2, 2 );
+    const shaderMesh = new THREE.Mesh( planeGeometry, shaderMaterial );
+    this.scene.add( shaderMesh );
 
-    material.extensions.derivatives = true;
-
-    this.mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), material );
-    this.scene.add( this.mesh );
+    // 3D testing mesh
+    const basicMaterial = new THREE.MeshBasicMaterial( { color: 0xfc1100 } );
+    const cubeGeometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
+    this.cubeMesh = new THREE.Mesh( cubeGeometry, basicMaterial );
+    this.cubeMesh.position.z = 0.5;
+    this.cubeMesh.rotation.y = 0.5;
+    this.cubeMesh.rotation.z = 0.5;
+    //this.scene.add( this.cubeMesh );
 
     this.renderer = new THREE.WebGLRenderer({
       preserveDrawingBuffer: true
     });
     this.renderer.antialias = true;
-    this.renderer.vr.enabled = true;
-    this.renderer.vr.setFrameOfReferenceType( 'eye-level' ); // 'eye-level' , 'head-model' ???
-    this.renderer.vr.setDevice( null );
     // this.renderer.setPixelRatio( window.devicePixelRatio );
 
     const width = this.container.innerWidth;
@@ -77,6 +82,7 @@ class ShaderEngine {
 
   start() {
 
+    // TODO use https://threejs.org/docs/index.html#api/en/core/Clock
     this.lastTime = Date.now();
     if(this.currentTime === null) this.currentTime = 0;
 
@@ -139,7 +145,12 @@ class ShaderEngine {
 
       if(devices) {
 
+        this.renderer.vr.enabled = true;
+        this.renderer.vr.setFrameOfReferenceType( 'eye-level' ); // 'eye-level' , 'head-model' ???
         this.renderer.vr.setDevice( devices[0] );
+
+        const VRButton = WebVR.createButton( this.renderer );
+        this.container.appendChild( VRButton );
 
         window.addEventListener( 'vrdisplaypresentchange', event => {
 
@@ -153,9 +164,6 @@ class ShaderEngine {
           });*/
 
         }, false);
-
-        const VRButton = WebVR.createButton( this.renderer );
-        this.container.appendChild( VRButton );
 
       }
 
