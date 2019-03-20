@@ -1,5 +1,6 @@
 import { throttle } from 'lodash';
 import * as THREE from 'three'
+import WebVR from '../../modules/WebVR';
 
 import ShaderParams from './shaderParams';
 import GlslWrapper from './glslWrapper';
@@ -25,7 +26,6 @@ class ShaderEngine {
     this.uniforms = {};
 
     this.currentTime = null;
-    this.running = false;
 
     this.quality = 1;
 
@@ -64,28 +64,35 @@ class ShaderEngine {
     this.uniforms.resolution.value.y = height;
 
     this.container.appendChild( this.renderer.domElement );
+
     this.onWindowResize();
     window.addEventListener('resize', () => this.onWindowResize());
     window.addEventListener("fullscreenchange", () => this.onWindowResize());
 
+    WebVR.isVRCompatible().then(compatible => {
+      if(compatible) {
+        WebVR.setupRenderer(this.renderer);
+        const VRButton = WebVR.createButton( this.renderer );
+        this.container.appendChild( VRButton );
+      }
+    }).catch(console.error);
+
   }
 
   start() {
-    this.running = true;
 
     this.lastTime = Date.now();
     if(this.currentTime === null) this.currentTime = 0;
 
-    this.animate();
+    this.renderer.setAnimationLoop(this.animate.bind(this));
+
   }
 
   stop() {
-    this.running = false;
+    this.renderer.setAnimationLoop(null);
   }
 
   animate() {
-
-    this.running && requestAnimationFrame( this.animate.bind(this) );
 
     const speed = this.shaderParams.getUniformValue('speed');
     const elapsed = Date.now() - this.lastTime;
@@ -93,6 +100,13 @@ class ShaderEngine {
     this.lastTime = Date.now();
 
     this.render();
+
+  }
+
+  render() {
+
+    this.shaderParams.updateSpecialUniforms();
+    this.renderer.render( this.scene, this.camera );
 
   }
 
@@ -113,13 +127,6 @@ class ShaderEngine {
   setQuality(quality) {
     this.quality = quality;
     this.onWindowResize();
-  }
-
-  render() {
-
-    this.shaderParams.updateSpecialUniforms();
-    this.renderer.render( this.scene, this.camera );
-
   }
 
   downloadScreenShot(){
