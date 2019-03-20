@@ -14,10 +14,3 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
   vec2 p = ( fragCoord.xy / resolution.xy );
   fragColor = vec4(p.x, 1.-p.x, p.y, 1.0);
 }
-
-
-void mainVR( out vec4 fragColor, in vec2 fragCoord, in vec3 fragRayOri, in vec3 fragRayDir )
-{
-  mainImage(fragColor, fragCoord);
-
-}

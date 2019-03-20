@@ -178,7 +178,7 @@ class ShaderParams {
       const iDeviceRotationUniform = new THREE.Matrix3();
       iDeviceRotationUniform.setFromMatrix4(rotationMatrix);
 
-      //console.log(iDevicePositionUniform, deviceOrientation, euler, rotationMatrix, iDeviceRotationUniform);
+      //console.log(deviceOrientation, iDeviceRotationUniform);
 
       this.setUniformValue('iDevicePositionUniform', iDevicePositionUniform);
       this.setUniformValue('iDeviceRotationUniform', iDeviceRotationUniform);
