@@ -20,7 +20,17 @@
         </v-layout>
         <v-divider light></v-divider>
         <v-card-actions class="pa-3">
-          <a :href="selectedVisualization.original" target="_blank">Original shader</a>
+          <v-btn
+            :to="selectedVisualization.original"
+          >
+            <v-icon
+              left
+              dark
+            >
+              open_in_new
+            </v-icon>
+            Original shader
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
