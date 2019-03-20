@@ -156,7 +156,6 @@ class ShaderParams {
 
     // Resolution uniform
     // Maybe not needed at each frames
-
     const vrDevice = this.shaderEngine.renderer.vr.getDevice();
     if(vrDevice) {
 
@@ -192,7 +191,7 @@ class ShaderParams {
       const resolution = new THREE.Vector2(width, height);
       this.setUniformValue('resolution', resolution);
       this.setUniformValue('mouse', { x: this.shaderEngine.mouse.x, y: this.shaderEngine.mouse.y });
-      
+
     }
 
   }

@@ -23,7 +23,6 @@ class ShaderEngine {
     this.container = container;
     this.renderer = null;
     this.mouse = { x: 0. , y: 0. };
-    this.uniforms = {};
 
     this.currentTime = null;
 
