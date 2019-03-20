@@ -54,10 +54,11 @@ float geartile(vec2 domain, float phase){
   gear(domain, -phase, vec2(0.34275 ,0.25)) +
   gear(domain, phase, vec2(0.45,0.75));
 }
-void main(void)
+
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
   // domain map
-  vec2 uv = gl_FragCoord.xy / resolution.xy;
+  vec2 uv = fragCoord.xy / resolution.xy;
 
   // aspect-ratio correction
   vec2 aspect = vec2(1., resolution.y/resolution.x);
@@ -88,13 +89,13 @@ void main(void)
   //float grid = border((uv_spiral - 0.5)*1., 0.2);
   float grid = geartile(uv_bipolar, -phaseS*1.);
 
-  gl_FragColor = vec4(uv, 0., 1.0);
+  fragColor = vec4(uv, 0., 1.0);
 
-  //gl_FragColor *= mix( vec4(0,0,1,0), vec4(0), fract(uv_bipolar.y ));
-  //gl_FragColor += mix(gl_FragColor, vec4(0.067*abs(uv_spiral.x+uv_spiral.y),0.25,0.125,0.05), grid);
-  //gl_FragColor -= mix(gl_FragColor, vec4(0.3), circle);
-  gl_FragColor -= mod(vec4(1.0), circle);
-  //gl_FragColor /= mix(gl_FragColor, vec4(0.25), circle_outline);
-  gl_FragColor /= mod(vec4(1.0), circle_outline)-0.5;
-  gl_FragColor = vec4(gl_FragColor.xyz, 1.0);
+  //fragColor *= mix( vec4(0,0,1,0), vec4(0), fract(uv_bipolar.y ));
+  //fragColor += mix(fragColor, vec4(0.067*abs(uv_spiral.x+uv_spiral.y),0.25,0.125,0.05), grid);
+  //fragColor -= mix(fragColor, vec4(0.3), circle);
+  fragColor -= mod(vec4(1.0), circle);
+  //fragColor /= mix(fragColor, vec4(0.25), circle_outline);
+  fragColor /= mod(vec4(1.0), circle_outline)-0.5;
+  fragColor = vec4(fragColor.xyz, 1.0);
 }

@@ -5,8 +5,8 @@ float x = 0.0;
 vec2 u;
 vec2 c;
 
-void main (void) {
-  vec2 v = (countUniform*gl_FragCoord.xy-resolution) /max(resolution.x,resolution.y);
+void mainImage (out vec4 fragColor, in vec2 fragCoord) {
+  vec2 v = (countUniform*fragCoord.xy-resolution) /max(resolution.x,resolution.y);
   float tt = 1. + abs(sin(phase*PI + PI/2.));
 
   for(int i=1;i<5;i++)
@@ -22,5 +22,5 @@ void main (void) {
 
   }
   c = vec2(x , 0.4);
-  gl_FragColor = vec4(c,colorUniform,1.0)*1.4;
+  fragColor = vec4(c,colorUniform,1.0)*1.4;
 }

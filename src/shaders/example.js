@@ -7,7 +7,6 @@
  * [string]       original:             Url of the original shader
  * glsl           fragmentShader:       Full code of fragment shader
  * [glsl]         vertexShader:         Full code of vertex shader. Optional, a simple one can be loaded.
- * [string]       wrapper               Type of wrapper ['image', 'vr']. If not set, the fragment need to have a main function. If set, the shader need to declare mainImage or mainVR functions
  *
  * array<object>  params:               Shader parameters to be passed as uniforms
  * string         params.name:          Name of the uniform
