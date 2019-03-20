@@ -19,9 +19,10 @@
   .shader-view{
   }
   .shader-container {
-    height: 400px;
+    height: 60vh;
     z-index: 0;
     position: relative;
+    max-height: 520px;
   }
 </style>
 
