@@ -1,5 +1,6 @@
 import { throttle } from 'lodash';
 import * as THREE from 'three'
+import WebVR from '../../modules/WebVR';
 
 import ShaderParams from './shaderParams';
 import GlslWrapper from './glslWrapper';
@@ -12,7 +13,6 @@ class ShaderEngine {
     this.shader = {
       vertexShader: shader.vertexShader,
       fragmentShader: shader.fragmentShader,
-      wrapper: shader.wrapper,
       controllableParams: shader.params || [],
       name: shader.name
     };
@@ -22,10 +22,8 @@ class ShaderEngine {
 
     this.container = container;
     this.renderer = null;
-    this.uniforms = {};
 
     this.currentTime = null;
-    this.running = false;
 
     this.quality = mobileCheck() ? 0.6: 1;
 
@@ -34,58 +32,63 @@ class ShaderEngine {
 
   init() {
 
-    this.camera = new THREE.PerspectiveCamera();
-    this.camera.position.z = 1;
-
-    this.scene = new THREE.Scene();
-
-    this.uniforms = this.shaderParams.createUniforms();
-
-    const material = new THREE.ShaderMaterial( {
-      uniforms: this.uniforms,
-      vertexShader: this.glslWrapper.getVertexShader(),
-      fragmentShader: this.glslWrapper.getFragmentShader(),
-    });
-
-    material.extensions.derivatives = true;
-
-    const mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2 ), material );
-    this.scene.add( mesh );
-
     this.renderer = new THREE.WebGLRenderer({
       preserveDrawingBuffer: true
     });
     this.renderer.antialias = true;
-    // this.renderer.setPixelRatio( window.devicePixelRatio );
+    //this.renderer.setPixelRatio( window.devicePixelRatio );
 
-    const width = this.container.innerWidth;
-    const height = this.container.innerHeight;
-    this.uniforms.resolution.value.x = width;
-    this.uniforms.resolution.value.y = height;
+    this.camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0, 10 );
+    this.scene = new THREE.Scene();
+
+    this.shaderParams.createUniforms();
+
+    const planeGeometry = new THREE.PlaneBufferGeometry( 2, 2 );
+    const shaderMaterial = this.getShaderMaterial();
+
+    this.shaderMesh = new THREE.Mesh( planeGeometry, shaderMaterial );
+    this.shaderMesh.position.z = -2;
+    this.scene.add( this.shaderMesh );
+
+    /*
+    // 3D testing mesh
+    const basicMaterial = new THREE.MeshBasicMaterial( { color: 0xfc1100 } );
+    const cubeGeometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
+    this.cubeMesh = new THREE.Mesh( cubeGeometry, basicMaterial );
+    this.cubeMesh.position.z = -1;
+    this.cubeMesh.rotation.y = 0.3;
+    this.cubeMesh.rotation.z = 0.4;
+    this.scene.add( this.cubeMesh );
+    */
+
+    this.shaderParams.uniforms.resolution.value.x = this.container.innerWidth;
+    this.shaderParams.uniforms.resolution.value.y = this.container.innerHeight;
 
     this.container.appendChild( this.renderer.domElement );
+
     this.onWindowResize();
     window.addEventListener('resize', () => this.onWindowResize());
     window.addEventListener("fullscreenchange", () => this.onWindowResize());
 
+    this.handleVR();
+
   }
 
   start() {
-    this.running = true;
 
+    // TODO use https://threejs.org/docs/index.html#api/en/core/Clock
     this.lastTime = Date.now();
     if(this.currentTime === null) this.currentTime = 0;
 
-    this.animate();
+    this.renderer.setAnimationLoop(this.animate.bind(this));
+
   }
 
   stop() {
-    this.running = false;
+    this.renderer.setAnimationLoop(null);
   }
 
   animate() {
-
-    this.running && requestAnimationFrame( this.animate.bind(this) );
 
     const speed = this.shaderParams.getUniformValue('speed');
     const elapsed = Date.now() - this.lastTime;
@@ -93,6 +96,13 @@ class ShaderEngine {
     this.lastTime = Date.now();
 
     this.render();
+
+  }
+
+  render() {
+
+    this.shaderParams.updateSpecialUniforms();
+    this.renderer.render( this.scene, this.camera );
 
   }
 
@@ -115,18 +125,64 @@ class ShaderEngine {
     this.onWindowResize();
   }
 
-  render() {
-
-    this.shaderParams.updateSpecialUniforms();
-    this.renderer.render( this.scene, this.camera );
-
-  }
-
   downloadScreenShot(){
 
     const dataUrl = this.renderer.domElement.toDataURL();
 
     download(`${this.shader.name.replace(' ', '_')}_${new Date().toISOString()}.png`, dataUrl);
+
+  }
+
+  getShaderMaterial() {
+
+    const vrDevice = this.renderer.vr.getDevice();
+    const shaderWrapper = (vrDevice && vrDevice.isPresenting) ? 'vr' : 'image';
+
+    const shaderMaterial = new THREE.ShaderMaterial({
+      uniforms: this.shaderParams.uniforms,
+      vertexShader: this.glslWrapper.getVertexShader(),
+      fragmentShader: this.glslWrapper.getFragmentShader(shaderWrapper),
+    });
+    shaderMaterial.extensions.derivatives = true;
+
+    return shaderMaterial;
+
+  }
+
+  handleVR() {
+
+    WebVR.isVRCompatible().then(devices => {
+
+      if(devices) {
+
+        this.renderer.vr.enabled = true;
+        this.renderer.vr.setFrameOfReferenceType( 'eye-level' ); // 'eye-level' , 'head-model' ???
+
+        const device = devices[0];
+
+        const enableVR = () => {
+          this.renderer.vr.setDevice(device);
+          device.requestPresent( [ { source: this.renderer.domElement } ] );
+        };
+
+        const VRButton = WebVR.createButton( enableVR );
+        this.container.appendChild( VRButton );
+
+        window.addEventListener('vrdisplaypresentchange', event => {
+
+          const isVR = event.display.isPresenting;
+          if(!isVR) {
+            this.renderer.vr.setDevice(null);
+          }
+          this.shaderMesh.material = this.getShaderMaterial();
+
+        }, false);
+
+      }
+
+    }).catch(console.error);
+
+    // TODO handle device connection event
 
   }
 

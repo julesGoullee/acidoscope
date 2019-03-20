@@ -26,6 +26,16 @@ const defaultParams = [
     auto: true,
   },
   {
+    name: 'iDevicePositionUniform',
+    type: 'v3',
+    auto: true,
+  },
+  {
+    name: 'iDeviceRotationUniform',
+    type: 'm3',
+    auto: true,
+  },
+  {
     name: 'speed',
     type: 'f',
     defaultValue: 1.0,
@@ -50,7 +60,7 @@ class ShaderParams {
         {}
       );
 
-    this.uniforms = null;
+    this.uniforms = {};
 
     this.beatData = {
       beatStartTime: 0,
@@ -58,6 +68,8 @@ class ShaderParams {
       bpm: 60,
       beat: 0,
     };
+
+    this.frameData = (typeof window !== 'undefined' && 'VRFrameData' in window) ? new window.VRFrameData() : null;
 
   }
 
@@ -67,21 +79,36 @@ class ShaderParams {
         return defaultValue || 0.;
       }
       case 'v2': {
+        const uniform = new THREE.Vector2();
         if(defaultValue && (!Array.isArray(defaultValue) || defaultValue.length !== 2)) {
           throw new Error(`Invalid v2 uniform default values ${defaultValue}`);
         }
-        const x = defaultValue ? defaultValue[0] : 0.;
-        const y = defaultValue ? defaultValue[1] : 0.;
-        return new THREE.Vector2(x, y);
+        defaultValue && uniform.fromArray(defaultValue);
+        return uniform;
       }
       case 'v3': {
+        const uniform = new THREE.Vector3();
         if(defaultValue && (!Array.isArray(defaultValue) || defaultValue.length !== 3)) {
-          throw new Error(`Invalid v3 uniform default values ${defaultValue}`);
+          throw new Error(`Invalid v2 uniform default values ${defaultValue}`);
         }
-        const x = defaultValue ? defaultValue[0] : 0.;
-        const y = defaultValue ? defaultValue[1] : 0.;
-        const z = defaultValue ? defaultValue[2] : 0.;
-        return new THREE.Vector3(x, y, z);
+        defaultValue && uniform.fromArray(defaultValue);
+        return uniform;
+      }
+      case 'm3': {
+        const uniform = new THREE.Matrix3();
+        if(defaultValue && (!Array.isArray(defaultValue) || defaultValue.length !== 3*3)) {
+          throw new Error(`Invalid v2 uniform default values ${defaultValue}`);
+        }
+        defaultValue && uniform.fromArray(defaultValue);
+        return uniform;
+      }
+      case 'm4': {
+        const uniform = new THREE.Matrix4();
+        if(defaultValue && (!Array.isArray(defaultValue) || defaultValue.length !== 4*4)) {
+          throw new Error(`Invalid v2 uniform default values ${defaultValue}`);
+        }
+        defaultValue && uniform.fromArray(defaultValue);
+        return uniform;
       }
       default: {
         throw new Error(`Creating unknown uniform type ${type}`);
@@ -119,18 +146,52 @@ class ShaderParams {
 
   updateSpecialUniforms() {
 
-
+    // Time uniform
     const time = this.shaderEngine.currentTime / 1000.;
     this.setUniformValue('time', time);
 
+    // Phase uniform
     const phase = (Date.now() - this.beatData.beatStartTime) / 1000 * this.beatData.bps;
     this.setUniformValue('phase', phase);
 
+    // Resolution uniform
     // Maybe not needed at each frames
-    const container = this.shaderEngine.container;
-    const width = container.offsetWidth * this.shaderEngine.quality;
-    const height = container.offsetHeight * this.shaderEngine.quality;
-    this.setUniformValue('resolution', { x: width, y: height });
+    const vrDevice = this.shaderEngine.renderer.vr.getDevice();
+    if(vrDevice) {
+
+      const eyeParameters = vrDevice.getEyeParameters( 'left' );
+      const renderWidth = eyeParameters.renderWidth;
+      const renderHeight = eyeParameters.renderHeight;
+      const resolution = new THREE.Vector2(2*renderWidth, renderHeight);
+      this.setUniformValue('resolution', resolution);
+
+      vrDevice.getFrameData( this.frameData );
+      const curFramePose = this.frameData.pose;
+
+      const iDevicePositionUniform = new THREE.Vector3();
+      iDevicePositionUniform.fromArray(curFramePose.position || [0.,0.,0.]);
+
+      const deviceOrientation = curFramePose.orientation;
+      const euler = new THREE.Euler(deviceOrientation[0], deviceOrientation[1], deviceOrientation[2]);
+      const rotationMatrix = new THREE.Matrix4();
+      rotationMatrix.makeRotationFromEuler(euler);
+      const iDeviceRotationUniform = new THREE.Matrix3();
+      iDeviceRotationUniform.setFromMatrix4(rotationMatrix);
+
+      //console.log(deviceOrientation, iDeviceRotationUniform);
+
+      this.setUniformValue('iDevicePositionUniform', iDevicePositionUniform);
+      this.setUniformValue('iDeviceRotationUniform', iDeviceRotationUniform);
+
+    } else {
+
+      const container = this.shaderEngine.container;
+      const width = container.offsetWidth * this.shaderEngine.quality;
+      const height = container.offsetHeight * this.shaderEngine.quality;
+      const resolution = new THREE.Vector2(width, height);
+      this.setUniformValue('resolution', resolution);
+
+    }
 
     // TODO mouse
 
@@ -145,42 +206,40 @@ class ShaderParams {
   setUniformValue(name, value) {
 
     const initialParam = this.initialParams[name];
+    const uniform = this.uniforms[name];
 
+    // TODO use VectorX functions to set and clamp https://threejs.org/docs/index.html#api/en/math/Vector2
     switch(initialParam.type) {
       case 'i':
       case 'f': {
-        this.uniforms[name].value = value;
+        uniform.value = value;
 
         if(initialParam.range) {
-          if(this.uniforms[name].value < initialParam.range[0]) {
-            this.uniforms[name].value = initialParam.range[0];
-          } else if(this.uniforms[name].value > initialParam.range[1]) {
-            this.uniforms[name].value = initialParam.range[1];
+          if(uniform.value < initialParam.range[0]) {
+            uniform.value = initialParam.range[0];
+          } else if(uniform.value > initialParam.range[1]) {
+            uniform.value = initialParam.range[1];
           }
         }
 
         break;
       }
       case 'v2': {
-        // TODO handle range
-        if(value.x !== undefined) {
-          this.uniforms[name].value.x = value.x;
-        }
-        if(value.y !== undefined) {
-          this.uniforms[name].value.y = value.y;
+        uniform.value.copy(value);
+        if(initialParam.range) {
+          uniform.clamp(initialParam.range[0], initialParam.range[1])
         }
         break;
       }
       case 'v3': {
-        if(value.x !== undefined) {
-          this.uniforms[name].value.x = value.x;
+        uniform.value.copy(value);
+        if(initialParam.range) {
+          uniform.clamp(initialParam.range[0], initialParam.range[1])
         }
-        if(value.y !== undefined) {
-          this.uniforms[name].value.y = value.y;
-        }
-        if(value.z !== undefined) {
-          this.uniforms[name].value.z = value.z;
-        }
+        break;
+      }
+      case 'm3': {
+        uniform.value.copy(value);
         break;
       }
       default: {

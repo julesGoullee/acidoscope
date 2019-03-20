@@ -1,6 +1,6 @@
 import DefaultVertex from './defaultVertex.glsl';
-import MainImage from './mainImage.glsl';
-import MainVR from './mainVR.glsl';
+import ImageWrapper from './mainImage.glsl';
+import VRWrapper from './mainVR.glsl';
 import Defines from './defines.glsl';
 import Uniforms from './uniforms.glsl';
 
@@ -10,36 +10,7 @@ class GlslWrapper {
     this.shaderEngine = shaderEngine;
   }
 
-  getWrapper(type) {
-
-    switch(type) {
-      case 'image': {
-        return `
-      
-// main image function
-
-${MainImage}
-      
-`;
-      }
-      case 'vr': {
-        return `
-      
-// main VR function
-
-# define VR_SETTINGS_CARDBOARD
-
-${MainVR}
-      
-`;
-      }
-      default:
-        return '';
-    }
-
-  }
-
-  getFragmentShader() {
+  getFragmentShader(renderType = 'image') {
 
     let fragmentShader = '';
 
@@ -54,8 +25,45 @@ ${MainVR}
 ${this.shaderEngine.shader.fragmentShader}
 
 `;
-    fragmentShader += this.getWrapper(this.shaderEngine.shader.wrapper);
+    if(!this.shaderEngine.shader.fragmentShader.includes('main(')) {
 
+      if(!this.shaderEngine.shader.fragmentShader.includes('mainVR(')) {
+
+        fragmentShader += `
+      
+void mainVR( out vec4 fragColor, in vec2 fragCoord, in vec3 fragRayOri, in vec3 fragRayDir )
+{
+
+  mainImage(fragColor, fragCoord);
+}
+
+`;
+      }
+
+      if(renderType === 'image') {
+        fragmentShader += `
+      
+// main image function
+
+${ImageWrapper}
+
+`;
+      }
+      if(renderType === 'vr') {
+        fragmentShader += `
+
+// main VR function
+
+#define VR_SETTINGS_CARDBOARD
+//#define VR_SETTINGS_FIXED_ROTATION
+#define VR_SETTINGS_DEVICE_ORIENTATION
+
+${VRWrapper}
+
+`;
+      }
+
+    }
     return fragmentShader;
 
   }
