@@ -31,8 +31,17 @@ const GalleryModule = {
 
       if(Object.keys(state.visualizations).length === 0){
 
-        commit('setVisualisations', shaders );
-
+        commit('setVisualisations',
+          Object.keys(shaders).reduce((acc, shaderId) =>
+              ({
+                ...acc,
+                [shaderId]: {
+                  ...shaders[shaderId],
+                  id: shaderId,
+                }
+              })
+            , {}
+          ));
       }
 
     },
@@ -74,7 +83,7 @@ const GalleryModule = {
 
   getters: {
 
-    visualizationsArray: state => Object.keys(state.visualizations).reduce((acc, vizId) => acc.concat({...state.visualizations[vizId], id: vizId}), []),
+    visualizationsArray: state => Object.keys(state.visualizations).reduce((acc, vizId) => acc.concat(state.visualizations[vizId]), []),
     selectedVisualization: state => state.selectedVisualizationId ? state.visualizations[state.selectedVisualizationId] : null,
 
   },

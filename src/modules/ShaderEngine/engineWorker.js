@@ -24,6 +24,7 @@ class ShaderEngineWorker {
 
     this.canvas = canvas;
     this.renderer = null;
+    this.mouse = { x: 0. , y: 0. };
 
     this.running = false;
     this.currentTime = null;
@@ -67,6 +68,7 @@ class ShaderEngineWorker {
 
     this.shaderParams.uniforms.resolution.value.x = this.width;
     this.shaderParams.uniforms.resolution.value.y = this.height;
+    document.addEventListener('mousemove', this.onMouseMove.bind(this) );
 
     this.handleVR();
 
@@ -118,6 +120,15 @@ class ShaderEngineWorker {
     this.camera.updateProjectionMatrix();
 
     this.renderer.setSize(this.width * this.quality, this.height * this.quality, false);
+
+  }
+
+  onMouseMove(event) {
+
+    if(event.target === this.renderer.domElement) {
+      this.mouse.x = event.pageX - this.container.offsetLeft;
+      this.mouse.y = event.pageY - this.container.offsetTop;
+    }
 
   }
 
