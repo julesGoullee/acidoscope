@@ -10,8 +10,8 @@ self.addEventListener('message', ({ data }) => {
 
     case 'init': {
 
-      const { shader, canvas, windowRatio, width, height, quality } = params;
-      shaderEngineWorker = new ShaderEngineWorker(shader, canvas, windowRatio, width, height, quality);
+      const { shader, canvas, windowRatio, width, height, quality, mouse } = params;
+      shaderEngineWorker = new ShaderEngineWorker(shader, canvas, windowRatio, width, height, quality, mouse);
       shaderEngineWorker.init();
       break;
 
@@ -32,8 +32,7 @@ self.addEventListener('message', ({ data }) => {
     case 'onWindowResize': {
 
       const { width, height } = params;
-      shaderEngineWorker.width = width;
-      shaderEngineWorker.height = height;
+      shaderEngineWorker.setWindowSize(width, height);
       shaderEngineWorker.onWindowResize();
       break;
     }
@@ -42,6 +41,14 @@ self.addEventListener('message', ({ data }) => {
 
       const { quality } = params;
       shaderEngineWorker.setQuality(quality);
+      break;
+
+    }
+
+    case 'onMouseMove': {
+
+      const { mouse } = params;
+      shaderEngineWorker.onMouseMove(mouse);
       break;
 
     }

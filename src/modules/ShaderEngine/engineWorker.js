@@ -7,7 +7,7 @@ import GlslWrapper from './glslWrapper';
 
 class ShaderEngineWorker {
 
-  constructor(shader, canvas, windowRatio, width, height, quality) {
+  constructor(shader, canvas, windowRatio, width, height, quality, mouse) {
 
     this.shader = {
       vertexShader: shader.vertexShader,
@@ -24,7 +24,7 @@ class ShaderEngineWorker {
 
     this.canvas = canvas;
     this.renderer = null;
-    this.mouse = { x: 0. , y: 0. };
+    this.mouse = mouse;
 
     this.running = false;
     this.currentTime = null;
@@ -68,7 +68,6 @@ class ShaderEngineWorker {
 
     this.shaderParams.uniforms.resolution.value.x = this.width;
     this.shaderParams.uniforms.resolution.value.y = this.height;
-    document.addEventListener('mousemove', this.onMouseMove.bind(this) );
 
     this.handleVR();
 
@@ -114,6 +113,13 @@ class ShaderEngineWorker {
 
   }
 
+  setWindowSize(width, height){
+
+    this.width = width;
+    this.height = height;
+
+  }
+
   onWindowResize(){
 
     this.camera.aspect = this.width / this.height;
@@ -123,12 +129,9 @@ class ShaderEngineWorker {
 
   }
 
-  onMouseMove(event) {
+  onMouseMove(mouse){
 
-    if(event.target === this.renderer.domElement) {
-      this.mouse.x = event.pageX - this.container.offsetLeft;
-      this.mouse.y = event.pageY - this.container.offsetTop;
-    }
+    this.mouse = mouse;
 
   }
 

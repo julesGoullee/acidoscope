@@ -14,7 +14,7 @@ class ShaderEngineMaster {
     this.shader = shader;
 
     this.params = []
-      .concat(this.shader.params)
+      .concat(this.shader.params || [])
       .reduce((acc, param) => ({
           ...acc,
           [param.name]: param,
@@ -30,7 +30,7 @@ class ShaderEngineMaster {
     };
 
     this.quality = mobileCheck() ? 0.6: 1;
-
+    this.mouse = { x: 0. , y: 0. };
   }
 
   init() {
@@ -49,6 +49,7 @@ class ShaderEngineMaster {
           height: this.container.clientHeight,
           windowRatio: window.innerWidth / window.innerHeight,
           quality: this.quality,
+          mouse: this.mouse
           // pixelRatio: window.devicePixelRatio,
         }
       }, [ offscreen ] );
@@ -62,6 +63,7 @@ class ShaderEngineMaster {
     this.onWindowResize();
     window.addEventListener('resize', () => this.onWindowResize());
     window.addEventListener("fullscreenchange", () => this.onWindowResize());
+    document.addEventListener('mousemove', this.onMouseMove.bind(this) );
     this.handleVR();
 
   }
@@ -94,6 +96,23 @@ class ShaderEngineMaster {
         height
       }
     });
+
+  }
+
+  onMouseMove(event) {
+
+    if(event.target === this.canvas){
+
+      this.mouse.x = event.pageX - this.container.offsetLeft;
+      this.mouse.y = event.pageY - this.container.offsetTop;
+
+      this.worker.postMessage({
+        type: 'onMouseMove',
+        params: {
+          mouse: this.mouse
+        }
+      });
+    }
 
   }
 
