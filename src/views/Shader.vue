@@ -12,6 +12,7 @@
 
     <ShaderControl />
     <ShaderParams />
+    <ShaderInfo />
   </v-container>
 </template>
 
@@ -19,9 +20,10 @@
   .shader-view{
   }
   .shader-container {
-    height: 400px;
+    height: 60vh;
     z-index: 0;
     position: relative;
+    max-height: 520px;
   }
 </style>
 
@@ -32,6 +34,7 @@
   import ShaderControl from '@/components/ShaderControl.vue'
   import ShaderRender from '@/components/ShaderRender.vue'
   import ShaderParams from '@/components/ShaderParams.vue';
+  import ShaderInfo from '@/components/ShaderInfo.vue';
   import { mapState, mapActions, mapGetters } from 'vuex';
 
   export default {
@@ -40,6 +43,7 @@
       ShaderParams,
       ShaderRender,
       ShaderControl,
+      ShaderInfo,
     },
     computed: {
       ...mapGetters([

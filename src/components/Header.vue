@@ -2,29 +2,25 @@
   <v-layout
     row
     wrap
+    justify-center
   >
-    <v-flex xs12 sm6 md3 v-if="$route.name === 'shader'">
-      <v-container
-        :style="[$vuetify.breakpoint.smAndDown ? { 'padding': '5px!important' } : '']"
-      >
+    <v-flex sm2 md3 xs12 align-self-center order-xs2 order-sm1 order-md1>
+      <v-container justify-center class="no-padding-xs" v-if="$route.name === 'shader'">
         <v-btn
           to="/"
           color="info"
+          block
         >
           <v-icon
-            left
             dark
           >
             apps
           </v-icon>
-          Gallery
         </v-btn>
       </v-container>
     </v-flex>
-    <v-flex xs12 sm4 md6 :offset-sm4="$route.name !== 'shader'" :offset-md3="$route.name !== 'shader'">
-      <v-container
-        :style="[$vuetify.breakpoint.smAndDown ? { 'padding': '0!important' } : '']"
-        text-xs-center
+    <v-flex sm8 md6 xs12 order-xs1 order-sm2 order-md2>
+      <v-container text-xs-center text-md-center
       >
         <v-btn
           :to="$route.name === 'about' ? '/' : '/about'"
@@ -45,7 +41,9 @@
         </v-btn>
       </v-container>
     </v-flex>
-    <v-flex xs3 class="hidden-sm-and-down">
+    <v-flex sm2 order-sm3 class="hidden-md-and-up hidden-xs-only">
+    </v-flex>
+    <v-flex md3 order-md3 class="hidden-sm-and-down">
       <Loaders />
     </v-flex>
   </v-layout>
@@ -71,6 +69,11 @@
     transform: scaleX(-1);
     filter: FlipH;
     -ms-filter: "FlipH";
+  }
+  @media only screen and (max-width: 600px) {
+    .no-padding-xs {
+      padding: 0;
+    }
   }
 </style>
 
