@@ -9,7 +9,7 @@
     "dll": "vue-cli-service dll",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
-    "linkproxy": "node ./electron/abletonLinkProxy",
+    "linkproxy": "node ./src/abletonLinkProxy",
     "rebuild:electron": "electron-rebuild -f -w sharp",
     "rebuild:node": "npm rebuild",
     "test:e2e": "vue-cli-service test:e2e",
