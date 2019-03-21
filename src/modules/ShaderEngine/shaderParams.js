@@ -193,7 +193,8 @@ class ShaderParams {
 
     }
 
-    // TODO mouse
+    // Mouse uniform
+    this.setUniformValue('mouse', { x: this.shaderEngine.mouse.x, y: this.shaderEngine.mouse.y });
 
   }
 

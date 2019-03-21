@@ -22,6 +22,7 @@ class ShaderEngine {
 
     this.container = container;
     this.renderer = null;
+    this.mouse = { x: 0. , y: 0. };
 
     this.currentTime = null;
 
@@ -67,8 +68,9 @@ class ShaderEngine {
     this.container.appendChild( this.renderer.domElement );
 
     this.onWindowResize();
-    window.addEventListener('resize', () => this.onWindowResize());
-    window.addEventListener("fullscreenchange", () => this.onWindowResize());
+    window.addEventListener('resize',this.onWindowResize);
+    window.addEventListener('fullscreenchange', this.onWindowResize);
+    document.addEventListener('mousemove', this.onMouseMove.bind(this) );
 
     this.handleVR();
 
@@ -117,6 +119,15 @@ class ShaderEngine {
     this.renderer.setSize(width * this.quality, height * this.quality);
     this.renderer.domElement.style.width = width + 'px';
     this.renderer.domElement.style.height = height + 'px';
+
+  }
+
+  onMouseMove(event) {
+
+    if(event.target === this.renderer.domElement) {
+      this.mouse.x = event.pageX - this.container.offsetLeft;
+      this.mouse.y = event.pageY - this.container.offsetTop;
+    }
 
   }
 
