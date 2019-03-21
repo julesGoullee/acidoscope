@@ -36,14 +36,14 @@ export default {
     button.onmouseenter = function () { button.style.opacity = '1.0'; };
     button.onmouseleave = function () { button.style.opacity = '0.5'; };
 
-    navigator.getVRDisplays().then(displays => {
+    // navigator.getVRDisplays().then(displays => {
 
-      if(displays.length === 0) return;
+      // if(displays.length === 0) return;
 
       button.onclick = enableVR;
       button.style.display = '';
 
-    });
+    // });
 
     return button;
 
