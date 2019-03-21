@@ -235,7 +235,7 @@ vec2 horseShoe(vec2 p)
 vec2 wrap(vec2 p)
 {
   float zoomFactor = 1.5-timeEffect*(sin(iTime+0.36));
-  float repeatFactor = 3.0;
+  float repeatFactor = control4;
   float radius = length(p)*zoomFactor;
   float angle = atan(p.y, p.x)*repeatFactor;
   return vec2(radius * cos(angle), radius*sin(angle));
@@ -308,10 +308,11 @@ vec2 rotate(vec2 pos, float angle)
 
 vec4 imageFunction(vec2 pos)
 {
-  float tt = 1. + abs(sin(phase*PI + PI/2.));
-  float p0 = vec2(0.4,0.0).x;
-  float p1 = vec2(0.5 * tt,0.0).x;
-  float p2 = vec2(0.6,0.0).x;
+  float tt = 0.5 * (sin(phase*PI) - 0.5);
+
+  float p0 = vec2(control1,0.0).x;
+  float p1 = vec2(control2+0.5*tt,0.0).x;
+  float p2 = vec2(control3,0.0).x;
   float p3 = vec2(0.7,0.0).x;
   float p4 = vec2(1.0,0.0).x;
 
