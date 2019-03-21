@@ -21,6 +21,22 @@
         </v-card-text>
 
         <h2 class="headline">
+          Keyboard shortcuts
+        </h2>
+        <v-card-text>
+          <p>Some actions can be triggered by pressing the keyboard:</p>
+
+          <v-layout row wrap>
+            <v-flex xs12 sm6><code>Space</code> Play/Pause animation</v-flex>
+            <v-flex xs12 sm6><code>C</code> Show/Hide controls in fullscreen</v-flex>
+            <v-flex xs12 sm6><code>S</code> Save screenshot</v-flex>
+            <v-flex xs12 sm6><code>F</code> Switch fullscreen</v-flex>
+            <v-flex xs12 sm6><code>G</code> Go back to gallery</v-flex>
+            <v-flex xs12 sm6><code>F</code> Go to next animation</v-flex>
+          </v-layout>
+
+        </v-card-text>
+        <h2 class="headline">
           MIDI
         </h2>
         <v-card-text>
@@ -41,8 +57,22 @@
           Code
         </h2>
         <v-card-text>
-          We're Open Source ;)
+          Made with 💜 by
+          <a
+            href="https://github.com/julesgoullee"
+            target="_blank"
+          >@julesgoullee
+            </a>
+          &amp;
+          <a
+            href="https://github.com/pakokrew"
+            target="_blank"
+          >
+            @pakokrew
+          </a>
+
           <br>
+          We're Open Source ;)
           <a
             href="https://github.com/julesgoullee/shaders-midi"
             target="_blank"
