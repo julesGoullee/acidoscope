@@ -139,7 +139,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
   vec2 p = (-resolution.xy + 2.0*fragCoord.xy)/ resolution.y;
 
-  vec2 m = vec2(0.0, -0.5);// mouse.xy/resolution.xy;
+  vec2 m = mouse.xy/resolution.xy;
   float t = 1. + abs(sin(phase*PI + PI/2.));
 
   // camera
@@ -156,5 +156,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
 void mainVR( out vec4 fragColor, in vec2 fragCoord, in vec3 fragRayOri, in vec3 fragRayDir )
 {
-  fragColor = trace_spheres( fragRayOri, fragRayDir );
+  vec3 ro = fragRayOri + vec3(time, 0., 0.);
+  fragColor = trace_spheres( ro, fragRayDir );
 }

@@ -124,8 +124,10 @@ class ShaderEngine {
 
   onMouseMove(event) {
 
-    this.mouse.x = event.pageX;
-    this.mouse.y = event.pageY;
+    if(event.target === this.renderer.domElement) {
+      this.mouse.x = event.pageX - this.container.offsetLeft;
+      this.mouse.y = event.pageY - this.container.offsetTop;
+    }
 
   }
 

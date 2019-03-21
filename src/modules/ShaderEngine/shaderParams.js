@@ -190,9 +190,11 @@ class ShaderParams {
       const height = container.offsetHeight * this.shaderEngine.quality;
       const resolution = new THREE.Vector2(width, height);
       this.setUniformValue('resolution', resolution);
-      this.setUniformValue('mouse', { x: this.shaderEngine.mouse.x, y: this.shaderEngine.mouse.y });
 
     }
+
+    // Mouse uniform
+    this.setUniformValue('mouse', { x: this.shaderEngine.mouse.x, y: this.shaderEngine.mouse.y });
 
   }
 
