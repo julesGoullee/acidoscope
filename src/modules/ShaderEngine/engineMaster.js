@@ -1,6 +1,7 @@
 import Worker from 'worker-loader!./offscene.worker.js';
 import { download, mobileCheck } from "../utils";
 import WebVR from "../WebVR";
+import workerHandler from './workerHandler';
 
 class ShaderEngineMaster {
 
@@ -36,29 +37,35 @@ class ShaderEngineMaster {
   init() {
 
     this.container.appendChild(this.canvas);
+    let offscreen = this.canvas;
 
     if('transferControlToOffscreen' in this.canvas){
 
-      const offscreen = this.canvas.transferControlToOffscreen();
-      this.worker.postMessage({
-        type: 'init',
-        params: {
-          canvas: offscreen,
-          shader: this.shader,
-          width: this.container.clientWidth,
-          height: this.container.clientHeight,
-          windowRatio: window.innerWidth / window.innerHeight,
-          quality: this.quality,
-          mouse: this.mouse
-          // pixelRatio: window.devicePixelRatio,
-        }
-      }, [ offscreen ] );
+      offscreen = this.canvas.transferControlToOffscreen();
 
     } else {
 
-      console.error('transferControlToOffscreen not supported');
+      console.warn('transferControlToOffscreen not supported');
+
+      this.worker = {
+        postMessage: (data) => workerHandler({ data })
+      };
 
     }
+
+    this.worker.postMessage({
+      type: 'init',
+      params: {
+        canvas: offscreen,
+        shader: this.shader,
+        width: this.container.clientWidth,
+        height: this.container.clientHeight,
+        windowRatio: window.innerWidth / window.innerHeight,
+        quality: this.quality,
+        mouse: this.mouse
+        // pixelRatio: window.devicePixelRatio,
+      }
+    }, [ offscreen ] );
 
     this.onWindowResize();
     window.addEventListener('resize', () => this.onWindowResize());

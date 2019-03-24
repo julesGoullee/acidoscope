@@ -100,7 +100,18 @@ class ShaderEngineWorker {
 
     if(this.running){
 
-      self.requestAnimationFrame(this.animate.bind(this) );
+      if(self && 'requestAnimationFrame' in self){
+
+        self.requestAnimationFrame(this.animate.bind(this) );
+
+      } else if(window && 'requestAnimationFrame' in window){
+
+        window.requestAnimationFrame(this.animate.bind(this) );
+
+      } else {
+
+        console.error('Cannot request animation frame');
+      }
 
     }
 
