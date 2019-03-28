@@ -17,7 +17,7 @@
         </h2>
 
         <v-card-text>
-          <b>Acidity</b> is a web app that allows to display interactive visualisations.
+          <b>Acidoscope</b> is a web app that allows to display interactive visualisations.
         </v-card-text>
 
         <h2 class="headline">
@@ -36,6 +36,14 @@
           </v-layout>
 
         </v-card-text>
+
+        <h2 class="headline">
+          Virtual reality
+        </h2>
+        <v-card-text>
+          You can watch the visualisation in virtual reality. Just plug your headset and a VR button will appear. We suggest using Firefox browser on desktop or Firefox Reality on autonomous devices.
+        </v-card-text>
+
         <h2 class="headline">
           MIDI
         </h2>

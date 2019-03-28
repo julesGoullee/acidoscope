@@ -21,9 +21,9 @@ export default {
     {
       name: 'control3',
       type: 'f',
-      range: [0.0, 0.5],
-      defaultValue: 0.1,
-      step: 0.001-3
+      range: [0.0, 3.],
+      defaultValue: 0.7,
+      step: 0.005
     },
     {
       name: 'control4',
