@@ -39,7 +39,7 @@ class ShaderEngineMaster {
     this.container.appendChild(this.canvas);
     let offscreen = this.canvas;
 
-    if('transferControlToOffscreen' in this.canvas){
+    if('transferControlToOffscreen' in this.canvas){ // TODO better check for firefox
 
       offscreen = this.canvas.transferControlToOffscreen();
 
