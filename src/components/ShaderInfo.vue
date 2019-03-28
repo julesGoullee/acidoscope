@@ -21,7 +21,8 @@
         <v-divider light></v-divider>
         <v-card-actions class="pa-3">
           <v-btn
-            :to="selectedVisualization.original"
+            :href="selectedVisualization.original"
+            target="_blank"
           >
             <v-icon
               left
