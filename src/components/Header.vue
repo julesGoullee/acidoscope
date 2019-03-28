@@ -30,13 +30,13 @@
           <img
             alt="logo"
             src="@/assets/logo-32.png"
-            class="title-logo"
+            class="title-logo hidden-xs-only"
           >
-          Acidity
+          Acidoscope
           <img
             alt="logo"
             src="@/assets/logo-32.png"
-            class="title-logo flip"
+            class="title-logo flip hidden-xs-only"
           >
         </v-btn>
       </v-container>
