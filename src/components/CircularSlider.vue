@@ -5,6 +5,7 @@
       class="slider"
       :viewBox="`0 0 ${radius * 2} ${radius * 2}`"
       @mousedown="handleMouseDown"
+      @touchstart="handleMouseDown"
     >
       <circle
         class="slider-circle"
@@ -34,6 +35,7 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import { mobileCheck } from '@/modules/utils';
 
   export default {
     name: 'CircularSlider',
@@ -91,14 +93,32 @@
       this.x = 0;
       this.y = 0;
 
-      document.addEventListener('mousemove', this.handleMouseMove);
-      document.addEventListener('mouseup', this.handleMouseUp);
+      if(mobileCheck() ){
+
+        document.addEventListener('touchmove', this.handleMouseMove);
+        document.addEventListener('touchend', this.handleMouseUp);
+
+      } else {
+
+        document.addEventListener('mousemove', this.handleMouseMove);
+        document.addEventListener('mouseup', this.handleMouseUp);
+
+      }
 
     },
     beforeDestroy: function(){
 
-      document.removeEventListener('mousemove', this.handleMouseMove);
-      document.removeEventListener('mouseup', this.handleMouseUp);
+      if(mobileCheck() ){
+
+        document.removeEventListener('touchmove', this.handleMouseMove);
+        document.removeEventListener('touchend', this.handleMouseUp);
+
+      } else {
+
+        document.removeEventListener('mousemove', this.handleMouseMove);
+        document.removeEventListener('mouseup', this.handleMouseUp);
+
+      }
 
     },
     methods: {
@@ -109,8 +129,25 @@
 
         const { left, top, width, height } = this.$refs.svg.getBoundingClientRect();
 
-        this.x = e.pageX - (left + width / 2);
-        this.y = (top + height / 2) - e.pageY;
+        const page = {
+          x: 0,
+          y: 0
+        };
+
+        if(mobileCheck() ){
+
+          page.x = e.changedTouches[0].pageX;
+          page.y = e.changedTouches[0].pageY;
+
+        } else {
+
+          page.x = e.pageX;
+          page.y = e.pageY;
+
+        }
+
+        this.x = page.x - (left + width / 2);
+        this.y = (top + height / 2) - page.y;
 
         this.isPinching = true;
 
@@ -126,8 +163,25 @@
 
           const { left, top, width, height } = this.$refs.svg.getBoundingClientRect();
 
-          const x = e.pageX - (left + width / 2);
-          const y = (top + height / 2) - e.pageY;
+          const page = {
+            x: 0,
+            y: 0
+          };
+
+          if(mobileCheck() ){
+
+            page.x = e.changedTouches[0].pageX;
+            page.y = e.changedTouches[0].pageY;
+
+          } else {
+
+            page.x = e.pageX;
+            page.y = e.pageY;
+
+          }
+
+          const x = page.x || - (left + width / 2);
+          const y = (top + height / 2) - page.y;
 
           const dx = (x - this.x) / this.velocity;
           const dy = (y - this.y) / this.velocity;
@@ -166,6 +220,7 @@
 
             if(yValue !== this.value){
 
+              console.log({ left, top, width, height,yValue, xValue, value: this.value, x: this.x, y: this.y  })
               this.onChange(this.paramName, this.denormalize(yValue) );
 
             }
