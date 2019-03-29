@@ -1,11 +1,10 @@
-# shaders-midi
+# Acidoscope
 
 > Interactive visualisations in WebGL
 
-*shaders-midi* is a web app builded to display interactive visualisations. 
+**Acidoscope** is a web app builded to display interactive visualisations. 
 
-They are rendered with WebGL by Pixel Shaders, and they can be controller by several inputs, such as MIDI controllers or accelerometers.
-
+They are rendered with WebGL by Pixel Shaders, and they can be controlled by several inputs, such as MIDI controllers or accelerometers.
 
 ## Ableton Link
 

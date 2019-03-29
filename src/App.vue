@@ -58,7 +58,7 @@
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
     color: #E8F0E8;
-    background-color: #011600;
+    background-color: #101510;
   }
   .v-sheet {
     background-color: #171A00 !important;
