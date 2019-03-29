@@ -74,13 +74,14 @@ class ShaderEngine {
     this.shaderParams.uniforms.resolution.value.x = this.container.innerWidth;
     this.shaderParams.uniforms.resolution.value.y = this.container.innerHeight;
 
-    this.container.appendChild( this.renderer.domElement );
-
     if(this.stats){
 
-      this.container.appendChild( this.stats.dom );
+      this.stats.domElement.style.position = 'fixed';
+      this.container.appendChild( this.stats.domElement );
 
     }
+
+    this.container.appendChild( this.renderer.domElement );
 
     this.onWindowResize();
     window.addEventListener('resize',this.onWindowResize);
