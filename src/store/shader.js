@@ -21,12 +21,11 @@ const ShaderParamsModule = {
 
     setParamValue(state, { paramName, paramValue }) {
 
-      const shader = state.shaderEngine.shaderParams;
-      shader.setUniformValue(paramName, paramValue);
+      state.shaderEngine.setParamValue(paramName, paramValue);
 
       state.paramsValue = {
         ...state.paramsValue,
-        [paramName]: shader.getUniformValue(paramName),
+        [paramName]: state.shaderEngine.getParamValue(paramName),
       };
 
     },
@@ -37,15 +36,12 @@ const ShaderParamsModule = {
       state.shaderEngine.init();
       state.shaderEngine.start();
 
-      const shaderParams = state.shaderEngine.shaderParams;
       state.paramsList = [];
       state.paramsValue = {};
 
-      shaderParams.forInitialParams(param => {
-        if(!param.auto) {
-          state.paramsList.push(param);
-          state.paramsValue[param.name] = param.defaultValue;
-        }
+      state.shaderEngine.forParams((param) => {
+        state.paramsList.push(param);
+        state.paramsValue[param.name] = param.defaultValue;
       });
 
     },
@@ -94,19 +90,19 @@ const ShaderParamsModule = {
 
     changeParamValue({state, commit}, { paramName, action, value }) {
 
-      const initialParam = state.shaderEngine.shaderParams.initialParams[paramName];
-      if(!initialParam) throw new Error('Unknown shader parameter to change');
+      const param = state.shaderEngine.params[paramName];
+      if(!param) throw new Error('Unknown shader parameter to change');
 
-      const oldValue = state.shaderEngine.shaderParams.getUniformValue(paramName);
+      const oldValue = state.shaderEngine.getParamValue(paramName);
       let newValue = oldValue;
 
       switch(action) {
         case 'up': {
-          newValue = oldValue + initialParam.step;
+          newValue = oldValue + param.step;
           break;
         }
         case 'down': {
-          newValue = oldValue - initialParam.step;
+          newValue = oldValue - param.step;
           break;
         }
         case 'value': {

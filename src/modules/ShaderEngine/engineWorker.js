@@ -4,11 +4,10 @@ import WebVR from '../../modules/WebVR';
 
 import ShaderParams from './shaderParams';
 import GlslWrapper from './glslWrapper';
-import { download, mobileCheck } from '../utils';
 
-class ShaderEngine {
+class ShaderEngineWorker {
 
-  constructor(shader, container) {
+  constructor(shader, canvas, windowRatio, width, height, quality, mouse) {
 
     this.shader = {
       vertexShader: shader.vertexShader,
@@ -17,16 +16,20 @@ class ShaderEngine {
       name: shader.name
     };
 
+    this.windowRatio = windowRatio;
+    this.width = width;
+    this.height = height;
     this.shaderParams = new ShaderParams(this);
     this.glslWrapper = new GlslWrapper(this);
 
-    this.container = container;
+    this.canvas = canvas;
     this.renderer = null;
-    this.mouse = { x: 0. , y: 0. };
+    this.mouse = mouse;
 
+    this.running = false;
     this.currentTime = null;
 
-    this.quality = mobileCheck() ? 0.6: 1;
+    this.quality = quality;
 
     this.onWindowResize = throttle(this.onWindowResize.bind(this), 200);
   }
@@ -34,12 +37,13 @@ class ShaderEngine {
   init() {
 
     this.renderer = new THREE.WebGLRenderer({
-      preserveDrawingBuffer: true
+      preserveDrawingBuffer: true,
+      antialias: true,
+      canvas: this.canvas
     });
-    this.renderer.antialias = true;
     //this.renderer.setPixelRatio( window.devicePixelRatio );
 
-    this.camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0, 10 );
+    this.camera = new THREE.PerspectiveCamera( 30, this.windowRatio, 0, 10 );
     this.scene = new THREE.Scene();
 
     this.shaderParams.createUniforms();
@@ -62,15 +66,8 @@ class ShaderEngine {
     this.scene.add( this.cubeMesh );
     */
 
-    this.shaderParams.uniforms.resolution.value.x = this.container.innerWidth;
-    this.shaderParams.uniforms.resolution.value.y = this.container.innerHeight;
-
-    this.container.appendChild( this.renderer.domElement );
-
-    this.onWindowResize();
-    window.addEventListener('resize',this.onWindowResize);
-    window.addEventListener('fullscreenchange', this.onWindowResize);
-    document.addEventListener('mousemove', this.onMouseMove.bind(this) );
+    this.shaderParams.uniforms.resolution.value.x = this.width;
+    this.shaderParams.uniforms.resolution.value.y = this.height;
 
     this.handleVR();
 
@@ -81,13 +78,15 @@ class ShaderEngine {
     // TODO use https://threejs.org/docs/index.html#api/en/core/Clock
     this.lastTime = Date.now();
     if(this.currentTime === null) this.currentTime = 0;
-
-    this.renderer.setAnimationLoop(this.animate.bind(this));
+    this.running = true;
+    this.animate();
 
   }
 
   stop() {
-    this.renderer.setAnimationLoop(null);
+
+    this.running = false;
+
   }
 
   animate() {
@@ -99,6 +98,23 @@ class ShaderEngine {
 
     this.render();
 
+    if(this.running){
+
+      if(self && 'requestAnimationFrame' in self){
+
+        self.requestAnimationFrame(this.animate.bind(this) );
+
+      } else if(window && 'requestAnimationFrame' in window){
+
+        window.requestAnimationFrame(this.animate.bind(this) );
+
+      } else {
+
+        console.error('Cannot request animation frame');
+      }
+
+    }
+
   }
 
   render() {
@@ -108,40 +124,31 @@ class ShaderEngine {
 
   }
 
-  onWindowResize() {
+  setWindowSize(width, height){
 
-    const width = this.container.clientWidth;
-    const height = this.container.clientHeight;
-
-    this.camera.aspect = width / height;
-    this.camera.updateProjectionMatrix();
-
-    this.renderer.setSize(width * this.quality, height * this.quality);
-    this.renderer.domElement.style.width = width + 'px';
-    this.renderer.domElement.style.height = height + 'px';
+    this.width = width;
+    this.height = height;
 
   }
 
-  onMouseMove(event) {
+  onWindowResize(){
 
-    if(event.target === this.renderer.domElement) {
-      this.mouse.x = event.pageX - this.container.offsetLeft;
-      this.mouse.y = event.pageY - this.container.offsetTop;
-    }
+    this.camera.aspect = this.width / this.height;
+    this.camera.updateProjectionMatrix();
+
+    this.renderer.setSize(this.width * this.quality, this.height * this.quality, false);
+
+  }
+
+  onMouseMove(mouse){
+
+    this.mouse = mouse;
 
   }
 
   setQuality(quality) {
     this.quality = quality;
     this.onWindowResize();
-  }
-
-  downloadScreenShot(){
-
-    const dataUrl = this.renderer.domElement.toDataURL();
-
-    download(`${this.shader.name.replace(' ', '_')}_${new Date().toISOString()}.png`, dataUrl);
-
   }
 
   getShaderMaterial() {
@@ -160,34 +167,33 @@ class ShaderEngine {
 
   }
 
+  enableVR(device){
+
+    this.renderer.vr.setDevice(device);
+    device.requestPresent( [ { source: this.canvas } ] );
+
+  }
+
+  vrPresentChange(isPresent){
+
+    if(!isPresent){
+
+      this.renderer.vr.setDevice(null);
+
+    }
+
+    this.shaderMesh.material = this.getShaderMaterial();
+
+  }
+
   handleVR() {
 
     WebVR.isVRCompatible().then(devices => {
 
-      if(devices) {
+      if(devices){
 
         this.renderer.vr.enabled = true;
         this.renderer.vr.setFrameOfReferenceType( 'eye-level' ); // 'eye-level' , 'head-model' ???
-
-        const device = devices[0];
-
-        const enableVR = () => {
-          this.renderer.vr.setDevice(device);
-          device.requestPresent( [ { source: this.renderer.domElement } ] );
-        };
-
-        const VRButton = WebVR.createButton( enableVR );
-        this.container.appendChild( VRButton );
-
-        window.addEventListener('vrdisplaypresentchange', event => {
-
-          const isVR = event.display.isPresenting;
-          if(!isVR) {
-            this.renderer.vr.setDevice(null);
-          }
-          this.shaderMesh.material = this.getShaderMaterial();
-
-        }, false);
 
       }
 
@@ -199,4 +205,4 @@ class ShaderEngine {
 
 }
 
-export default ShaderEngine;
+export default ShaderEngineWorker;

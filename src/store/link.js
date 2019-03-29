@@ -59,7 +59,7 @@ const LinkModule = {
 
         if(state.linkEnabled){
 
-          rootState.shader.shaderEngine.shaderParams.setBeat(beatData);
+          rootState.shader.shaderEngine.setBeat(beatData);
 
         }
 
@@ -77,7 +77,7 @@ const LinkModule = {
 
       if(rootState.shader.shaderEngine){
 
-        rootState.shader.shaderEngine.shaderParams.setBeat({
+        rootState.shader.shaderEngine.setBeat({
           beatStartTime: 0,
           bps: 1,
           bpm: 60,

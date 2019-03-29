@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 
 import { store } from '@/store';
 import Midi from '@/modules/midi';
-import ShaderEngine from '@/modules/ShaderEngine'
+import ShaderEngine from '@/modules/ShaderEngineMaster'
 import shader1 from '@/shaders/shader1'
 
 describe('Store', function (){

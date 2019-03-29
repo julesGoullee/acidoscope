@@ -185,9 +185,8 @@ class ShaderParams {
 
     } else {
 
-      const container = this.shaderEngine.container;
-      const width = container.offsetWidth * this.shaderEngine.quality;
-      const height = container.offsetHeight * this.shaderEngine.quality;
+      const width = this.shaderEngine.width * this.shaderEngine.quality;
+      const height = this.shaderEngine.height * this.shaderEngine.quality;
       const resolution = new THREE.Vector2(width, height);
       this.setUniformValue('resolution', resolution);
 
@@ -214,14 +213,6 @@ class ShaderParams {
       case 'i':
       case 'f': {
         uniform.value = value;
-
-        if(initialParam.range) {
-          if(uniform.value < initialParam.range[0]) {
-            uniform.value = initialParam.range[0];
-          } else if(uniform.value > initialParam.range[1]) {
-            uniform.value = initialParam.range[1];
-          }
-        }
 
         break;
       }
