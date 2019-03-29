@@ -8,6 +8,8 @@ import shader7 from '@/shaders/shader7';
 import shader8 from '@/shaders/shader8';
 import shader9 from '@/shaders/shader9';
 import shader10 from '@/shaders/shader10';
+import shader11 from '@/shaders/shader11';
+import shader12 from '@/shaders/shader12';
 
 const shaders = {
   shader1,
@@ -20,6 +22,8 @@ const shaders = {
   shader8,
   shader9,
   shader10,
+  shader11,
+  shader12,
 };
 
 export default shaders;
