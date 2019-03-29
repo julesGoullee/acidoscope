@@ -1,10 +1,12 @@
 import { throttle } from 'lodash';
 import * as THREE from 'three'
-import WebVR from '../../modules/WebVR';
+import WebVR from '@/modules/WebVR';
+import Stats from 'stats.js';
 
+import config from '@/../config';
+import { download, mobileCheck } from '@/modules/utils';
 import ShaderParams from './shaderParams';
 import GlslWrapper from './glslWrapper';
-import { download, mobileCheck } from '../utils';
 
 class ShaderEngine {
 
@@ -29,6 +31,12 @@ class ShaderEngine {
     this.quality = mobileCheck() ? 0.6: 1;
 
     this.onWindowResize = throttle(this.onWindowResize.bind(this), 200);
+
+    if(config.ENV === 'development'){
+
+      this.stats = new Stats();
+
+    }
 
   }
 
@@ -68,6 +76,12 @@ class ShaderEngine {
 
     this.container.appendChild( this.renderer.domElement );
 
+    if(this.stats){
+
+      this.container.appendChild( this.stats.dom );
+
+    }
+
     this.onWindowResize();
     window.addEventListener('resize',this.onWindowResize);
     window.addEventListener('fullscreenchange', this.onWindowResize);
@@ -106,6 +120,12 @@ class ShaderEngine {
 
     this.shaderParams.updateSpecialUniforms();
     this.renderer.render( this.scene, this.camera );
+
+    if(this.stats){
+
+      this.stats.update();
+
+    }
 
   }
 
