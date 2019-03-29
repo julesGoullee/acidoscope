@@ -31,3 +31,4 @@ tests/e2e/videos
 
 #Electron-builder output
 /dist_electron
+build

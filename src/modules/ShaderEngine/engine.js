@@ -25,7 +25,7 @@ class ShaderEngine {
     this.container = container;
     this.renderer = null;
     this.mouse = { x: 0. , y: 0. };
-
+    this.isFocus = false;
     this.currentTime = null;
 
     this.quality = mobileCheck() ? 0.6: 1;
@@ -86,7 +86,7 @@ class ShaderEngine {
     window.addEventListener('resize',this.onWindowResize);
     window.addEventListener('fullscreenchange', this.onWindowResize);
     document.addEventListener('mousemove', this.onMouseMove.bind(this) );
-
+    this.renderer.domElement.addEventListener('click', this.onClick.bind(this) );
     this.handleVR();
 
   }
@@ -143,11 +143,34 @@ class ShaderEngine {
 
   }
 
+  onClick(){
+
+    if(this.isFocus){
+
+      this.renderer.domElement.style.cursor = 'pointer';
+
+    } else {
+
+      this.renderer.domElement.style.cursor = 'move';
+
+    }
+
+    this.isFocus = !this.isFocus;
+
+  }
+
   onMouseMove(event) {
 
-    if(event.target === this.renderer.domElement) {
+    if(event.target === this.renderer.domElement && this.isFocus){
+
       this.mouse.x = event.pageX - this.container.offsetLeft;
       this.mouse.y = event.pageY - this.container.offsetTop;
+
+    } else {
+
+      this.isFocus = false;
+      this.renderer.domElement.style.cursor = 'pointer';
+
     }
 
   }

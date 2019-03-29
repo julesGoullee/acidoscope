@@ -62,6 +62,21 @@
         </v-card-text>
 
         <h2 class="headline">
+          Download
+        </h2>
+        <v-card-text>
+          <v-btn
+            :href="link.osx"
+            color="info"
+          >
+            OSX
+              <span style="margin-left: 15px">
+                <v-icon>cloud_download</v-icon>
+              </span>
+          </v-btn>
+        </v-card-text>
+
+        <h2 class="headline">
           Code
         </h2>
         <v-card-text>
@@ -70,7 +85,7 @@
             href="https://github.com/julesgoullee"
             target="_blank"
           >@julesgoullee
-            </a>
+          </a>
           &amp;
           <a
             href="https://github.com/pakokrew"
@@ -95,7 +110,17 @@
 </style>
 
 <script>
+
+  import Config from '@/../config';
+
   export default {
     name: 'AboutView',
+    data: function(){
+      return {
+        link: {
+          osx: Config.ELECTRON_APP_LINK.OSX
+        }
+      }
+    }
   }
 </script>
