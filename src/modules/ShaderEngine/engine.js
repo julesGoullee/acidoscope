@@ -1,10 +1,12 @@
 import { throttle } from 'lodash';
 import * as THREE from 'three'
-import WebVR from '../../modules/WebVR';
+import WebVR from '@/modules/WebVR';
+import Stats from 'stats.js';
 
+import config from '@/../config';
+import { download, mobileCheck } from '@/modules/utils';
 import ShaderParams from './shaderParams';
 import GlslWrapper from './glslWrapper';
-import { download, mobileCheck } from '../utils';
 
 class ShaderEngine {
 
@@ -23,12 +25,19 @@ class ShaderEngine {
     this.container = container;
     this.renderer = null;
     this.mouse = { x: 0. , y: 0. };
-
+    this.isFocus = false;
     this.currentTime = null;
 
     this.quality = mobileCheck() ? 0.6: 1;
 
     this.onWindowResize = throttle(this.onWindowResize.bind(this), 200);
+
+    if(config.ENV === 'development'){
+
+      this.stats = new Stats();
+
+    }
+
   }
 
   init() {
@@ -67,11 +76,17 @@ class ShaderEngine {
 
     this.container.appendChild( this.renderer.domElement );
 
+    if(this.stats){
+
+      this.container.appendChild( this.stats.dom );
+
+    }
+
     this.onWindowResize();
     window.addEventListener('resize',this.onWindowResize);
     window.addEventListener('fullscreenchange', this.onWindowResize);
     document.addEventListener('mousemove', this.onMouseMove.bind(this) );
-
+    this.renderer.domElement.addEventListener('click', this.onClick.bind(this) );
     this.handleVR();
 
   }
@@ -106,6 +121,12 @@ class ShaderEngine {
     this.shaderParams.updateSpecialUniforms();
     this.renderer.render( this.scene, this.camera );
 
+    if(this.stats){
+
+      this.stats.update();
+
+    }
+
   }
 
   onWindowResize() {
@@ -122,11 +143,34 @@ class ShaderEngine {
 
   }
 
+  onClick(){
+
+    if(this.isFocus){
+
+      this.renderer.domElement.style.cursor = 'pointer';
+
+    } else {
+
+      this.renderer.domElement.style.cursor = 'move';
+
+    }
+
+    this.isFocus = !this.isFocus;
+
+  }
+
   onMouseMove(event) {
 
-    if(event.target === this.renderer.domElement) {
+    if(event.target === this.renderer.domElement && this.isFocus){
+
       this.mouse.x = event.pageX - this.container.offsetLeft;
       this.mouse.y = event.pageY - this.container.offsetTop;
+
+    } else {
+
+      this.isFocus = false;
+      this.renderer.domElement.style.cursor = 'pointer';
+
     }
 
   }
