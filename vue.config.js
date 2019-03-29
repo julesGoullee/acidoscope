@@ -1,17 +1,17 @@
 module.exports = {
   pluginOptions: {
-    // dll: {
-    //   entry: [
-    //     'vue',
-    //     'vue-router',
-    //     'vuex',
-    //     'vuetify',
-    //     'vuetify/lib',
-    //     'vuetify/src/stylus/app.styl',
-    //     'three'
-    //   ],
-    //   open: process.env.NODE_ENV !== 'test',
-    // },
+    dll: {
+      entry: [
+        'vue',
+        'vue-router',
+        'vuex',
+        'vuetify',
+        'vuetify/lib',
+        'vuetify/src/stylus/app.styl',
+        'three'
+      ],
+      open: process.env.NODE_ENV !== 'test',
+    },
     electronBuilder: {
       externals: ['socket.io', 'abletonlink'],
       chainWebpackRendererProcess: config => {
@@ -22,7 +22,7 @@ module.exports = {
           return args
         })
       },
-      mainProcessFile:  './src/background.js',
+      mainProcessFile:  './src/electron/main.js',
     }
   },
   chainWebpack: config => {
