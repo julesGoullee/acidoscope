@@ -11,6 +11,7 @@ const Config = {
   ENV: process.env.ENV || process.env.VUE_APP_ENV || 'development',
   SERVER_HOST: process.env.VUE_APP_SERVER_HOST || 'http://localhost',
   SERVER_PORT: SERVER_PORT || process.env.VUE_APP_SERVER_PORT || '3000',
+  IS_ELECTRON: process.type === 'renderer',
   GA_ID: process.env.GA_ID || process.env.VUE_APP_GA_ID || null,
 };
 
