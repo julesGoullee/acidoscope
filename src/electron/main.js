@@ -1,5 +1,7 @@
 'use strict'
+/* global __static */
 
+import path from 'path'
 import { app, protocol, BrowserWindow } from 'electron'
 import {
   createProtocol,
@@ -23,6 +25,7 @@ async function createWindow () {
     minWidth: 680,
     height: 840,
     title: app.getName(),
+    icon: path.join(__static, 'icon.png')
   })
 
   win.SERVER_PORT = Server.port;
