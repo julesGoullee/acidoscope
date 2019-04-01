@@ -97,9 +97,9 @@
           <br>
           We're Open Source ;)
           <a
-            href="https://github.com/julesgoullee/shaders-midi"
+            href="https://github.com/julesgoullee/acidoscope"
             target="_blank"
-          >https://github.com/julesgoullee/shaders-midi</a>
+          >https://github.com/julesgoullee/acidoscope</a>
         </v-card-text>
       </v-container>
     </v-card>
