@@ -32,7 +32,7 @@
             <v-flex xs12 sm6><code>S</code> Save screenshot</v-flex>
             <v-flex xs12 sm6><code>F</code> Switch fullscreen</v-flex>
             <v-flex xs12 sm6><code>G</code> Go back to gallery</v-flex>
-            <v-flex xs12 sm6><code>F</code> Go to next animation</v-flex>
+            <v-flex xs12 sm6><code>P</code> Go to next animation</v-flex>
           </v-layout>
 
         </v-card-text>
@@ -97,9 +97,9 @@
           <br>
           We're Open Source ;)
           <a
-            href="https://github.com/julesgoullee/shaders-midi"
+            href="https://github.com/julesgoullee/acidoscope"
             target="_blank"
-          >https://github.com/julesgoullee/shaders-midi</a>
+          >https://github.com/julesgoullee/acidoscope</a>
         </v-card-text>
       </v-container>
     </v-card>
