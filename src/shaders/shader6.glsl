@@ -15,6 +15,13 @@ float mhash( float n )
 }
 
 
+//  Function from Iñigo Quiles
+//  https://www.shadertoy.com/view/MsS3Wc
+vec3 hsb2rgb( in vec3 c ){
+  vec3 rgb = clamp(abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),6.0)-3.0)-1.0, 0.0, 1.0);
+  rgb = rgb*rgb*(3.0-2.0*rgb);
+  return c.z * mix( vec3(1.0), rgb, c.y);
+}
 
 vec3 getColor(vec3 p)
 {
@@ -25,9 +32,9 @@ vec3 getColor(vec3 p)
 
   vec3 col;
 
-  if (f > 4.0) col = vec3(0.2, 0.7, 1.0);
-  else if (f > 0.0) col = vec3(0.2, 0.9, 1.0);
-  else if (f > -4.0) col = vec3(1.0, 0.2, 1.0);
+  if (f > 4.0) col = hsb2rgb(vec3(control1, 1., 0.6));
+  else if (f > 0.0) col = hsb2rgb(vec3(control2, 1., 0.8));
+  else if (f > -4.0) col = hsb2rgb(vec3(control3, 1., 0.9));
   else col = vec3(0.6, 0.0, 1.0);
 
   return col;
@@ -59,7 +66,7 @@ vec4 trace_spheres( in vec3 rayo, in vec3 rayd )
 
   // voxel traversal algorithm by Andrew Woo (http://www.cse.chalmers.se/edu/year/2010/course/TDA361/grid.pdf)
 
-  for(int i=0; i<40; i++) {
+  for(int i=0; i<30; i++) {
     if (tmax.x < tmax.y) {
       if (tmax.x < tmax.z) {
         V.x += step.x;
@@ -84,7 +91,7 @@ vec4 trace_spheres( in vec3 rayo, in vec3 rayd )
     // now we have the voxel, check for intersections with sphere
     vec3 c = V + voxelSize*0.5 + 0.4*mhash3(V.x+50.0*V.y+2500.0*V.z); // sphere at center of voxel + rnd displacement
 
-    float r = voxelSize.x*0.10; // sphere is 20% of voxel size
+    float r = voxelSize.x*control4; // sphere is 20% of voxel size
     float r2 = r*r;
 
     vec3 p_minus_c = p - c;
@@ -96,7 +103,7 @@ vec4 trace_spheres( in vec3 rayo, in vec3 rayd )
 
     const float divFogRange = 1.0/30.0; // 50-20
     const vec3 fogCol = vec3(0.3, 0.3, 0.6);
-    const vec3 sunDir = vec3(-0.707106, 0.707106, 0.0);
+    vec3 sunDir = vec3(cos(time/2.), sin(time/2.), cos(time/2.));
 
     if (root >= 0.0) {
       dist = -d - sqrt(root);
