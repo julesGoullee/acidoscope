@@ -2,7 +2,12 @@
 
 // info: http://miss-cache.blogspot.com/2015/01/modelling-with-distance-functions-shape.html
 
+#define TWO_PI 6.28318530718
+
 #define COLOR_PALETTE 2
+
+uniform vec2 u_resolution;
+uniform float u_time;
 
 #if COLOR_PALETTE==1
 vec3 backgrColor = vec3(0.51, 0.85, 0.98);
@@ -27,6 +32,13 @@ vec3 glowColor = vec3(0.43, 0.85, 1.0);
 float glowStrength = 0.99;
 #endif
 
+//  Function from Iñigo Quiles
+//  https://www.shadertoy.com/view/MsS3Wc
+vec3 hsb2rgb( in vec3 c ){
+  vec3 rgb = clamp(abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),6.0)-3.0)-1.0, 0.0, 1.0);
+  rgb = rgb*rgb*(3.0-2.0*rgb);
+  return c.z * mix( vec3(1.0), rgb, c.y);
+}
 
 float distBox(vec2 p, vec2 b)
 {
@@ -214,7 +226,7 @@ float distShape(vec2 modpos)
 
   float d = mix(d1, d2, t01);
 
-  return d * 0.01;
+  return d * control4/100.;
 }
 
 vec2 rotateCoords(vec2 uv)
@@ -232,6 +244,11 @@ vec2 rotateCoords(vec2 uv)
 
 vec3 getColor(float d)
 {
+  backgrColor = hsb2rgb(vec3(control1, 0.5, 0.25));
+  insideColor0 = hsb2rgb(vec3(control2, 0.5, 0.85));
+  insideColor1 = hsb2rgb(vec3(0.5-control2/2., 0.5, 0.85));
+  glowColor = hsb2rgb(vec3(control3, 0.3, 0.5));
+
   float borderOffset = 0.0033;
   float inSmooth = smoothstep(1.0, 0.0, -d < 0.01 ? 0.0 : (-d-0.01) * 200.0);
   vec3 inColor = inSmooth * insideColor0 + (1.0 - inSmooth) * insideColor1;
