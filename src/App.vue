@@ -51,6 +51,9 @@
   body {
     margin: 0;
     overflow: hidden;
+    background-color: #101510;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
