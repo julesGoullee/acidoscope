@@ -2,6 +2,8 @@ const midi = require('midi');
 const http = require('http');
 const express = require('express');
 const io = require('socket.io');
+//https://github.com/justinlatimer/node-midi
+// https://help.ableton.com/hc/en-us/articles/209071169-Sending-and-receiving-MIDI-messages-using-a-virtual-MIDI-network
 
 const Server = {
   http: null,
