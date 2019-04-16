@@ -21,6 +21,7 @@
   "dependencies": {
     "@vue/cli-service": "^3.5.3",
     "abletonlink": "0.0.7",
+    "midi": "^0.9.5",
     "socket.io": "^2.2.0",
     "vue": "^2.6.10"
   },

@@ -2,6 +2,8 @@ const http = require('http');
 const express = require('express');
 const io = require('socket.io');
 const Abletonlink = require('abletonlink');
+//https://github.com/justinlatimer/node-midi
+//https://help.ableton.com/hc/en-us/articles/209071169-Sending-and-receiving-MIDI-messages-using-a-virtual-MIDI-network
 
 const Server = {
   http: null,
@@ -41,8 +43,27 @@ const Server = {
     });
 
     Server.link.startUpdate(100, (beat, phase, bpm) => {
+/*
+beat 72.005376 phase 0.005376 bpm 98.99993565004183
+New beatInt 72 beatStartTime 1555421384238.9968 phaseDecimal 0.005376 bps 1.6499989275006972
+beat 72.171387 phase 0.171387 bpm 98.99993565004183
+beat 72.342786 phase 0.342786 bpm 98.99993565004183
+beat 72.507431 phase 0.507431 bpm 98.99993565004183
+beat 72.675642 phase 0.675642 bpm 98.99993565004183
+beat 72.849205 phase 0.849205 bpm 98.99993565004183
+beat 73.02043 phase 1.02043 bpm 98.99993565004183
+New beatInt 73 beatStartTime 1555421384853.9875 phaseDecimal 0.020429999999999948 bps 1.6499989275006972
+beat 73.192905 phase 1.192905 bpm 98.99993565004183
+beat 73.36796 phase 1.36796 bpm 98.99993565004183
+beat 73.541431 phase 1.541431 bpm 98.99993565004183
+beat 73.709896 phase 1.709896 bpm 98.99993565004183
+beat 73.88331 phase 1.88331 bpm 98.99993565004183
+beat 74.057582 phase 2.057582 bpm 98.99993565004183
+New beatInt 74 beatStartTime 1555421385481.965 phaseDecimal 0.05758200000000002 bps 1.6499989275006972
+beat 74.23095 phase 2.23095 bpm 98.99993565004183
 
-      //console.log(`beat ${beat} phase ${phase} bpm ${bpm}`);
+ */
+      console.log(`beat ${beat} phase ${phase} bpm ${bpm}`);
 
       const beatInt = Math.floor(beat);
       if((beatInt - Server.lastBeat) <= 0) return;
@@ -56,7 +77,7 @@ const Server = {
       if(Server.numPeers > 0){
 
         Server.io.emit('beat', { bpm, bps, beat: beatInt, phase: phaseDecimal, beatStartTime});
-        // console.log(`New beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bps ${bps}`);
+        console.log(`New beatInt ${beatInt} beatStartTime ${beatStartTime} phaseDecimal ${phaseDecimal} bps ${bps}`);
 
       }
 
