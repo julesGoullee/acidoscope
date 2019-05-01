@@ -36,12 +36,14 @@
 
       this.initMidi().catch(console.error);
       this.initLink().catch(console.error);
+      this.initActionBridge();
 
     },
     methods: {
       ...mapActions([
         'initMidi',
         'initLink',
+        'initActionBridge',
       ])
     }
   };

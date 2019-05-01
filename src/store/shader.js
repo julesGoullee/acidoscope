@@ -8,7 +8,6 @@ const ShaderParamsModule = {
 
   state: {
     shaderEngine: null,
-    running: false,
     paramsList: [],
     paramsValue: {},
   },
@@ -21,12 +20,12 @@ const ShaderParamsModule = {
 
     setParamValue(state, { paramName, paramValue }) {
 
-      const shader = state.shaderEngine.shaderParams;
-      shader.setUniformValue(paramName, paramValue);
+      const shaderParams = state.shaderEngine.shaderParams;
+      shaderParams.setUniformValue(paramName, paramValue);
 
       state.paramsValue = {
         ...state.paramsValue,
-        [paramName]: shader.getUniformValue(paramName),
+        [paramName]: shaderParams.getUniformValue(paramName),
       };
 
     },
@@ -37,21 +36,16 @@ const ShaderParamsModule = {
       state.shaderEngine.init();
       state.shaderEngine.start();
 
-      const shaderParams = state.shaderEngine.shaderParams;
       state.paramsList = [];
       state.paramsValue = {};
 
-      shaderParams.forInitialParams(param => {
+      state.shaderEngine.shaderParams.forInitialParams(param => {
         if(!param.auto) {
           state.paramsList.push(param);
           state.paramsValue[param.name] = param.defaultValue;
         }
       });
 
-    },
-
-    setRunning: (state, running) => {
-      state.running = running;
     },
 
   },
@@ -75,7 +69,6 @@ const ShaderParamsModule = {
       } else {
 
         commit('createShaderEngine', { shader, container } );
-        commit('setRunning', true);
 
       }
 
@@ -122,23 +115,26 @@ const ShaderParamsModule = {
 
     },
 
-    pauseShader({ state, commit }) {
-      if(state.running) {
+    pauseShader({ state }) {
+      if(!state.shaderEngine) return;
+
+      if(state.shaderEngine.running) {
         state.shaderEngine.stop();
-        commit('setRunning', false);
       } else {
         state.shaderEngine.start();
-        commit('setRunning', true);
       }
     },
 
     takeScreenShot({ state }){
 
+      if(!state.shaderEngine) return;
       state.shaderEngine.downloadScreenShot();
 
     },
 
     switchFullscreen({ state }) {
+
+      if(!state.shaderEngine) return;
 
       if (document.fullscreenElement) {
 
@@ -168,7 +164,8 @@ const ShaderParamsModule = {
       commit('setQuality', qualityValue);
     },
 
-    handleAction({ dispatch }, { action }) {
+    handleAction({ state, dispatch }, { action }) {
+      if(!state.shaderEngine) return;
 
       switch(action) {
         case 'pause': {
@@ -181,7 +178,6 @@ const ShaderParamsModule = {
         }
         default: {
           console.warn('Unknown shader handle action', action);
-
         }
       }
     },
@@ -191,7 +187,7 @@ const ShaderParamsModule = {
   getters: {
     shaderEngine: state => state.shaderEngine,
     quality: state => state.shaderEngine ? state.shaderEngine.quality : 1,
-    shaderRunning: state => state.running,
+    shaderRunning: state => state.shaderEngine && state.shaderEngine.running,
     paramsList: state => state.paramsList,
     getParamValue: state => paramName => {
       return state.paramsValue[paramName];

@@ -37,7 +37,7 @@ class ShaderEngine {
       this.stats = new Stats();
 
     }
-
+    this.running = false;
   }
 
   init() {
@@ -94,6 +94,7 @@ class ShaderEngine {
 
   start() {
 
+    this.running = true;
     // TODO use https://threejs.org/docs/index.html#api/en/core/Clock
     this.lastTime = Date.now();
     if(this.currentTime === null) this.currentTime = 0;
@@ -103,6 +104,7 @@ class ShaderEngine {
   }
 
   stop() {
+    this.running = false;
     this.renderer.setAnimationLoop(null);
   }
 

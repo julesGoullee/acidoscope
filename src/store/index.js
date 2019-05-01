@@ -6,6 +6,7 @@ import GalleryModule from "./gallery";
 import linkModule from "./link";
 import ShaderModule from "./shader";
 import MidiModule from "./midi";
+import ActionBridgeModule from "./actionBridge";
 
 Vue.use(Vuex);
 
@@ -15,7 +16,8 @@ export const store = {
     gallery: GalleryModule,
     midi: MidiModule,
     shader: ShaderModule,
-    link: linkModule
+    link: linkModule,
+    actionBridge: ActionBridgeModule,
   },
   plugins,
 

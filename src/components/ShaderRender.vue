@@ -46,31 +46,11 @@
           e.preventDefault();
 
           switch(e.code) {
-            case 'Space': {
-              this.pauseShader();
-              break;
-            }
             case 'KeyC': {
 
               if(this.isFullScreen){
                 this.displayFullScreenControl = !this.displayFullScreenControl;
               }
-              break;
-            }
-            case 'KeyS': {
-              this.takeScreenShot();
-              break;
-            }
-            case 'KeyF': {
-              this.switchFullscreen();
-              break;
-            }
-            case 'KeyG': {
-              this.goToGallery();
-              break;
-            }
-            case 'KeyP': {
-              this.nextVisualisation();
               break;
             }
           }

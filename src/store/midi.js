@@ -98,9 +98,7 @@ const MidiModule = {
     listenMidiActions({ dispatch }) {
 
       midi.on('input', (midiAction) => {
-
         dispatch('handleMidiAction', midiAction);
-
       });
 
     },
