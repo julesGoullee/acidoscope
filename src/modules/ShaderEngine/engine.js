@@ -13,10 +13,10 @@ class ShaderEngine {
   constructor(shader, container) {
 
     this.shader = {
+      name: shader.name,
       vertexShader: shader.vertexShader,
       fragmentShader: shader.fragmentShader,
-      controllableParams: shader.params || [],
-      name: shader.name
+      customParams: shader.params || [],
     };
 
     this.shaderParams = new ShaderParams(this);
@@ -37,7 +37,7 @@ class ShaderEngine {
       this.stats = new Stats();
 
     }
-
+    this.running = false;
   }
 
   init() {
@@ -94,6 +94,7 @@ class ShaderEngine {
 
   start() {
 
+    this.running = true;
     // TODO use https://threejs.org/docs/index.html#api/en/core/Clock
     this.lastTime = Date.now();
     if(this.currentTime === null) this.currentTime = 0;
@@ -103,7 +104,16 @@ class ShaderEngine {
   }
 
   stop() {
+    this.running = false;
     this.renderer.setAnimationLoop(null);
+  }
+
+  pause() {
+    if(this.running) {
+      this.stop();
+    } else {
+      this.start();
+    }
   }
 
   animate() {
@@ -242,6 +252,31 @@ class ShaderEngine {
 
   }
 
+  switchFullscreen() {
+
+    if (document.fullscreenElement) {
+
+      if(document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+
+    } else {
+
+      // TODO requestFullscreen doesnt work on oculus, ios...
+      const container = this.container;
+      if(container.requestFullscreen) {
+        container.requestFullscreen();
+      }
+      if (container.requestFullScreen) {
+        container.requestFullScreen();
+      } else if (container.mozRequestFullScreen) {
+        container.mozRequestFullScreen();
+      } else if (container.webkitRequestFullScreen) {
+        container.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
+      }
+    }
+
+  }
 }
 
 export default ShaderEngine;

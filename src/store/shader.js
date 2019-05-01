@@ -4,13 +4,17 @@ import ShaderEngine from '@/modules/ShaderEngine';
 import shaders from '@/shaders';
 import Midi from '@/modules/midi';
 
+import ActionBridge from '@/modules/ActionBridge';
+import KeyboardInput from '@/modules/ActionBridge/input/keyboard';
+import ShaderOutput from '@/modules/ActionBridge/output/shader';
+
 const ShaderParamsModule = {
 
   state: {
     shaderEngine: null,
-    running: false,
     paramsList: [],
     paramsValue: {},
+    displayFullScreenControl: false,
   },
 
   mutations: {
@@ -19,14 +23,18 @@ const ShaderParamsModule = {
       state.shaderEngine.setQuality(quality);
     },
 
+    switchDisplayFullScreenControl(state) {
+      state.displayFullScreenControl = !state.displayFullScreenControl;
+    },
+
     setParamValue(state, { paramName, paramValue }) {
 
-      const shader = state.shaderEngine.shaderParams;
-      shader.setUniformValue(paramName, paramValue);
+      const shaderParams = state.shaderEngine.shaderParams;
+      shaderParams.setUniformValue(paramName, paramValue);
 
       state.paramsValue = {
         ...state.paramsValue,
-        [paramName]: shader.getUniformValue(paramName),
+        [paramName]: shaderParams.getUniformValue(paramName),
       };
 
     },
@@ -37,21 +45,16 @@ const ShaderParamsModule = {
       state.shaderEngine.init();
       state.shaderEngine.start();
 
-      const shaderParams = state.shaderEngine.shaderParams;
       state.paramsList = [];
       state.paramsValue = {};
 
-      shaderParams.forInitialParams(param => {
+      state.shaderEngine.shaderParams.forInitialParams(param => {
         if(!param.auto) {
           state.paramsList.push(param);
           state.paramsValue[param.name] = param.defaultValue;
         }
       });
 
-    },
-
-    setRunning: (state, running) => {
-      state.running = running;
     },
 
   },
@@ -75,21 +78,47 @@ const ShaderParamsModule = {
       } else {
 
         commit('createShaderEngine', { shader, container } );
-        commit('setRunning', true);
 
       }
+
+      dispatch('initActionBridgeShader');
+
+    },
+
+    initActionBridgeShader: ({ state, commit }) => {
+
+      const keyboardInput = new KeyboardInput();
+      const shaderOutput = new ShaderOutput(state.shaderEngine);
+
+      const actionBridge = new ActionBridge({
+        input: keyboardInput,
+        output: shaderOutput,
+        links: [
+          {
+            input: KeyboardInput.keypress('KeyS'),
+            output: ShaderOutput.action('takeScreenShot'),
+          },
+          {
+            input: KeyboardInput.keypress('Space'),
+            output: ShaderOutput.action('pause'),
+          },
+          {
+            input: KeyboardInput.keypress('KeyF'),
+            output: ShaderOutput.action('switchFullscreen'),
+          },
+        ]
+      });
+
+      actionBridge.listen();
+
+      commit('setActionBridge', { name: 'shader', actionBridge });
 
     },
 
     stopShaderEngine: ({ state }) => {
-
-
       if(state.shaderEngine){
-
         state.shaderEngine.stop();
-
       }
-
     },
 
     changeParamValue({state, commit}, { paramName, action, value }) {
@@ -122,66 +151,39 @@ const ShaderParamsModule = {
 
     },
 
-    pauseShader({ state, commit }) {
-      if(state.running) {
-        state.shaderEngine.stop();
-        commit('setRunning', false);
-      } else {
-        state.shaderEngine.start();
-        commit('setRunning', true);
-      }
+    pauseShader({ state }) {
+      if(!state.shaderEngine) return;
+      state.shaderEngine.pause();
     },
 
     takeScreenShot({ state }){
-
+      if(!state.shaderEngine) return;
       state.shaderEngine.downloadScreenShot();
-
     },
 
     switchFullscreen({ state }) {
-
-      if (document.fullscreenElement) {
-
-        if(document.exitFullscreen) {
-          document.exitFullscreen();
-        }
-
-      } else {
-
-        // TODO requestFullscreen doesnt work on oculus, ios...
-        const container = state.shaderEngine.container;
-        if(container.requestFullscreen) {
-          container.requestFullscreen();
-        }
-        if (container.requestFullScreen) {
-          container.requestFullScreen();
-        } else if (container.mozRequestFullScreen) {
-          container.mozRequestFullScreen();
-        } else if (container.webkitRequestFullScreen) {
-          container.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
-        }
-      }
-
+      if(!state.shaderEngine) return;
+      state.shaderEngine.switchFullscreen();
     },
 
     setQuality({ commit }, qualityValue) {
       commit('setQuality', qualityValue);
     },
 
-    handleAction({ dispatch }, { action }) {
+    switchDisplayFullScreenControl({ commit }) {
+      commit('switchDisplayFullScreenControl');
+    },
+
+    handleAction({ state }, { action }) {
+      if(!state.shaderEngine) return;
 
       switch(action) {
-        case 'pause': {
-          dispatch('pauseShader');
-          break;
-        }
         case 'nyan': {
           Midi.danceColors();
           break;
         }
         default: {
           console.warn('Unknown shader handle action', action);
-
         }
       }
     },
@@ -190,8 +192,9 @@ const ShaderParamsModule = {
 
   getters: {
     shaderEngine: state => state.shaderEngine,
+    displayFullScreenControl: state => state.displayFullScreenControl,
     quality: state => state.shaderEngine ? state.shaderEngine.quality : 1,
-    shaderRunning: state => state.running,
+    shaderRunning: state => state.shaderEngine && state.shaderEngine.running,
     paramsList: state => state.paramsList,
     getParamValue: state => paramName => {
       return state.paramsValue[paramName];

@@ -52,13 +52,17 @@ class ShaderParams {
 
     this.initialParams = []
       .concat(defaultParams)
-      .concat(this.shaderEngine.shader.controllableParams)
+      .concat(this.shaderEngine.shader.customParams)
       .reduce((acc, param) => ({
           ...acc,
           [param.name]: param,
         }),
         {}
       );
+
+    this.controllableParams = Object.entries(this.initialParams)
+      .filter(([_, param]) => !param.auto)
+      .map(([name, _]) => name);
 
     this.uniforms = {};
 

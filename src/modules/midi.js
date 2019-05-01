@@ -119,4 +119,4 @@ class Midi extends EventEmitter {
 
 }
 
-export default Midi;
+export default new Midi();

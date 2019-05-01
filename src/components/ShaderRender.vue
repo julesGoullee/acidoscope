@@ -27,7 +27,7 @@
 <script>
 
   import NoSleep from 'nosleep.js';
-  import { mapActions } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   import ShaderParams from '@/components/ShaderParams.vue';
 
@@ -38,47 +38,17 @@
     components: {
       ShaderParams,
     },
+    computed: {
+      ...mapGetters([
+        'displayFullScreenControl',
+      ]),
+    },
     data: function(){
       return {
         isFullScreen: false,
-        displayFullScreenControl: false,
-        listenerKeyPress: (e) => {
-          e.preventDefault();
-
-          switch(e.code) {
-            case 'Space': {
-              this.pauseShader();
-              break;
-            }
-            case 'KeyC': {
-
-              if(this.isFullScreen){
-                this.displayFullScreenControl = !this.displayFullScreenControl;
-              }
-              break;
-            }
-            case 'KeyS': {
-              this.takeScreenShot();
-              break;
-            }
-            case 'KeyF': {
-              this.switchFullscreen();
-              break;
-            }
-            case 'KeyG': {
-              this.goToGallery();
-              break;
-            }
-            case 'KeyP': {
-              this.nextVisualisation();
-              break;
-            }
-          }
-
-          return false;
-        },
         listenerFullScreen: () => {
 
+          // TODO move nosleep in engine
           if(document.fullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement) {
 
             noSleep.enable();
@@ -87,7 +57,6 @@
           } else {
 
             this.isFullScreen = false;
-            this.displayFullScreenControl = false;
 
           }
 
@@ -99,7 +68,6 @@
       const container = document.getElementById('shader-renderer');
       this.createShaderEngine({ container });
 
-      window.addEventListener('keypress', this.listenerKeyPress);
       document.addEventListener('fullscreenchange', this.listenerFullScreen, false);
 
       this.listenMidiActions();
@@ -108,7 +76,6 @@
     },
     beforeDestroy: function() {
 
-      window.removeEventListener('keypress', this.listenerKeyPress);
       window.removeEventListener('fullscreenchange', this.listenerFullScreen);
 
       this.stopShaderEngine();

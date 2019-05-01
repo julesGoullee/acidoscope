@@ -220,7 +220,7 @@
 
             if(yValue !== this.value){
 
-              console.log({ left, top, width, height,yValue, xValue, value: this.value, x: this.x, y: this.y  })
+              // console.log({ left, top, width, height,yValue, xValue, value: this.value, x: this.x, y: this.y  })
               this.onChange(this.paramName, this.denormalize(yValue) );
 
             }
