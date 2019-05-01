@@ -5,13 +5,13 @@ import StoreOutput from '@/modules/ActionBridge/output/store';
 const ActionBridgeModule = {
 
   state: {
-    actionBridge: null,
+    actionBridges: {},
   },
 
   mutations: {
 
-    setActionBridge: (state, actionBridge) => {
-      state.actionBridge = actionBridge;
+    setActionBridge: (state, { name, actionBridge }) => {
+      state.actionBridges[name] = actionBridge;
     },
 
   },
@@ -26,30 +26,21 @@ const ActionBridgeModule = {
       const actionBridge = new ActionBridge({
         input: keyboardInput,
         output: storeOutput,
+        links: [
+          {
+            input: KeyboardInput.keypress('KeyG'),
+            output: StoreOutput.action('goToGallery'),
+          },
+          {
+            input: KeyboardInput.keypress('KeyP'),
+            output: StoreOutput.action('nextVisualisation'),
+          },
+        ],
       });
-
-      actionBridge.createLinks([
-        {
-          input: KeyboardInput.keypress('Space'),
-          output: StoreOutput.action('handleAction', {action: 'pause'}),
-        },
-        {
-          input: KeyboardInput.keypress('KeyS'),
-          output: StoreOutput.action('takeScreenShot'),
-        },
-        {
-          input: KeyboardInput.keypress('KeyG'),
-          output: StoreOutput.action('goToGallery'),
-        },
-        {
-          input: KeyboardInput.keypress('KeyP'),
-          output: StoreOutput.action('nextVisualisation'),
-        },
-      ]);
 
       actionBridge.listen();
 
-      commit('setActionBridge', actionBridge);
+      commit('setActionBridge', { name: 'store', actionBridge });
 
     },
 

@@ -108,6 +108,14 @@ class ShaderEngine {
     this.renderer.setAnimationLoop(null);
   }
 
+  pause() {
+    if(this.running) {
+      this.stop();
+    } else {
+      this.start();
+    }
+  }
+
   animate() {
 
     const speed = this.shaderParams.getUniformValue('speed');
@@ -244,6 +252,31 @@ class ShaderEngine {
 
   }
 
+  switchFullscreen() {
+
+    if (document.fullscreenElement) {
+
+      if(document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+
+    } else {
+
+      // TODO requestFullscreen doesnt work on oculus, ios...
+      const container = this.container;
+      if(container.requestFullscreen) {
+        container.requestFullscreen();
+      }
+      if (container.requestFullScreen) {
+        container.requestFullScreen();
+      } else if (container.mozRequestFullScreen) {
+        container.mozRequestFullScreen();
+      } else if (container.webkitRequestFullScreen) {
+        container.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
+      }
+    }
+
+  }
 }
 
 export default ShaderEngine;

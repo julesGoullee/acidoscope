@@ -4,6 +4,10 @@ import ShaderEngine from '@/modules/ShaderEngine';
 import shaders from '@/shaders';
 import Midi from '@/modules/midi';
 
+import ActionBridge from '@/modules/ActionBridge';
+import KeyboardInput from '@/modules/ActionBridge/input/keyboard';
+import ShaderOutput from '@/modules/ActionBridge/output/shader';
+
 const ShaderParamsModule = {
 
   state: {
@@ -72,17 +76,44 @@ const ShaderParamsModule = {
 
       }
 
+      dispatch('initActionBridgeShader');
+
+    },
+
+    initActionBridgeShader: ({ state, commit }) => {
+
+      const keyboardInput = new KeyboardInput();
+      const shaderOutput = new ShaderOutput(state.shaderEngine);
+
+      const actionBridge = new ActionBridge({
+        input: keyboardInput,
+        output: shaderOutput,
+        links: [
+          {
+            input: KeyboardInput.keypress('KeyS'),
+            output: ShaderOutput.action('takeScreenShot'),
+          },
+          {
+            input: KeyboardInput.keypress('Space'),
+            output: ShaderOutput.action('pause'),
+          },
+          {
+            input: KeyboardInput.keypress('KeyF'),
+            output: ShaderOutput.action('switchFullscreen'),
+          },
+        ]
+      });
+
+      actionBridge.listen();
+
+      commit('setActionBridge', { name: 'shader', actionBridge });
+
     },
 
     stopShaderEngine: ({ state }) => {
-
-
       if(state.shaderEngine){
-
         state.shaderEngine.stop();
-
       }
-
     },
 
     changeParamValue({state, commit}, { paramName, action, value }) {
@@ -117,61 +148,27 @@ const ShaderParamsModule = {
 
     pauseShader({ state }) {
       if(!state.shaderEngine) return;
-
-      if(state.shaderEngine.running) {
-        state.shaderEngine.stop();
-      } else {
-        state.shaderEngine.start();
-      }
+      state.shaderEngine.pause();
     },
 
     takeScreenShot({ state }){
-
       if(!state.shaderEngine) return;
       state.shaderEngine.downloadScreenShot();
-
     },
 
     switchFullscreen({ state }) {
-
       if(!state.shaderEngine) return;
-
-      if (document.fullscreenElement) {
-
-        if(document.exitFullscreen) {
-          document.exitFullscreen();
-        }
-
-      } else {
-
-        // TODO requestFullscreen doesnt work on oculus, ios...
-        const container = state.shaderEngine.container;
-        if(container.requestFullscreen) {
-          container.requestFullscreen();
-        }
-        if (container.requestFullScreen) {
-          container.requestFullScreen();
-        } else if (container.mozRequestFullScreen) {
-          container.mozRequestFullScreen();
-        } else if (container.webkitRequestFullScreen) {
-          container.webkitRequestFullScreen( Element.ALLOW_KEYBOARD_INPUT );
-        }
-      }
-
+      state.shaderEngine.switchFullscreen();
     },
 
     setQuality({ commit }, qualityValue) {
       commit('setQuality', qualityValue);
     },
 
-    handleAction({ state, dispatch }, { action }) {
+    handleAction({ state }, { action }) {
       if(!state.shaderEngine) return;
 
       switch(action) {
-        case 'pause': {
-          dispatch('pauseShader');
-          break;
-        }
         case 'nyan': {
           Midi.danceColors();
           break;

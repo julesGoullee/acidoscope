@@ -45,6 +45,7 @@
         listenerKeyPress: (e) => {
           e.preventDefault();
 
+          // TODO move displayFullScreenControl in store
           switch(e.code) {
             case 'KeyC': {
 
@@ -59,6 +60,7 @@
         },
         listenerFullScreen: () => {
 
+          // TODO move nosleep in engine
           if(document.fullscreenElement || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement) {
 
             noSleep.enable();

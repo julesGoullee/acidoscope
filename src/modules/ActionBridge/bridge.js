@@ -4,8 +4,9 @@ class Bridge {
     this.input = params.input;
     this.output = params.output;
 
-    // TODO clear listeners
     this.links = [];
+    if(params.links) this.createLinks(params.links);
+    // TODO clear listeners
   }
 
   listen() {
