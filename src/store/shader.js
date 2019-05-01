@@ -14,12 +14,17 @@ const ShaderParamsModule = {
     shaderEngine: null,
     paramsList: [],
     paramsValue: {},
+    displayFullScreenControl: false,
   },
 
   mutations: {
 
     setQuality(state, quality) {
       state.shaderEngine.setQuality(quality);
+    },
+
+    switchDisplayFullScreenControl(state) {
+      state.displayFullScreenControl = !state.displayFullScreenControl;
     },
 
     setParamValue(state, { paramName, paramValue }) {
@@ -165,6 +170,10 @@ const ShaderParamsModule = {
       commit('setQuality', qualityValue);
     },
 
+    switchDisplayFullScreenControl({ commit }) {
+      commit('switchDisplayFullScreenControl');
+    },
+
     handleAction({ state }, { action }) {
       if(!state.shaderEngine) return;
 
@@ -183,6 +192,7 @@ const ShaderParamsModule = {
 
   getters: {
     shaderEngine: state => state.shaderEngine,
+    displayFullScreenControl: state => state.displayFullScreenControl,
     quality: state => state.shaderEngine ? state.shaderEngine.quality : 1,
     shaderRunning: state => state.shaderEngine && state.shaderEngine.running,
     paramsList: state => state.paramsList,

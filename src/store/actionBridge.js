@@ -35,6 +35,10 @@ const ActionBridgeModule = {
             input: KeyboardInput.keypress('KeyP'),
             output: StoreOutput.action('nextVisualisation'),
           },
+          {
+            input: KeyboardInput.keypress('KeyC'),
+            output: StoreOutput.action('switchDisplayFullScreenControl'),
+          },
         ],
       });
 

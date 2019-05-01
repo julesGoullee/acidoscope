@@ -27,7 +27,7 @@
 <script>
 
   import NoSleep from 'nosleep.js';
-  import { mapActions } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   import ShaderParams from '@/components/ShaderParams.vue';
 
@@ -38,26 +38,14 @@
     components: {
       ShaderParams,
     },
+    computed: {
+      ...mapGetters([
+        'displayFullScreenControl',
+      ]),
+    },
     data: function(){
       return {
         isFullScreen: false,
-        displayFullScreenControl: false,
-        listenerKeyPress: (e) => {
-          e.preventDefault();
-
-          // TODO move displayFullScreenControl in store
-          switch(e.code) {
-            case 'KeyC': {
-
-              if(this.isFullScreen){
-                this.displayFullScreenControl = !this.displayFullScreenControl;
-              }
-              break;
-            }
-          }
-
-          return false;
-        },
         listenerFullScreen: () => {
 
           // TODO move nosleep in engine
@@ -69,7 +57,6 @@
           } else {
 
             this.isFullScreen = false;
-            this.displayFullScreenControl = false;
 
           }
 
@@ -81,7 +68,6 @@
       const container = document.getElementById('shader-renderer');
       this.createShaderEngine({ container });
 
-      window.addEventListener('keypress', this.listenerKeyPress);
       document.addEventListener('fullscreenchange', this.listenerFullScreen, false);
 
       this.listenMidiActions();
@@ -90,7 +76,6 @@
     },
     beforeDestroy: function() {
 
-      window.removeEventListener('keypress', this.listenerKeyPress);
       window.removeEventListener('fullscreenchange', this.listenerFullScreen);
 
       this.stopShaderEngine();
