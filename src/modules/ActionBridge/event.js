@@ -1,14 +1,16 @@
 class Event {
   constructor(data) {
-    this.device = data.device;
-    this.type = data.type;
-    this.value = data.value;
+    this.data = data;
   }
 
   compare(event) {
-    return Object.entries(event).reduce((acc, [ key, value ]) =>
-      acc && this[key] === value
-    , true);
+    const match = event.match ? Object.entries(event.match).reduce((acc, [ key, value ]) =>
+      acc && this.data[key] === value
+      , true) : true;
+
+    const matchFn = event.matchFn ? event.matchFn(this.data) : true;
+
+    return match && matchFn;
   }
 }
 

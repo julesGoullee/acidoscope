@@ -8,6 +8,7 @@ class KeyboardInput extends Input {
   }
 
   _listenerKeyPress(e) {
+    e.preventDefault();
     this._event('keypress', e.code);
   }
 
@@ -23,8 +24,10 @@ class KeyboardInput extends Input {
 
   static keypress(code) {
     return {
-      device: 'keyboard',
-      value: code,
+      match: {
+        device: 'keyboard',
+        value: code,
+      },
     };
   }
 }

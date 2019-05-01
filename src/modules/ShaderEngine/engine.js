@@ -13,10 +13,10 @@ class ShaderEngine {
   constructor(shader, container) {
 
     this.shader = {
+      name: shader.name,
       vertexShader: shader.vertexShader,
       fragmentShader: shader.fragmentShader,
-      controllableParams: shader.params || [],
-      name: shader.name
+      customParams: shader.params || [],
     };
 
     this.shaderParams = new ShaderParams(this);
